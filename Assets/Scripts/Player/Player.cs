@@ -11,12 +11,20 @@ public class Player : MonoBehaviour
     public float groundCheckDist = 0.1f;
 
     [Header("Movement Parameters")] //Explain that this will show a header in the inspector to categorize variables
-    [Range(1, 20)] public float moveSpeed = 12f; //Say that this variable is for modifying our movement vector to actually create speed.
+    [Range(1, 10)] public float walkSpeed = 5f;
+    [Range(1, 20)] public float runSpeed = 12f; 
     [Range(1, 20)] public float maxSpeed = 14f;
     [Range(1, 10)] public float maxDecelSpeed = 5f; //When you let go of the controls clamp speed to this value. Probs step 2
 
     public float xAxis;
     private Vector2 moveDirection;
+
+    #region movement bools
+    //we walk if the x input is less than or equal to 0.5f
+    private bool isWalking => Mathf.Abs(xAxis) <= 0.5f ? true : false;
+    //set movespeed based on if we are walking.
+    private float moveSpeed => isWalking ? walkSpeed : runSpeed;
+    #endregion
 
     private Transform camTransform;
 
@@ -27,6 +35,8 @@ public class Player : MonoBehaviour
     //Input actions
     private InputAction moveAction;
     private InputAction jumpAction;
+
+
 
 
     #region Jumping
@@ -47,13 +57,13 @@ public class Player : MonoBehaviour
     [SerializeField] private bool jumpCanceled;
     [SerializeField] private bool jumping;
     public float jumpHeight = 5f; //Our jump height, set this to a specific value and our player will reach that height with a maximum deviation of 0.1
-    [SerializeField] private float buttonTime;
-    [SerializeField] private float jumpTime;
-    public float jumpDist; //This is not in the actual tutorial because I only used it for testing the distance of the actual jump.
+    private float buttonTime;
+    private float jumpTime;
+    public float jumpDist; //used to see the measured distance of the jump.
     public Vector2 ogJump; //Not included just like what I said above.
-    public float fallMultiplier = 2.5f; //When you reach the peak of the expected arc this is the force applied to make falling more fluid.
-    public float lowJumpMultiplier = 2f; //When you stop holding jump to do a low jump this is the force applied to make the jump stop short.
-    public float Multiplier = 100f; //This is so we can scale with deltatime properly.
+    public float fallMultiplier = 9f; //When you reach the peak of the expected arc this is the force applied to make falling more fluid.
+    public float lowJumpMultiplier = 15f; //When you stop holding jump to do a low jump this is the force applied to make the jump stop short.
+    private float Multiplier = 100f; //This is so we can scale with deltatime properly.
 
     #endregion
 
@@ -82,7 +92,7 @@ public class Player : MonoBehaviour
     {
 
         #region bool control
-        doJump |= (jumpAction.GetButtonDown() && jumpCount > 0 && !jumping); //We use |= because we want doJump to be set from true to false
+        doJump |= (jumpAction.WasPressedThisFrame() && jumpCount > 0 && !jumping); //We use |= because we want doJump to be set from true to false
         //This ^ Operator is the or equals operator, it's kind of hard to explain so hopefully I explain this correctly,
         //Basically its saying this : doJump = doJump || (jumpAction.GetButtonDown() && jumpCount > 0 && !jumping)
         //Which is too say, if doJump is already true we return true otherwise we check (jumpAction.GetButtonDown() && jumpCount > 0 && !jumping)
@@ -107,7 +117,7 @@ public class Player : MonoBehaviour
         if (jumping && !jumpCanceled)
         {
 
-            if (jumpAction.GetButtonUp()) //If we stop giving input for jump cancel jump so we can have a variable jump.
+            if (!jumpAction.IsPressed()) //If we stop giving input for jump cancel jump so we can have a variable jump.
             {
                 jumpCanceled = true;
             }
@@ -130,9 +140,27 @@ public class Player : MonoBehaviour
         moveDirection = ((currentInput.normalized.x * camTransform.right.normalized) + (currentInput.normalized.y * camTransform.up.normalized)) * moveSpeed;
 
         //TODO: check for how far stick is tilted and run instead if tilted farther than 0.5 in either direction.
+
+        //xAxis = currentInput.x != 0 ? currentInput.x > 0 ? 1 : -1 : 0;
         //A or D is pressed return -1 or 1, relative to which
+        //if tilted less than or equal to .75f then walk.
         //otherwise return zero.
-        xAxis = currentInput.x != 0 ? currentInput.x > 0 ? 1 : -1 : 0;
+        if (currentInput.x != 0)
+        {
+            if (currentInput.x > 0)
+            {
+                xAxis = currentInput.x <= 0.75f ? 0.5f : 1f;
+            }
+            else if (currentInput.x < 0)
+            {
+                xAxis = currentInput.x <= -0.75f ? -1 : -0.5f;
+            }
+        }
+        else
+        {
+            xAxis = 0;
+        }
+        //xAxis = currentInput.x != 0 ? currentInput.x > 0 ? Mathf.mi(currentInput.x, 0.5f, 1f) : Mathf.Clamp(currentInput.x, -1f, 0.5f) : 0;
     }
 
     private void FixedUpdate()
@@ -153,9 +181,11 @@ public class Player : MonoBehaviour
             ogJump = transform.position;
             float jumpForce;
 
-            jumpForce = Mathf.Sqrt(2f * Physics2D.gravity.magnitude * jumpHeight) * rb.mass;
+            jumpForce = Mathf.Sqrt(2f * Physics2D.gravity.magnitude * jumpHeight) * rb.mass; //multiply by mass at the
+            //end so that it reaches the height regardless of weight.
             buttonTime = (jumpForce / (rb.mass * Physics2D.gravity.magnitude)); //initial velocity divided by player accel for gravity gives us the amount of time it will take to reach the apex.
             rb.velocity = new Vector2(rb.velocity.x, 0); //Reset y velocity before we jump so it is always reaching desired height.
+            
             rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse); //don't normalize transform.up cus it makes jumping more inconsistent.
             jumpTime = 0;
             jumping = true;
@@ -168,27 +198,20 @@ public class Player : MonoBehaviour
 
         if (localVel.y < 0 && inAir) //If we are in the air and at the top of the arc then apply our fall speed to make falling more game-like
         {
-            Vector2 jumpVec = Multiplier * -transform.up * (fallMultiplier - 1) * Time.deltaTime;
+            //we don't multiply by mass because forceMode2D.Force includes that in it's calculation.
+            Vector2 jumpVec = /*Multiplier * */-transform.up * (fallMultiplier - 1)/* * Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
-        else if (localVel.y > 0 && !jumpAction.GetButtonDown() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
+        else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
         {
-            Vector2 jumpVec = Multiplier * -transform.up * (lowJumpMultiplier - 1) * Time.deltaTime;
+            Vector2 jumpVec = /*Multiplier * */-transform.up * (lowJumpMultiplier - 1) /** Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
     }
 
     private void ApplyFinalMovements() //Step 1
     {
+        //set velocity directly, don't override y velocity.
         rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
-        //rb.AddForce(moveDirection, ForceMode2D.Force);
-/*        if (currentInput.x != 0) //What this does is when we stop giving input (when the player tries to stop moving) we Decel in a specific 
-        {                        //range by setting velocity to our max Decel speed so it slows down to 0 from that value.
-            rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x, -maxSpeed, maxSpeed), rb.velocity.y);
-        }
-        else
-        {
-            rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x, -maxDecelSpeed, maxDecelSpeed), rb.velocity.y);
-        }*/
     }
 }
