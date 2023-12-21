@@ -7,6 +7,7 @@ using UnityEngine.InputSystem.Editor;
 
 public class Player : MonoBehaviour
 {
+    public GameObject playerSprite;
 
     public float groundCheckDist = 0.1f;
 
@@ -17,6 +18,9 @@ public class Player : MonoBehaviour
     [Range(1, 10)] public float maxDecelSpeed = 5f; //When you let go of the controls clamp speed to this value. Probs step 2
 
     public float xAxis;
+    public float yAxis;
+
+    private Vector2 moveInput;
     private Vector2 moveDirection;
 
     #region movement bools
@@ -35,9 +39,16 @@ public class Player : MonoBehaviour
     //Input actions
     private InputAction moveAction;
     private InputAction jumpAction;
+    private InputAction attackAction;
+    private InputAction specialAction;
+    private InputAction smashAction;
 
+    #region attack
 
+    bool shouldAttack;
+    bool shouldAttackContinuous;
 
+    #endregion
 
     #region Jumping
 
@@ -85,13 +96,25 @@ public class Player : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
         jumpAction = playerInput.actions["Jump"];
+        attackAction = playerInput.actions["Attack"];
+        specialAction = playerInput.actions["Special"];
+        smashAction = playerInput.actions["SmashAttack"];
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        #region bool control
+        #region input bools
+
+        //only true during the frame the button is pressed.
+        shouldAttack = attackAction.WasPressedThisFrame();
+        //While button is held down this is true.
+        shouldAttackContinuous = attackAction.IsPressed();
+
+        #endregion
+
+        #region jump bool control
         doJump |= (jumpAction.WasPressedThisFrame() && jumpCount > 0 && !jumping); //We use |= because we want doJump to be set from true to false
         //This ^ Operator is the or equals operator, it's kind of hard to explain so hopefully I explain this correctly,
         //Basically its saying this : doJump = doJump || (jumpAction.GetButtonDown() && jumpCount > 0 && !jumping)
@@ -136,41 +159,66 @@ public class Player : MonoBehaviour
 
         #endregion
 
-        Vector2 currentInput = moveAction.ReadValue<Vector2>();
-        moveDirection = ((currentInput.normalized.x * camTransform.right.normalized) + (currentInput.normalized.y * camTransform.up.normalized)) * moveSpeed;
+        moveInput = moveAction.ReadValue<Vector2>();
+        moveDirection = ((moveInput.normalized.x * camTransform.right.normalized) + (moveInput.normalized.y * camTransform.up.normalized)) * moveSpeed;
 
         //TODO: check for how far stick is tilted and run instead if tilted farther than 0.5 in either direction.
 
-        //xAxis = currentInput.x != 0 ? currentInput.x > 0 ? 1 : -1 : 0;
+        //xAxis = moveInput.x != 0 ? moveInput.x > 0 ? 1 : -1 : 0;
         //A or D is pressed return -1 or 1, relative to which
         //if tilted less than or equal to .75f then walk.
         //otherwise return zero.
-        if (currentInput.x != 0)
+        if (moveInput.x != 0 && Mathf.Abs(moveInput.x) > 0.01 && (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y)))
         {
-            if (currentInput.x > 0)
+            if (moveInput.x > 0)
             {
-                xAxis = currentInput.x <= 0.75f ? 0.5f : 1f;
+                xAxis = moveInput.x <= 0.75f ? 0.5f : 1f;
             }
-            else if (currentInput.x < 0)
+            else if (moveInput.x < 0)
             {
-                xAxis = currentInput.x <= -0.75f ? -1 : -0.5f;
+                xAxis = moveInput.x <= -0.75f ? -1 : -0.5f;
             }
         }
         else
         {
             xAxis = 0;
         }
-        //xAxis = currentInput.x != 0 ? currentInput.x > 0 ? Mathf.mi(currentInput.x, 0.5f, 1f) : Mathf.Clamp(currentInput.x, -1f, 0.5f) : 0;
-    }
 
-    private void FixedUpdate()
-    {
+
+        if (moveInput.y != 0 && Mathf.Abs(moveInput.y) > 0.01)
+        {
+            if (moveInput.y > 0)
+            {
+                yAxis = moveInput.y <= 0.75f ? 0.5f : 1f;
+            }
+            else if (moveInput.y < 0)
+            {
+                yAxis = moveInput.y <= -0.75f ? -1 : -0.5f;
+            }
+        }
+        else
+        {
+            yAxis = 0;
+        }
+
+        float xScale = Mathf.Abs(moveInput.x) < 0.1f ? playerSprite.transform.localScale.x : xAxis < 0 ? -1 : 1;
+        xScale = xScale == 0 ? playerSprite.transform.localScale.x : xScale;
+        playerSprite.transform.localScale = new Vector3(xScale, 1, 1);
+
+
         HandleJump();
 
+        HandleAttack();
+
+        //We are able to 
+        //apply forces to the rigidbody during
+        //update because we set the rigidbody
+        //to interpolate. Normally, this 
+        //wouldn't work.
         ApplyFinalMovements();
     }
 
-    private void HandleJump() //Step 2
+    private void HandleJump()
     {
 
 
@@ -209,9 +257,161 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void HandleAttack()
+    {
+        //TODO: 
+        //Code an if statement for each attack input, a neutral and 4 directions.
+        //Make sure to change this if we are handling air attacks.
+        if (shouldAttack)
+        {
+            Vector2 directionInput = new Vector2(xAxis, yAxis);
+            Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));
+
+            if (dotVector.x != 0 && dotVector.x == dotVector.y)
+            {
+                //I think if they're the same I'm just going to 
+                //make it do up/down attacks depending on if y is positive or negative.
+                Debug.LogWarning("The user input equal weight on both the x and y axes when attacking. Please figure out how to avoid this happening.");
+            }
+            //if we have a mixed input, let's see which is greater.
+            else if (dotVector.x != 0 && dotVector.y != 0)
+            {
+                //Choose horizontal attack
+                if (Mathf.Abs(dotVector.x) > Mathf.Abs(dotVector.y))
+                {
+                    //Right Tilt
+                    if (dotVector.x > 0)
+                    {
+/*                        if (inAir)
+                        {
+                            ForwardAerial();
+                        }*/
+                        RightTilt();
+                    }//Left Tilt
+                    else
+                    {
+                        LeftTilt();
+                    }
+                }//choose vertical attack.
+                else
+                {
+                    //Up Tilt
+                    if (dotVector.y > 0)
+                    {
+                        UpTilt();
+                    }//Down Tilt
+                    else
+                    {
+                        DownTilt();
+                    }
+                }
+            }
+            //Horizontal attacking (Left & Right Tilt)
+            else if (xAxis != 0 && yAxis == 0)
+            {
+                //Right Tilt
+                if (dotVector.x > 0)
+                {
+                    RightTilt();
+                }
+                //Left Tilt
+                else
+                {
+                    LeftTilt();
+                }
+            }
+            //Vertical attacking (Up & Down Tilt)
+            else if (xAxis == 0 && yAxis != 0)
+            {
+                //Up Tilt
+                if (dotVector.y > 0)
+                {
+                    UpTilt();
+                }//Down Tilt
+                else
+                {
+                    DownTilt();
+                }
+            }
+            //Neutral attacking
+            else
+            {
+                Neutral();
+            }
+        }
+    }
+
+    private void HandleAerial()
+    {
+
+    }
+
+    private void HandleSpecial()
+    {
+
+    }
+
     private void ApplyFinalMovements() //Step 1
     {
         //set velocity directly, don't override y velocity.
         rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
     }
+
+    #region Attack Methods
+
+    private void Neutral()
+    {
+        Debug.Log("Player 1: Neutral ".Color("green"));
+    }
+
+    private void LeftTilt()
+    {
+        Debug.Log("Player 1: LeftTilt ".Color("yellow"));
+    }
+
+    private void RightTilt()
+    {
+        Debug.Log("Player 1: RightTilt ".Color("yellow"));
+    }
+
+    private void UpTilt()
+    {
+        Debug.Log("Player 1: UpTilt ".Color("yellow"));
+    }
+
+    private void DownTilt()
+    {
+        Debug.Log("Player 1: DownTilt ".Color("yellow"));
+    }
+
+    #endregion
+
+    #region Aerial Methods
+
+    private void NeutralAerial()
+    {
+        Debug.Log("Player 1: NeutralAerial ".Color("white"));
+    }
+
+    private void ForwardAerial()
+    {
+        Debug.Log("Player 1: ForwardAerial ".Color("white"));
+    }
+
+    private void BackAerial()
+    {
+        Debug.Log("Player 1: BackAerial ".Color("white"));
+    }
+
+    private void UpAerial()
+    {
+        Debug.Log("Player 1: UpAerial ".Color("white"));
+    }
+
+    private void DownAerial()
+    {
+        Debug.Log("Player 1: DownAerial ".Color("white"));
+    }
+
+    #endregion
 }
