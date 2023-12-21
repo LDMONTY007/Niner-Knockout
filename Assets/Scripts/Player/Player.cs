@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     public float xAxis;
     public float yAxis;
 
+
+    private float lastXinput;
     private Vector2 moveInput;
     private Vector2 moveDirection;
 
@@ -77,6 +79,8 @@ public class Player : MonoBehaviour
     private float Multiplier = 100f; //This is so we can scale with deltatime properly.
 
     #endregion
+
+    
 
     // Start is called before the first frame update
     void Start()
@@ -147,6 +151,7 @@ public class Player : MonoBehaviour
 
             if (jumpTime >= buttonTime) //When we reach our projected time stop jumping and begin falling.
             {
+                Debug.Log("JUMP CANCELED BY BUTTON TIME".Color("Green"));
                 jumpCanceled = true;
                 jumpDist = Vector2.Distance(transform.position, ogJump); //Not needed, just calculates distance from where we started jumping to our highest point in the jump.
             }
@@ -200,11 +205,16 @@ public class Player : MonoBehaviour
         {
             yAxis = 0;
         }
+        
+        //if the player is moving the stick in the same direction for more than one frame,
+        //set the direction the player is facing.
+        if ((moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && moveInput.x - lastXinput > 0)
+        {
+            playerSprite.transform.localScale = new Vector3(xAxis < 0 ? -1 : 1, 1, 1);
+        }
 
-        float xScale = Mathf.Abs(moveInput.x) < 0.1f ? playerSprite.transform.localScale.x : xAxis < 0 ? -1 : 1;
-        xScale = xScale == 0 ? playerSprite.transform.localScale.x : xScale;
-        playerSprite.transform.localScale = new Vector3(xScale, 1, 1);
-
+        lastXinput = moveInput.x;
+        
 
         HandleJump();
 
@@ -230,8 +240,10 @@ public class Player : MonoBehaviour
             float jumpForce;
 
             jumpForce = Mathf.Sqrt(2f * Physics2D.gravity.magnitude * jumpHeight) * rb.mass; //multiply by mass at the
+            
             //end so that it reaches the height regardless of weight.
             buttonTime = (jumpForce / (rb.mass * Physics2D.gravity.magnitude)); //initial velocity divided by player accel for gravity gives us the amount of time it will take to reach the apex.
+            
             rb.velocity = new Vector2(rb.velocity.x, 0); //Reset y velocity before we jump so it is always reaching desired height.
             
             rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse); //don't normalize transform.up cus it makes jumping more inconsistent.
