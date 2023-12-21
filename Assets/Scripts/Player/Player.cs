@@ -167,8 +167,6 @@ public class Player : MonoBehaviour
         moveInput = moveAction.ReadValue<Vector2>();
         moveDirection = ((moveInput.normalized.x * camTransform.right.normalized) + (moveInput.normalized.y * camTransform.up.normalized)) * moveSpeed;
 
-        //TODO: check for how far stick is tilted and run instead if tilted farther than 0.5 in either direction.
-
         //xAxis = moveInput.x != 0 ? moveInput.x > 0 ? 1 : -1 : 0;
         //A or D is pressed return -1 or 1, relative to which
         //if tilted less than or equal to .75f then walk.
@@ -205,20 +203,29 @@ public class Player : MonoBehaviour
         {
             yAxis = 0;
         }
-        
-        //if the player is moving the stick in the same direction for more than one frame,
-        //set the direction the player is facing.
-        if ((moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && moveInput.x - lastXinput > 0)
+
+
+        HandleJump();
+
+        if (isGrounded)
         {
-            playerSprite.transform.localScale = new Vector3(xAxis < 0 ? -1 : 1, 1, 1);
+            //only rotate when grounded,
+            //or doing back aerial.
+            HandleRotation();
+            HandleAttack();
         }
+        else if (inAir)
+        {
+            HandleAerial();
+        }
+        
 
         lastXinput = moveInput.x;
         
 
-        HandleJump();
+        
 
-        HandleAttack();
+        
 
         //We are able to 
         //apply forces to the rigidbody during
@@ -228,12 +235,26 @@ public class Player : MonoBehaviour
         ApplyFinalMovements();
     }
 
+    private void HandleRotation()
+    {
+        //We do all rotations after
+        //input so that the back 
+        //aerial can be registered.
+        //if the player is moving the stick in the same direction for more than one frame,
+        //set the direction the player is facing.
+        if ((moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && moveInput.x - lastXinput > 0)
+        {
+            playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
+        }
+    }
+
     private void HandleJump()
     {
 
 
         if (doJump)
         {
+            
             doJump = false;
             jumpCount--;
             ogJump = transform.position;
@@ -355,7 +376,92 @@ public class Player : MonoBehaviour
 
     private void HandleAerial()
     {
+        //TODO: 
+        //Code an if statement for each attack input, a neutral and 4 directions.
+        //Make sure to change this if we are handling air attacks.
+        if (shouldAttack)
+        {
+            Vector2 directionInput = new Vector2(xAxis, yAxis);
+            Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));
 
+            if (dotVector.x != 0 && dotVector.x == dotVector.y)
+            {
+                //I think if they're the same I'm just going to 
+                //make it do up/down attacks depending on if y is positive or negative.
+                Debug.LogWarning("The user input equal weight on both the x and y axes when attacking. Please figure out how to avoid this happening.");
+            }
+            //if we have a mixed input, let's see which is greater.
+            else if (dotVector.x != 0 && dotVector.y != 0)
+            {
+                //Choose horizontal attack
+                if (Mathf.Abs(dotVector.x) > Mathf.Abs(dotVector.y))
+                {
+                    //Forward Aerial
+                    //only if our sprite is 
+                    //facing the same direction of 
+                    //our current input.
+                    if (Vector2.Dot(playerSprite.transform.right, directionInput) > 0)
+                    {
+                        ForwardAerial();
+                    }
+                    //We are inputting the opposite of 
+                    //our facing direction. 
+                    else
+                    {
+                        BackAerial();
+                    }
+                }
+                //choose vertical Aerial.
+                else
+                {
+                    //Up Aerial
+                    if (dotVector.y > 0)
+                    {
+                        UpAerial();
+                    }//Down Aerial
+                    else
+                    {
+                        DownAerial();
+                    }
+                }
+            }
+            //Horizontal attacking (Forward & Back Aerial)
+            else if (xAxis != 0 && yAxis == 0)
+            {
+                //Forward Aerial
+                //only if our sprite is 
+                //facing the same direction of 
+                //our current input.
+                if (Vector2.Dot(playerSprite.transform.right, directionInput) > 0)
+                {
+                    ForwardAerial();
+                }
+                //We are inputting the opposite of 
+                //our facing direction. 
+                else
+                {
+                    BackAerial();
+                }
+            }
+            //Vertical attacking (Up & Down Aerial)
+            else if (xAxis == 0 && yAxis != 0)
+            {
+                //Up Aerial
+                if (dotVector.y > 0)
+                {
+                    UpAerial();
+                }//Down Aerial
+                else
+                {
+                    DownTilt();
+                }
+            }
+            //Neutral Aerial
+            else
+            {
+                NeutralAerial();
+            }
+        }
     }
 
     private void HandleSpecial()
@@ -412,6 +518,12 @@ public class Player : MonoBehaviour
 
     private void BackAerial()
     {
+        //the only time we rotate when jumping
+        //is if we do a back aerial.
+        //back aerial is always an input opposite of 
+        //the direction the player is facing so we always
+        //invert rotation on this attack.
+        playerSprite.transform.rotation = Quaternion.Euler(0f, playerSprite.transform.rotation.eulerAngles.y == 0 ? 180f : 0f, 0f);
         Debug.Log("Player 1: BackAerial ".Color("white"));
     }
 
