@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     public float xAxis;
     public float yAxis;
 
-
+    private Vector2 lastDirectionInput;
     private float lastXinput;
     private Vector2 moveInput;
     private Vector2 moveDirection;
@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
 
     //Input actions
     private InputAction moveAction;
+    private InputAction dirAction;
     private InputAction jumpAction;
     private InputAction attackAction;
     private InputAction specialAction;
@@ -64,7 +65,7 @@ public class Player : MonoBehaviour
     private InputAction rightSmashAction;
     private InputAction leftSmashAction;
 
-    #region attack bools
+    #region input bools
 
     bool shouldAttack;
     bool shouldAttackContinuous;
@@ -74,6 +75,9 @@ public class Player : MonoBehaviour
 
     bool shouldSmash;
     bool shouldSmashContinuous;
+
+    //did the player tap this frame?
+    bool didTap;
 
     #endregion
 
@@ -113,20 +117,11 @@ public class Player : MonoBehaviour
         //get the player input and assign the actions.
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
+        dirAction = playerInput.actions["Direction"];
         jumpAction = playerInput.actions["Jump"];
         attackAction = playerInput.actions["Attack"];
         specialAction = playerInput.actions["Special"];
 
-        //Normal Attacks
-        upTiltAction = playerInput.actions["UpTilt"];
-        downTiltAction = playerInput.actions["DownTilt"];
-        rightTiltAction = playerInput.actions["RightTilt"];
-        leftTiltAction = playerInput.actions["LeftTilt"];
-
-        upTiltAction.performed += UpTilt;
-        downTiltAction.performed += DownTilt;
-        rightTiltAction.performed += RightTilt;
-        leftTiltAction.performed += LeftTilt;
 
         //Smash Attacks
         upSmashAction = playerInput.actions["UpSmash"];
@@ -134,10 +129,10 @@ public class Player : MonoBehaviour
         rightSmashAction = playerInput.actions["RightSmash"];
         leftSmashAction = playerInput.actions["LeftSmash"];
 
-        upSmashAction.performed += UpSmash;
+/*        upSmashAction.performed += UpSmash;
         downSmashAction.performed += DownSmash;
         rightSmashAction.performed += RightSmash;
-        leftSmashAction.performed += LeftSmash;
+        leftSmashAction.performed += LeftSmash;*/
     }
 
     private void OnEnable()
@@ -187,6 +182,18 @@ public class Player : MonoBehaviour
         shouldSpecial = specialAction.WasPressedThisFrame();
         //While button is held down this is true.
         shouldSpecialContinuous = attackAction.IsPressed();
+
+        //this deterimines if the player tapped an input direction this frame.
+        Vector2 curDir = dirAction.ReadValue<Vector2>();
+        if (Mathf.Abs(curDir.x) > Mathf.Abs(lastDirectionInput.x) || Mathf.Abs(curDir.y) > Mathf.Abs(lastDirectionInput.y))
+        {
+            didTap = true;
+            Debug.Log("Tap!".Color("cyan"));
+        }
+        else
+        {
+            didTap = false;
+        }
 
         #endregion
 
@@ -284,6 +291,7 @@ public class Player : MonoBehaviour
             //only rotate when grounded,
             //or doing back aerial.
             HandleRotation();
+            HandleAttack();
             HandleSpecial();
             //HandleSmash();
         }
@@ -293,14 +301,13 @@ public class Player : MonoBehaviour
             HandleSpecial();
             //HandleSmash();
         }
-        
 
         lastXinput = moveInput.x;
-        
 
-        
+        lastDirectionInput = dirAction.ReadValue<Vector2>();
 
-        
+
+
 
         //We are able to 
         //apply forces to the rigidbody during
@@ -352,20 +359,154 @@ public class Player : MonoBehaviour
         //This is what gives us consistent fall velocity so that jumping has the correct arc.
         Vector2 localVel = transform.InverseTransformDirection(rb.velocity);
 
-        if (localVel.y < 0 && inAir) //If we are in the air and at the top of the arc then apply our fall speed to make falling more game-like
+/*        if (localVel.y < 0 && inAir) //If we are in the air and at the top of the arc then apply our fall speed to make falling more game-like
         {
             //we don't multiply by mass because forceMode2D.Force includes that in it's calculation.
-            Vector2 jumpVec = /*Multiplier * */-transform.up * (fallMultiplier - 1)/* * Time.deltaTime*/;
+            Vector2 jumpVec = *//*Multiplier * *//*-transform.up * (fallMultiplier - 1)*//* * Time.deltaTime*//*;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
         else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
         {
-            Vector2 jumpVec = /*Multiplier * */-transform.up * (lowJumpMultiplier - 1) /** Time.deltaTime*/;
+            Vector2 jumpVec = *//*Multiplier * *//*-transform.up * (lowJumpMultiplier - 1) *//* Time.deltaTime*//*;
             rb.AddForce(jumpVec, ForceMode2D.Force);
-        }
+        }*/
     }
 
-    
+    private void HandleAttack()
+    {
+        //TODO: 
+        //Code an if statement for each attack input, a neutral and 4 directions.
+        //Make sure to change this if we are handling air attacks.
+        if (shouldAttack)
+        {
+            Vector2 directionInput = new Vector2(xAxis, yAxis);
+            Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));
+            if (dotVector.x != 0 && dotVector.x == dotVector.y)
+            {
+                //Actually, if they are equal it means they want to do a
+                //side attack but they also are aiming up, so we should
+                //probably do a side tilt here.
+                Debug.LogWarning("The user input equal weight on both the x and y axes when attacking. Please figure out how to avoid this happening.");
+            }
+            //if we have a mixed input, let's see which is greater.
+            else if (dotVector.x != 0 && dotVector.y != 0)
+            {
+                //Choose horizontal attack
+                if (Mathf.Abs(dotVector.x) > Mathf.Abs(dotVector.y))
+                {
+                    //Right Tilt
+                    if (dotVector.x > 0)
+                    {
+                        if (didTap)
+                        {
+                            ForwardSmash();
+                        }
+                        else
+                        {
+                            RightTilt();
+                        }
+                    }//Left Tilt
+                    else
+                    {
+                        if (didTap)
+                        {
+                            ForwardSmash();
+                        }
+                        else
+                        {
+                            LeftTilt();
+                        }
+                    }
+                }//choose vertical attack.
+                else
+                {
+                    //Up Tilt
+                    if (dotVector.y > 0)
+                    {
+                        if (didTap)
+                        {
+                            UpSmash();
+                        }
+                        else
+                        {
+                            UpTilt();
+                        }
+                    }//Down Tilt
+                    else
+                    {
+                        if (didTap)
+                        {
+                            DownSmash();
+                        }
+                        else
+                        {
+                            DownTilt();
+                        }
+                    }
+                }
+            }
+            //Horizontal attacking (Left & Right Tilt)
+            else if (xAxis != 0 && yAxis == 0)
+            {
+                //Right Tilt
+                if (dotVector.x > 0)
+                {
+                    if (didTap)
+                    {
+                        ForwardSmash();
+                    }
+                    else
+                    {
+                        RightTilt();
+                    }
+                }
+                //Left Tilt
+                else
+                {
+                    if (didTap)
+                    {
+                        ForwardSmash();
+                    }
+                    else
+                    {
+                        LeftTilt();
+                    }
+                }
+            }
+            //Vertical attacking (Up & Down Tilt)
+            else if (xAxis == 0 && yAxis != 0)
+            {
+                //Up Tilt
+                if (dotVector.y > 0)
+                {
+                    if (didTap)
+                    {
+                        UpSmash();
+                    }
+                    else
+                    {
+                        UpTilt();
+                    }
+                }//Down Tilt
+                else
+                {
+                    if (didTap)
+                    {
+                        DownSmash();
+                    }
+                    else
+                    {
+                        DownTilt();
+                    }
+                }
+            }
+            //Neutral attacking
+            else
+            {
+                Neutral();
+            }
+        }
+    }
 
     private void HandleAerial()
     {
@@ -545,7 +686,7 @@ public class Player : MonoBehaviour
 
     #region Attack Methods
 
-    private void Neutral(InputAction.CallbackContext context)
+    private void Neutral()
     {
         if (state == PlayerState.attacking)
         {
@@ -566,7 +707,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void LeftTilt(InputAction.CallbackContext context)
+    private void LeftTilt()
     {
         if (state == PlayerState.attacking)
         {
@@ -586,7 +727,7 @@ public class Player : MonoBehaviour
         state = PlayerState.None;
     }
 
-    private void RightTilt(InputAction.CallbackContext context)
+    private void RightTilt()
     {
         if (state == PlayerState.attacking)
         {
@@ -607,7 +748,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void UpTilt(InputAction.CallbackContext context)
+    private void UpTilt()
     {
         if (state == PlayerState.attacking)
         {
@@ -628,7 +769,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void DownTilt(InputAction.CallbackContext context)
+    private void DownTilt()
     {
         if (state == PlayerState.attacking)
         {
@@ -877,8 +1018,17 @@ public class Player : MonoBehaviour
 
     #region Smash Attack Methods
 
-    private void LeftSmash(InputAction.CallbackContext context)
+    private void ForwardSmash()
     {
+        //please call "HandleRotation" before calling this method.
+        //it is imperative so that your character is facing forward. (the direction of input horizontally)
+
+        //you cannot smash attack while in the air.
+        if (inAir)
+        {
+            return;
+        }
+
         if (state == PlayerState.attacking)
         {
             //cannot attack because we are already attacking.
@@ -890,7 +1040,7 @@ public class Player : MonoBehaviour
         }
 
 
-        Debug.Log("Player 1: LeftSmash ".Color("purple"));
+        Debug.Log("Player 1: ForwardSmash ".Color("purple"));
 
         //TODO: Actually code this attack.
 
@@ -898,29 +1048,13 @@ public class Player : MonoBehaviour
         state = PlayerState.None;
     }
 
-    private void RightSmash(InputAction.CallbackContext context)
+    private void UpSmash()
     {
-        if (state == PlayerState.attacking)
+        //you cannot smash attack while in the air.
+        if (inAir)
         {
-            //cannot attack because we are already attacking.
             return;
         }
-        else
-        {
-            state = PlayerState.attacking;
-        }
-
-
-        Debug.Log("Player 1: RightSmash ".Color("purple"));
-
-        //TODO: Actually code this attack.
-
-        //lastly set the playerState back to none.
-        state = PlayerState.None;
-    }
-
-    private void UpSmash(InputAction.CallbackContext context)
-    {
 
         if (state == PlayerState.attacking)
         {
@@ -940,7 +1074,7 @@ public class Player : MonoBehaviour
         state = PlayerState.None;
     }
 
-    private void DownSmash(InputAction.CallbackContext context)
+    private void DownSmash()
     {
         if (state == PlayerState.attacking)
         {
