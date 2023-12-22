@@ -85,6 +85,42 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UpTilt",
+                    "type": "Button",
+                    "id": "755d0fa8-4578-42d1-81af-d657bdcbfda6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DownTilt",
+                    "type": "Button",
+                    "id": "1eba50dd-377d-44b2-ba72-014df19bef8e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightTilt",
+                    "type": "Button",
+                    "id": "372375e0-3dbe-4383-8d21-66dad08c17b8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftTilt",
+                    "type": "Button",
+                    "id": "a711cec1-b9a9-4dd4-9203-08c2c7b6c647",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -290,7 +326,7 @@
                     "name": "Left Stick/Up + Button East [Gamepad]",
                     "id": "1dcf9b70-78e5-41ca-affd-4313254e8480",
                     "path": "OneModifier",
-                    "interactions": "",
+                    "interactions": "Press(pressPoint=1)",
                     "processors": "",
                     "groups": "",
                     "action": "UpSmash",
@@ -299,8 +335,8 @@
                 },
                 {
                     "name": "modifier",
-                    "id": "19a0de2b-a5ad-4e27-9bdf-4c10ab0072f9",
-                    "path": "<Gamepad>/leftStick/up",
+                    "id": "1af1f8f2-ac55-43f7-95b5-8ed90d7c1812",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -310,8 +346,8 @@
                 },
                 {
                     "name": "binding",
-                    "id": "1af1f8f2-ac55-43f7-95b5-8ed90d7c1812",
-                    "path": "<Gamepad>/buttonEast",
+                    "id": "19a0de2b-a5ad-4e27-9bdf-4c10ab0072f9",
+                    "path": "<Gamepad>/leftStick/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -367,7 +403,7 @@
                     "name": "Left Stick/Down + Button East [Gamepad]",
                     "id": "7cb2d57d-330d-4d3d-85a5-0f4d924f6902",
                     "path": "OneModifier",
-                    "interactions": "",
+                    "interactions": "Press(pressPoint=1)",
                     "processors": "",
                     "groups": "",
                     "action": "DownSmash",
@@ -376,8 +412,8 @@
                 },
                 {
                     "name": "modifier",
-                    "id": "429b4e44-997f-4b99-b461-ae3c63a4bcc9",
-                    "path": "<Gamepad>/leftStick/down",
+                    "id": "d0e802df-1b34-4a3d-800c-2716c8a31e0a",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -387,8 +423,8 @@
                 },
                 {
                     "name": "binding",
-                    "id": "d0e802df-1b34-4a3d-800c-2716c8a31e0a",
-                    "path": "<Gamepad>/buttonEast",
+                    "id": "429b4e44-997f-4b99-b461-ae3c63a4bcc9",
+                    "path": "<Gamepad>/leftStick/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -444,7 +480,7 @@
                     "name": "Left Stick/Right + Button East [Gamepad]",
                     "id": "b508df65-bd2b-46e2-a7bd-43e43a578f36",
                     "path": "OneModifier",
-                    "interactions": "",
+                    "interactions": "Press(pressPoint=1)",
                     "processors": "",
                     "groups": "",
                     "action": "RightSmash",
@@ -452,7 +488,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "modifier",
+                    "name": "binding",
                     "id": "74fe056d-b70b-4005-a608-bd7239f57d44",
                     "path": "<Gamepad>/leftStick/right",
                     "interactions": "",
@@ -463,7 +499,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "binding",
+                    "name": "modifier",
                     "id": "9c286514-c108-4153-b828-1c98b6c41b47",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
@@ -521,7 +557,7 @@
                     "name": "Left Stick/Left + Button East [Gamepad]",
                     "id": "d5f8b87f-34e5-448f-9caf-0729541ac564",
                     "path": "OneModifier",
-                    "interactions": "",
+                    "interactions": "Press(pressPoint=1)",
                     "processors": "",
                     "groups": "",
                     "action": "LeftSmash",
@@ -529,7 +565,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "modifier",
+                    "name": "binding",
                     "id": "2d82fc58-e45e-49a6-b407-ce1d94e311ef",
                     "path": "<Gamepad>/leftStick/left",
                     "interactions": "",
@@ -540,7 +576,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "binding",
+                    "name": "modifier",
                     "id": "8ceeb2c0-ba48-46ef-ba65-57900b66aca0",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
@@ -580,6 +616,314 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "LeftSmash",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "8f7447b2-8e8a-4ccd-b48e-1b90ce91e10a",
+                    "path": "<Gamepad>/rightStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UpTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Left Stick/Up + Button East [Gamepad]",
+                    "id": "7c69abb7-9b1e-4ab7-82e3-ef88c4e503c5",
+                    "path": "OneModifier",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UpTilt",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "binding",
+                    "id": "66c6d173-1ceb-447d-97fb-b237ede47ee3",
+                    "path": "<Gamepad>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UpTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier",
+                    "id": "c924e01a-1dd5-4b7b-908f-b83770a34757",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UpTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "W + O [Keyboard]",
+                    "id": "adf02582-2a96-4a93-b1cf-1aec1dd3d15b",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UpTilt",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "ebbb2965-9fa8-4c34-9fd0-850ce9a61d72",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "UpTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "bfbc9e24-7246-4bd8-b067-35b5efd28ca4",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "UpTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c04d3ea1-f332-47f5-b5d9-cb6df5c7b819",
+                    "path": "<Gamepad>/rightStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DownTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Left Stick/Down + Button East [Gamepad]",
+                    "id": "6a1045fd-9757-4a5b-a11a-226675e60761",
+                    "path": "OneModifier",
+                    "interactions": "Press(pressPoint=0.1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DownTilt",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "binding",
+                    "id": "6ef04941-d304-44a7-b0c2-c945d2897385",
+                    "path": "<Gamepad>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DownTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier",
+                    "id": "feb996e2-9ffd-4ad0-ae15-507181e4e046",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DownTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "S + O [Keyboard]",
+                    "id": "c14da9a0-5f67-4948-9ee4-520e9ee6687e",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DownTilt",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "771887bc-561d-45a5-9af8-4d43169e0f88",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "DownTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "c7877c0d-b128-43b0-ab26-fdda7ef74c9c",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "DownTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "e4a79c1b-ecc1-4683-b129-35f0834c47df",
+                    "path": "<Gamepad>/rightStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "RightTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Left Stick/Right + Button East [Gamepad]",
+                    "id": "1a77462c-bfd3-4ef2-b265-de3f3379d18b",
+                    "path": "OneModifier",
+                    "interactions": "Press(pressPoint=0.1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightTilt",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "binding",
+                    "id": "318c6ea0-f880-4a1c-815c-e68793988f91",
+                    "path": "<Gamepad>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "RightTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier",
+                    "id": "19944220-c292-4703-b829-394a1901aca8",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "RightTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "D + O [Keyboard]",
+                    "id": "6cd014b0-c05f-4a1f-b610-e95af330b3cc",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightTilt",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "b57c41a1-0f03-4829-86be-95d8b149bcd0",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RightTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "aefac949-1564-4e2c-ae13-66dcd7f4cac6",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RightTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c55fd614-c8be-4cc5-80ce-d664de32afe8",
+                    "path": "<Gamepad>/rightStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LeftTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Left Stick/Left + Button East [Gamepad]",
+                    "id": "56bb60ef-4088-41e2-8c73-1052986a390e",
+                    "path": "OneModifier",
+                    "interactions": "Press(pressPoint=0.1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftTilt",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "binding",
+                    "id": "a4af64c6-4b8f-4f8d-a2d7-1d8a44bf4b05",
+                    "path": "<Gamepad>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LeftTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier",
+                    "id": "ab0dc162-1ee8-4a2b-aa18-20b9def20c01",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LeftTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "A + O [Keyboard]",
+                    "id": "90b0d171-c578-4fe2-9f0a-64febdb12404",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftTilt",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "a890fd71-d1e4-42cf-ac69-960ee575b9a1",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "LeftTilt",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "69408d48-bfa1-42a9-b39d-c24496097b0a",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "LeftTilt",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

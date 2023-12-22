@@ -53,6 +53,11 @@ public class Player : MonoBehaviour
     private InputAction jumpAction;
     private InputAction attackAction;
     private InputAction specialAction;
+    //Attack inputs
+    private InputAction upTiltAction;
+    private InputAction downTiltAction;
+    private InputAction rightTiltAction;
+    private InputAction leftTiltAction;
     //Smash inputs
     private InputAction upSmashAction;
     private InputAction downSmashAction;
@@ -111,6 +116,19 @@ public class Player : MonoBehaviour
         jumpAction = playerInput.actions["Jump"];
         attackAction = playerInput.actions["Attack"];
         specialAction = playerInput.actions["Special"];
+
+        //Normal Attacks
+        upTiltAction = playerInput.actions["UpTilt"];
+        downTiltAction = playerInput.actions["DownTilt"];
+        rightTiltAction = playerInput.actions["RightTilt"];
+        leftTiltAction = playerInput.actions["LeftTilt"];
+
+        upTiltAction.performed += UpTilt;
+        downTiltAction.performed += DownTilt;
+        rightTiltAction.performed += RightTilt;
+        leftTiltAction.performed += LeftTilt;
+
+        //Smash Attacks
         upSmashAction = playerInput.actions["UpSmash"];
         downSmashAction = playerInput.actions["DownSmash"];
         rightSmashAction = playerInput.actions["RightSmash"];
@@ -266,7 +284,6 @@ public class Player : MonoBehaviour
             //only rotate when grounded,
             //or doing back aerial.
             HandleRotation();
-            HandleAttack();
             HandleSpecial();
             //HandleSmash();
         }
@@ -348,85 +365,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void HandleAttack()
-    {
-        //TODO: 
-        //Code an if statement for each attack input, a neutral and 4 directions.
-        //Make sure to change this if we are handling air attacks.
-        if (shouldAttack)
-        {
-            Vector2 directionInput = new Vector2(xAxis, yAxis);
-            Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));
-
-            if (dotVector.x != 0 && dotVector.x == dotVector.y)
-            {
-                //I think if they're the same I'm just going to 
-                //make it do up/down attacks depending on if y is positive or negative.
-                Debug.LogWarning("The user input equal weight on both the x and y axes when attacking. Please figure out how to avoid this happening.");
-            }
-            //if we have a mixed input, let's see which is greater.
-            else if (dotVector.x != 0 && dotVector.y != 0)
-            {
-                //Choose horizontal attack
-                if (Mathf.Abs(dotVector.x) > Mathf.Abs(dotVector.y))
-                {
-                    //Right Tilt
-                    if (dotVector.x > 0)
-                    {
-                        RightTilt();
-                    }//Left Tilt
-                    else
-                    {
-                        LeftTilt();
-                    }
-                }//choose vertical attack.
-                else
-                {
-                    //Up Tilt
-                    if (dotVector.y > 0)
-                    {
-                        UpTilt();
-                    }//Down Tilt
-                    else
-                    {
-                        DownTilt();
-                    }
-                }
-            }
-            //Horizontal attacking (Left & Right Tilt)
-            else if (xAxis != 0 && yAxis == 0)
-            {
-                //Right Tilt
-                if (dotVector.x > 0)
-                {
-                    RightTilt();
-                }
-                //Left Tilt
-                else
-                {
-                    LeftTilt();
-                }
-            }
-            //Vertical attacking (Up & Down Tilt)
-            else if (xAxis == 0 && yAxis != 0)
-            {
-                //Up Tilt
-                if (dotVector.y > 0)
-                {
-                    UpTilt();
-                }//Down Tilt
-                else
-                {
-                    DownTilt();
-                }
-            }
-            //Neutral attacking
-            else
-            {
-                Neutral();
-            }
-        }
-    }
+    
 
     private void HandleAerial()
     {
@@ -507,7 +446,7 @@ public class Player : MonoBehaviour
                 }//Down Aerial
                 else
                 {
-                    DownTilt();
+                    DownAerial();
                 }
             }
             //Neutral Aerial
@@ -606,7 +545,7 @@ public class Player : MonoBehaviour
 
     #region Attack Methods
 
-    private void Neutral()
+    private void Neutral(InputAction.CallbackContext context)
     {
         if (state == PlayerState.attacking)
         {
@@ -627,7 +566,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void LeftTilt()
+    private void LeftTilt(InputAction.CallbackContext context)
     {
         if (state == PlayerState.attacking)
         {
@@ -647,7 +586,7 @@ public class Player : MonoBehaviour
         state = PlayerState.None;
     }
 
-    private void RightTilt()
+    private void RightTilt(InputAction.CallbackContext context)
     {
         if (state == PlayerState.attacking)
         {
@@ -668,7 +607,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void UpTilt()
+    private void UpTilt(InputAction.CallbackContext context)
     {
         if (state == PlayerState.attacking)
         {
@@ -689,7 +628,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void DownTilt()
+    private void DownTilt(InputAction.CallbackContext context)
     {
         if (state == PlayerState.attacking)
         {
