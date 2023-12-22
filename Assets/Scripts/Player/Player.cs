@@ -45,12 +45,17 @@ public class Player : MonoBehaviour
     private InputAction specialAction;
     private InputAction smashAction;
 
-    #region attack
+    #region attack bools
 
     bool shouldAttack;
     bool shouldAttackContinuous;
 
+    bool shouldSpecialAttack;
+    bool shouldSpecialAttackContinuous;
+
     #endregion
+
+
 
     #region Jumping
 
@@ -115,6 +120,11 @@ public class Player : MonoBehaviour
         shouldAttack = attackAction.WasPressedThisFrame();
         //While button is held down this is true.
         shouldAttackContinuous = attackAction.IsPressed();
+
+        //only true during the frame the button is pressed.
+        shouldSpecialAttack = specialAction.WasPressedThisFrame();
+        //While button is held down this is true.
+        shouldSpecialAttackContinuous = attackAction.IsPressed();
 
         #endregion
 
@@ -213,10 +223,12 @@ public class Player : MonoBehaviour
             //or doing back aerial.
             HandleRotation();
             HandleAttack();
+            HandleSpecial();
         }
         else if (inAir)
         {
             HandleAerial();
+            HandleSpecial();
         }
         
 
@@ -315,10 +327,6 @@ public class Player : MonoBehaviour
                     //Right Tilt
                     if (dotVector.x > 0)
                     {
-/*                        if (inAir)
-                        {
-                            ForwardAerial();
-                        }*/
                         RightTilt();
                     }//Left Tilt
                     else
@@ -466,7 +474,82 @@ public class Player : MonoBehaviour
 
     private void HandleSpecial()
     {
+        //TODO: 
+        //Code an if statement for each attack input, a neutral and 4 directions.
+        //Make sure to change this if we are handling air attacks.
+        if (shouldSpecialAttack)
+        {
+            Vector2 directionInput = new Vector2(xAxis, yAxis);
+            Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));
 
+            if (dotVector.x != 0 && dotVector.x == dotVector.y)
+            {
+                //I think if they're the same I'm just going to 
+                //make it do up/down attacks depending on if y is positive or negative.
+                Debug.LogWarning("The user input equal weight on both the x and y axes when attacking. Please figure out how to avoid this happening.");
+            }
+            //if we have a mixed input, let's see which is greater.
+            else if (dotVector.x != 0 && dotVector.y != 0)
+            {
+                //Choose horizontal attack
+                if (Mathf.Abs(dotVector.x) > Mathf.Abs(dotVector.y))
+                {
+                    //Right Special
+                    if (dotVector.x > 0)
+                    {
+                        RightSpecial();
+                    }//Left Special
+                    else
+                    {
+                        LeftSpecial();
+                    }
+                }//choose vertical attack.
+                else
+                {
+                    //Up Special
+                    if (dotVector.y > 0)
+                    {
+                        UpSpecial();
+                    }//Down Special
+                    else
+                    {
+                        DownSpecial();
+                    }
+                }
+            }
+            //Horizontal attacking (Left & Right Special)
+            else if (xAxis != 0 && yAxis == 0)
+            {
+                //Right Special
+                if (dotVector.x > 0)
+                {
+                    RightSpecial();
+                }
+                //Left Special
+                else
+                {
+                    LeftSpecial();
+                }
+            }
+            //Vertical attacking (Up & Down Special)
+            else if (xAxis == 0 && yAxis != 0)
+            {
+                //Up Special
+                if (dotVector.y > 0)
+                {
+                    UpSpecial();
+                }//Down Special
+                else
+                {
+                    DownSpecial();
+                }
+            }
+            //Neutral attacking
+            else
+            {
+                NeutralSpecial();
+            }
+        }
     }
 
     private void ApplyFinalMovements() //Step 1
@@ -535,6 +618,35 @@ public class Player : MonoBehaviour
     private void DownAerial()
     {
         Debug.Log("Player 1: DownAerial ".Color("white"));
+    }
+
+    #endregion
+
+    #region Special Attack Methods
+
+    private void NeutralSpecial()
+    {
+        Debug.Log("Player 1: NeutralSpecial ".Color("red"));
+    }
+
+    private void LeftSpecial()
+    {
+        Debug.Log("Player 1: LeftSpecial ".Color("orange"));
+    }
+
+    private void RightSpecial()
+    {
+        Debug.Log("Player 1: RightSpecial ".Color("orange"));
+    }
+
+    private void UpSpecial()
+    {
+        Debug.Log("Player 1: UpSpecial ".Color("orange"));
+    }
+
+    private void DownSpecial()
+    {
+        Debug.Log("Player 1: DownSpecial ".Color("orange"));
     }
 
     #endregion
