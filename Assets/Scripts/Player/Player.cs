@@ -379,6 +379,8 @@ public class Player : MonoBehaviour
         //Make sure to change this if we are handling air attacks.
         if (shouldAttack)
         {
+            shouldSmash = didTap && attackAction.IsPressed();
+
             Vector2 directionInput = new Vector2(xAxis, yAxis);
             Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));
             if (dotVector.x != 0 && dotVector.x == dotVector.y)
@@ -397,7 +399,7 @@ public class Player : MonoBehaviour
                     //Right Tilt
                     if (dotVector.x > 0)
                     {
-                        if (didTap)
+                        if (shouldSmash)
                         {
                             ForwardSmash();
                         }
@@ -408,7 +410,7 @@ public class Player : MonoBehaviour
                     }//Left Tilt
                     else
                     {
-                        if (didTap)
+                        if (shouldSmash)
                         {
                             ForwardSmash();
                         }
@@ -423,7 +425,7 @@ public class Player : MonoBehaviour
                     //Up Tilt
                     if (dotVector.y > 0)
                     {
-                        if (didTap)
+                        if (shouldSmash)
                         {
                             UpSmash();
                         }
@@ -434,7 +436,7 @@ public class Player : MonoBehaviour
                     }//Down Tilt
                     else
                     {
-                        if (didTap)
+                        if (shouldSmash)
                         {
                             DownSmash();
                         }
@@ -451,7 +453,7 @@ public class Player : MonoBehaviour
                 //Right Tilt
                 if (dotVector.x > 0)
                 {
-                    if (didTap)
+                    if (shouldSmash)
                     {
                         ForwardSmash();
                     }
@@ -463,7 +465,7 @@ public class Player : MonoBehaviour
                 //Left Tilt
                 else
                 {
-                    if (didTap)
+                    if (shouldSmash)
                     {
                         ForwardSmash();
                     }
@@ -479,7 +481,7 @@ public class Player : MonoBehaviour
                 //Up Tilt
                 if (dotVector.y > 0)
                 {
-                    if (didTap)
+                    if (shouldSmash)
                     {
                         UpSmash();
                     }
@@ -490,7 +492,7 @@ public class Player : MonoBehaviour
                 }//Down Tilt
                 else
                 {
-                    if (didTap)
+                    if (shouldSmash)
                     {
                         DownSmash();
                     }
