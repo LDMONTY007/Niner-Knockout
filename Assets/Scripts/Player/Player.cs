@@ -7,6 +7,16 @@ using UnityEngine.InputSystem.Editor;
 
 public class Player : MonoBehaviour
 {
+
+    public enum PlayerState
+    {
+        None,
+        attacking,
+        falling
+    }
+
+    public PlayerState state = PlayerState.None;
+
     public GameObject playerSprite;
 
     public float groundCheckDist = 0.1f;
@@ -43,15 +53,22 @@ public class Player : MonoBehaviour
     private InputAction jumpAction;
     private InputAction attackAction;
     private InputAction specialAction;
-    private InputAction smashAction;
+    //Smash inputs
+    private InputAction upSmashAction;
+    private InputAction downSmashAction;
+    private InputAction rightSmashAction;
+    private InputAction leftSmashAction;
 
     #region attack bools
 
     bool shouldAttack;
     bool shouldAttackContinuous;
 
-    bool shouldSpecialAttack;
-    bool shouldSpecialAttackContinuous;
+    bool shouldSpecial;
+    bool shouldSpecialContinuous;
+
+    bool shouldSmash;
+    bool shouldSmashContinuous;
 
     #endregion
 
@@ -85,7 +102,42 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    
+
+    private void Awake()
+    {
+        //get the player input and assign the actions.
+        playerInput = GetComponent<PlayerInput>();
+        moveAction = playerInput.actions["Move"];
+        jumpAction = playerInput.actions["Jump"];
+        attackAction = playerInput.actions["Attack"];
+        specialAction = playerInput.actions["Special"];
+        upSmashAction = playerInput.actions["UpSmash"];
+        downSmashAction = playerInput.actions["DownSmash"];
+        rightSmashAction = playerInput.actions["RightSmash"];
+        leftSmashAction = playerInput.actions["LeftSmash"];
+
+        upSmashAction.performed += UpSmash;
+        downSmashAction.performed += DownSmash;
+        rightSmashAction.performed += RightSmash;
+        leftSmashAction.performed += LeftSmash;
+    }
+
+    private void OnEnable()
+    {
+        upSmashAction.Enable();
+        downSmashAction.Enable();
+        rightSmashAction.Enable();
+        leftSmashAction.Enable();
+    }
+
+    private void OnDisable()
+    {
+        upSmashAction.Disable();
+        downSmashAction.Disable();
+        rightSmashAction.Disable();
+        leftSmashAction.Disable();
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -100,14 +152,6 @@ public class Player : MonoBehaviour
 
         //get rigidbody.
         rb = GetComponent<Rigidbody2D>();
-
-        //get the player input and assign the actions.
-        playerInput = GetComponent<PlayerInput>();
-        moveAction = playerInput.actions["Move"];
-        jumpAction = playerInput.actions["Jump"];
-        attackAction = playerInput.actions["Attack"];
-        specialAction = playerInput.actions["Special"];
-        smashAction = playerInput.actions["SmashAttack"];
     }
 
     // Update is called once per frame
@@ -122,9 +166,9 @@ public class Player : MonoBehaviour
         shouldAttackContinuous = attackAction.IsPressed();
 
         //only true during the frame the button is pressed.
-        shouldSpecialAttack = specialAction.WasPressedThisFrame();
+        shouldSpecial = specialAction.WasPressedThisFrame();
         //While button is held down this is true.
-        shouldSpecialAttackContinuous = attackAction.IsPressed();
+        shouldSpecialContinuous = attackAction.IsPressed();
 
         #endregion
 
@@ -224,11 +268,13 @@ public class Player : MonoBehaviour
             HandleRotation();
             HandleAttack();
             HandleSpecial();
+            //HandleSmash();
         }
         else if (inAir)
         {
             HandleAerial();
             HandleSpecial();
+            //HandleSmash();
         }
         
 
@@ -477,7 +523,7 @@ public class Player : MonoBehaviour
         //TODO: 
         //Code an if statement for each attack input, a neutral and 4 directions.
         //Make sure to change this if we are handling air attacks.
-        if (shouldSpecialAttack)
+        if (shouldSpecial)
         {
             Vector2 directionInput = new Vector2(xAxis, yAxis);
             Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));
@@ -562,27 +608,106 @@ public class Player : MonoBehaviour
 
     private void Neutral()
     {
-        Debug.Log("Player 1: Neutral ".Color("green"));
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
+        Debug.Log("Player 1: Neutral ".Color("yellow"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void LeftTilt()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: LeftTilt ".Color("yellow"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
     }
 
     private void RightTilt()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: RightTilt ".Color("yellow"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void UpTilt()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: UpTilt ".Color("yellow"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void DownTilt()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: DownTilt ".Color("yellow"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     #endregion
@@ -591,16 +716,58 @@ public class Player : MonoBehaviour
 
     private void NeutralAerial()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: NeutralAerial ".Color("white"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void ForwardAerial()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: ForwardAerial ".Color("white"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void BackAerial()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         //the only time we rotate when jumping
         //is if we do a back aerial.
         //back aerial is always an input opposite of 
@@ -608,16 +775,54 @@ public class Player : MonoBehaviour
         //invert rotation on this attack.
         playerSprite.transform.rotation = Quaternion.Euler(0f, playerSprite.transform.rotation.eulerAngles.y == 0 ? 180f : 0f, 0f);
         Debug.Log("Player 1: BackAerial ".Color("white"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void UpAerial()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: UpAerial ".Color("white"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void DownAerial()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: DownAerial ".Color("white"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     #endregion
@@ -626,27 +831,192 @@ public class Player : MonoBehaviour
 
     private void NeutralSpecial()
     {
-        Debug.Log("Player 1: NeutralSpecial ".Color("red"));
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
+        Debug.Log("Player 1: NeutralSpecial ".Color("orange"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void LeftSpecial()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: LeftSpecial ".Color("orange"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void RightSpecial()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: RightSpecial ".Color("orange"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void UpSpecial()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: UpSpecial ".Color("orange"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     private void DownSpecial()
     {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
         Debug.Log("Player 1: DownSpecial ".Color("orange"));
+        
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
+    }
+
+    #endregion
+
+    #region Smash Attack Methods
+
+    private void LeftSmash(InputAction.CallbackContext context)
+    {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
+
+        Debug.Log("Player 1: LeftSmash ".Color("purple"));
+
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+    }
+
+    private void RightSmash(InputAction.CallbackContext context)
+    {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
+
+        Debug.Log("Player 1: RightSmash ".Color("purple"));
+
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+    }
+
+    private void UpSmash(InputAction.CallbackContext context)
+    {
+
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }
+
+        Debug.Log("Player 1: UpSmash ".Color("purple"));
+
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+    }
+
+    private void DownSmash(InputAction.CallbackContext context)
+    {
+        if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+
+        state = PlayerState.attacking;
+        Debug.Log("Player 1: DownSmash ".Color("purple"));
+
+        //TODO: Actually code this attack.
+
+        //lastly set the playerState back to none.
+        state = PlayerState.None;
+
     }
 
     #endregion
