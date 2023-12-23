@@ -284,8 +284,7 @@ public class Player : MonoBehaviour
         }
 
 
-        HandleJump();
-
+        
         if (isGrounded)
         {
             //only rotate when grounded,
@@ -301,6 +300,12 @@ public class Player : MonoBehaviour
             HandleSpecial();
             //HandleSmash();
         }
+
+        //currently
+        //you can jump while doing an attack,
+        //I think this is how smash works.
+        HandleJump();
+
 
         lastXinput = moveInput.x;
 
@@ -347,9 +352,9 @@ public class Player : MonoBehaviour
             //end so that it reaches the height regardless of weight.
             buttonTime = (jumpForce / (rb.mass * Physics2D.gravity.magnitude)); //initial velocity divided by player accel for gravity gives us the amount of time it will take to reach the apex.
             
-            rb.velocity = new Vector2(rb.velocity.x, 0); //Reset y velocity before we jump so it is always reaching desired height.
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce); //Reset y velocity before we jump so it is always reaching desired height.
             
-            rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse); //don't normalize transform.up cus it makes jumping more inconsistent.
+            //rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse); //don't normalize transform.up cus it makes jumping more inconsistent.
             jumpTime = 0;
             jumping = true;
             jumpCanceled = false;
@@ -359,17 +364,17 @@ public class Player : MonoBehaviour
         //This is what gives us consistent fall velocity so that jumping has the correct arc.
         Vector2 localVel = transform.InverseTransformDirection(rb.velocity);
 
-/*        if (localVel.y < 0 && inAir) //If we are in the air and at the top of the arc then apply our fall speed to make falling more game-like
+        if (localVel.y < 0 && inAir) //If we are in the air and at the top of the arc then apply our fall speed to make falling more game-like
         {
             //we don't multiply by mass because forceMode2D.Force includes that in it's calculation.
-            Vector2 jumpVec = *//*Multiplier * *//*-transform.up * (fallMultiplier - 1)*//* * Time.deltaTime*//*;
+            Vector2 jumpVec = /*Multiplier * */-transform.up * (fallMultiplier - 1) /** Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
         else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
         {
-            Vector2 jumpVec = *//*Multiplier * *//*-transform.up * (lowJumpMultiplier - 1) *//* Time.deltaTime*//*;
+            Vector2 jumpVec = /*Multiplier * */-transform.up * (lowJumpMultiplier - 1) /* Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
-        }*/
+        }
     }
 
     private void HandleAttack()

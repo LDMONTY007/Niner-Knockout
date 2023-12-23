@@ -1265,7 +1265,7 @@ MonoBehaviour:
   jumpTotal: 2
   jumpCanceled: 0
   jumping: 0
-  jumpHeight: 2.5
+  jumpHeight: 5
   jumpDist: 0
   ogJump: {x: 0, y: 0}
   fallMultiplier: 9
