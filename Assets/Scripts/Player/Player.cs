@@ -218,6 +218,7 @@ public class Player : MonoBehaviour
             {
                 jumpCount = jumpTotal; //Reset jump count when we land.
                 jumpCanceled = false;
+                //animator.SetTrigger("landing");
             }
         }
 
@@ -234,11 +235,17 @@ public class Player : MonoBehaviour
                 jumpCanceled = true;
             }
 
+            if (jumpTime < buttonTime)
+            {
+                jumpDist = transform.position.y - ogJump.y;
+            }
+
             if (jumpTime >= buttonTime) //When we reach our projected time stop jumping and begin falling.
             {
                 Debug.Log("JUMP CANCELED BY BUTTON TIME".Color("Green"));
                 jumpCanceled = true;
-                jumpDist = Vector2.Distance(transform.position, ogJump); //Not needed, just calculates distance from where we started jumping to our highest point in the jump.
+                //jumpDist = Vector2.Distance(transform.position, ogJump); //Not needed, just calculates distance from where we started jumping to our highest point in the jump.
+                jumpDist = transform.position.y - ogJump.y;
             }
         }
 
@@ -313,8 +320,10 @@ public class Player : MonoBehaviour
         
         if (doJump && isGrounded)
         {
+            //play the jump sequence
             animator.SetTrigger("jump");
-            StartCoroutine(Wait(HandleJump));
+            //wait 250 ms then actually jump.
+            StartCoroutine(Wait(HandleJump, 0.25f));
         }
         else
         {
@@ -335,6 +344,17 @@ public class Player : MonoBehaviour
         //to interpolate. Normally, this 
         //wouldn't work.
         ApplyFinalMovements();
+
+        HandlePassiveAnimation();
+    }
+
+    private void HandlePassiveAnimation()
+    {
+        Vector2 localVel = transform.InverseTransformDirection(rb.velocity);
+
+        animator.SetBool("inAir", inAir);
+        //only when we are falling do we turn this var on.
+        animator.SetBool("falling", localVel.y < 0);
     }
 
     private void HandleRotation()
@@ -350,16 +370,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    private IEnumerator Wait(Action action)
+    private IEnumerator Wait(Action action, float time)
     {
-        //Print the time of when the function is first called.
-        Debug.Log("Started Coroutine at timestamp : " + Time.time);
 
-        //yield on a new YieldInstruction that waits for 5 seconds.
-        yield return new WaitForSeconds(0.5f);
+        //wait for 0.5 seconds
+        yield return new WaitForSeconds(time);
+        //call the given action.
         action();
-        //After we have waited 5 seconds print the time again.
-        Debug.Log("Finished Coroutine at timestamp : " + Time.time);
     }
 
     private void HandleJump()
@@ -370,7 +387,6 @@ public class Player : MonoBehaviour
         {
             //play crouch animation.
             animator.ResetTrigger("jump");
-            animator.SetTrigger("falling");
             doJump = false;
             jumpCount--;
             ogJump = transform.position;
@@ -395,12 +411,14 @@ public class Player : MonoBehaviour
 
         if (localVel.y < 0 && inAir) //If we are in the air and at the top of the arc then apply our fall speed to make falling more game-like
         {
+            animator.SetBool("falling", true);
             //we don't multiply by mass because forceMode2D.Force includes that in it's calculation.
             Vector2 jumpVec = /*Multiplier * */-transform.up * (fallMultiplier - 1) /** Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
         else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
         {
+            animator.SetBool("falling", false);
             Vector2 jumpVec = /*Multiplier * */-transform.up * (lowJumpMultiplier - 1) /* Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
