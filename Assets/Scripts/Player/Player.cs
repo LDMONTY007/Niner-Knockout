@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,6 +46,8 @@ public class Player : MonoBehaviour
     private Transform camTransform;
 
     private Rigidbody2D rb;
+
+    private Animator animator;
 
     private PlayerInput playerInput;
 
@@ -165,6 +168,9 @@ public class Player : MonoBehaviour
 
         //get rigidbody.
         rb = GetComponent<Rigidbody2D>();
+
+        //get animator
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -304,7 +310,16 @@ public class Player : MonoBehaviour
         //currently
         //you can jump while doing an attack,
         //I think this is how smash works.
-        HandleJump();
+        
+        if (doJump && isGrounded)
+        {
+            animator.SetTrigger("jump");
+            StartCoroutine(Wait(HandleJump));
+        }
+        else
+        {
+            HandleJump();
+        }
 
 
         lastXinput = moveInput.x;
@@ -335,13 +350,27 @@ public class Player : MonoBehaviour
         }
     }
 
+    private IEnumerator Wait(Action action)
+    {
+        //Print the time of when the function is first called.
+        Debug.Log("Started Coroutine at timestamp : " + Time.time);
+
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSeconds(0.5f);
+        action();
+        //After we have waited 5 seconds print the time again.
+        Debug.Log("Finished Coroutine at timestamp : " + Time.time);
+    }
+
     private void HandleJump()
     {
 
 
         if (doJump)
         {
-            
+            //play crouch animation.
+            animator.ResetTrigger("jump");
+            animator.SetTrigger("falling");
             doJump = false;
             jumpCount--;
             ogJump = transform.position;
