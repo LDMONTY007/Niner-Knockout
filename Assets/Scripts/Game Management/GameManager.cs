@@ -62,7 +62,15 @@ public class GameManager
             currentIndex = 1; //reset index;
             players.Clear();
         }
-        SceneManager.LoadScene(scene);
+        if (SceneManager.GetSceneByName(scene) != null)
+        {
+            SceneManager.LoadScene(scene);
+        }
+        else
+        {
+            Debug.LogWarning("Scene : " + scene + " was not found in the build settings");
+        }
+        
 
     }
 

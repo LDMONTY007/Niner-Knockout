@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Editor;
+using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
@@ -81,7 +82,9 @@ public class Player : MonoBehaviour
 
     //did the player tap this frame?
     bool didTap;
-
+    float tapInputWindow = 0.1f;
+    float timeSinceTap;
+    bool startedInput;
     #endregion
 
 
@@ -191,15 +194,60 @@ public class Player : MonoBehaviour
 
         //this deterimines if the player tapped an input direction this frame.
         Vector2 curDir = dirAction.ReadValue<Vector2>();
-        if (Mathf.Abs(curDir.x) > Mathf.Abs(lastDirectionInput.x) || Mathf.Abs(curDir.y) > Mathf.Abs(lastDirectionInput.y))
+
+        //detect if the player has tapped an input direction.
+        //it uses the tapInputWindow parameter as the window of time
+        //in which the player needs to move the control stick from 
+        //one point to the outermost edge to register tapping.
+        if (Mathf.Abs(curDir.x) > Mathf.Abs(lastDirectionInput.x))
         {
-            didTap = true;
-            Debug.Log("Tap!".Color("cyan"));
+            //if we were at the center before
+            if (lastDirectionInput.x < 0.1 && !startedInput)
+            {
+                startedInput = true;
+                timeSinceTap = 0f;
+                Debug.Log("STARTED");
+            }
+
+            //Debug.Log(Mathf.Abs(curDir.x) - Mathf.Abs(lastDirectionInput.x));
+            if (Mathf.Abs(curDir.x) > 0.98 && timeSinceTap < tapInputWindow && startedInput)
+            {
+                Debug.Log("Tap!".Color("cyan") + "X: " + curDir.x + ", Y: " + curDir.y);
+                didTap = true;
+                startedInput = false;
+            }
+            
         }
-        else
+        else if (Mathf.Abs(curDir.y) > Mathf.Abs(lastDirectionInput.y))
         {
-            didTap = false;
+            if (lastDirectionInput.y < 0.1 && !startedInput)
+            {
+                startedInput = true;
+                timeSinceTap = 0f;
+                Debug.Log("STARTED");
+            }
+
+            if (Mathf.Abs(curDir.y) > 0.98 && timeSinceTap < tapInputWindow && startedInput)
+            {
+                Debug.Log("Tap!".Color("cyan") + "X: " + curDir.x + ", Y: " + curDir.y);
+                didTap = true;
+                startedInput = false;
+            }
+            
         }
+        else if (lastDirectionInput.x < 0.99 && lastDirectionInput.y < 0.99 && startedInput && timeSinceTap >= tapInputWindow)
+        {
+            startedInput = false;
+            Debug.Log("STOPPED");
+            //timeSinceTap = 0f;
+        }
+        
+        if (startedInput)
+        {
+            timeSinceTap += Time.deltaTime;
+        }
+
+
 
         #endregion
 
