@@ -84,7 +84,14 @@ public class Player : MonoBehaviour
     bool didTap;
     float tapInputWindow = 0.1f;
     float timeSinceTap;
-    bool startedInput;
+    bool startedTapInput;
+    float tapStopWindow = 0.2f;
+    float tapStopTime;
+
+    public float attackStopWindow = 0.2f;
+    float attackStopTime;
+    bool shouldWaitToAttack;
+
     #endregion
 
 
@@ -202,51 +209,84 @@ public class Player : MonoBehaviour
         if (Mathf.Abs(curDir.x) > Mathf.Abs(lastDirectionInput.x))
         {
             //if we were at the center before
-            if (lastDirectionInput.x < 0.1 && !startedInput)
+            if (lastDirectionInput.x < 0.1 && !startedTapInput)
             {
-                startedInput = true;
+                startedTapInput = true;
                 timeSinceTap = 0f;
                 Debug.Log("STARTED");
             }
 
             //Debug.Log(Mathf.Abs(curDir.x) - Mathf.Abs(lastDirectionInput.x));
-            if (Mathf.Abs(curDir.x) > 0.98 && timeSinceTap < tapInputWindow && startedInput)
+            if (Mathf.Abs(curDir.x) > 0.98 && timeSinceTap < tapInputWindow && startedTapInput)
             {
                 Debug.Log("Tap!".Color("cyan") + "X: " + curDir.x + ", Y: " + curDir.y);
                 didTap = true;
-                startedInput = false;
+                startedTapInput = false;
             }
             
         }
         else if (Mathf.Abs(curDir.y) > Mathf.Abs(lastDirectionInput.y))
         {
-            if (lastDirectionInput.y < 0.1 && !startedInput)
+            if (lastDirectionInput.y < 0.1 && !startedTapInput)
             {
-                startedInput = true;
+                startedTapInput = true;
                 timeSinceTap = 0f;
-                Debug.Log("STARTED");
+                Debug.Log("STARTED TAP");
             }
 
-            if (Mathf.Abs(curDir.y) > 0.98 && timeSinceTap < tapInputWindow && startedInput)
+            if (Mathf.Abs(curDir.y) > 0.98 && timeSinceTap < tapInputWindow && startedTapInput)
             {
                 Debug.Log("Tap!".Color("cyan") + "X: " + curDir.x + ", Y: " + curDir.y);
                 didTap = true;
-                startedInput = false;
+                startedTapInput = false;
             }
             
         }
-        else if (lastDirectionInput.x < 0.99 && lastDirectionInput.y < 0.99 && startedInput && timeSinceTap >= tapInputWindow)
+        else if (lastDirectionInput.x < 0.99 && lastDirectionInput.y < 0.99 && startedTapInput && timeSinceTap >= tapInputWindow)
         {
-            startedInput = false;
-            Debug.Log("STOPPED");
+            startedTapInput = false;
+            Debug.Log("STOPPED TAP");
             //timeSinceTap = 0f;
         }
         
-        if (startedInput)
+        if (startedTapInput)
         {
             timeSinceTap += Time.deltaTime;
         }
 
+        
+        //window until we stop telling 
+        //the code that we tapped. 
+        if (didTap && !startedTapInput)
+        {
+            if (tapStopTime >= tapStopWindow)
+            {
+                tapStopTime = 0f;
+                didTap = false;
+            }
+            else
+            tapStopTime += Time.deltaTime;
+        }
+
+        if (shouldAttack || shouldWaitToAttack)
+        {
+            if (attackAction.WasPressedThisFrame())
+            {
+                attackStopTime = 0f;
+                Debug.Log("Attack hit before tapping".Color("red"));
+            }
+           
+            if (attackStopTime >= attackStopWindow)
+            {
+                //attackStopTime = 0f;
+                shouldWaitToAttack = false;
+            }
+            else
+            {
+                attackStopTime += Time.deltaTime;
+                shouldWaitToAttack = true;
+            }
+        }
 
 
         #endregion
@@ -477,9 +517,26 @@ public class Player : MonoBehaviour
         //TODO: 
         //Code an if statement for each attack input, a neutral and 4 directions.
         //Make sure to change this if we are handling air attacks.
-        if (shouldAttack)
+        if (shouldAttack || shouldWaitToAttack)
         {
             shouldSmash = didTap && attackAction.IsPressed();
+
+            //if the player inputted the attack button recently and
+            //they haven't tapped give them a small window to tap
+            //so that they can smash attack. 
+            if (!didTap && shouldWaitToAttack)
+            {
+                //Debug.Log("Should wait");
+                return;
+            }
+            else if (didTap && shouldWaitToAttack)
+            {
+                //Debug.Log("Should Attack");
+                shouldSmash = true;
+            }
+
+            //turn off the didtap var.
+            didTap = false;
 
             Vector2 directionInput = new Vector2(xAxis, yAxis);
             Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));

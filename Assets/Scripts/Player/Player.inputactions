@@ -94,15 +94,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Tap Stick",
-                    "type": "PassThrough",
-                    "id": "37ed3cbf-7306-4355-9a41-bbd337e38d99",
-                    "expectedControlType": "Stick",
-                    "processors": "",
-                    "interactions": "Tap(pressPoint=1)",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -666,17 +657,6 @@
                     "action": "Direction",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "93b3d7f9-4623-47a6-b16a-4dfe82cca326",
-                    "path": "<Gamepad>/leftStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Tap Stick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
