@@ -1,0 +1,24 @@
+Up Tilt = High Jump, glide down with hat.
+Down Tilt = Stomp into ground
+Side Tilt = Punch Forward
+
+Up Smash = Gold Pickaxe Up
+Down Smash = Smash Gold Pickaxe down and send out a wave of rocks breaking
+Forward Smash = Gold Pickaxe Slash Forward
+
+Up Special = Silver Pickaxe Up
+Down Special = Silver Pickaxe something
+Side Special = Silver Pickaxe something
+
+Up air = flip upwards
+Down air = drop pickaxe onto the ground like Pacman fire hydrant
+Forward air = 
+Back air = 
+
+
+Skins:
+
+Make an owl mascot skin - "Prior to the "49ers" moniker, the athletic teams were known as the "Owls" due to CCUNC's beginnings as a night school." https://en.wikipedia.org/wiki/Norm_the_Niner
+
+Norm in a black suit with a black tie like in this video: https://www.youtube.com/watch?v=7eZqXSbwzX4&list=PL7Nlum4_q5kidHmX0MySqQ8KAexNlEPaa&index=15
+
