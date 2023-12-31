@@ -457,6 +457,7 @@ public class Player : MonoBehaviour
         //set the direction the player is facing.
         if ((moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && moveInput.x - lastXinput > 0)
         {
+            Debug.Log("Should Rotate");
             playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
         }
     }
