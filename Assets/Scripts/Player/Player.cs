@@ -91,7 +91,7 @@ public class Player : MonoBehaviour
     public float attackStopWindow = 0.2f;
     float attackStopTime;
     bool shouldWaitToAttack;
-
+    bool doDelayedAttack;
     #endregion
 
 
@@ -280,6 +280,7 @@ public class Player : MonoBehaviour
             {
                 //attackStopTime = 0f;
                 shouldWaitToAttack = false;
+                doDelayedAttack = true;
             }
             else
             {
@@ -517,8 +518,12 @@ public class Player : MonoBehaviour
         //TODO: 
         //Code an if statement for each attack input, a neutral and 4 directions.
         //Make sure to change this if we are handling air attacks.
-        if (shouldAttack || shouldWaitToAttack)
+        if (shouldAttack || shouldWaitToAttack || doDelayedAttack)
         {
+            if (doDelayedAttack)
+            {
+                doDelayedAttack = false;
+            }
             shouldSmash = didTap && attackAction.IsPressed();
 
             //if the player inputted the attack button recently and
@@ -533,6 +538,9 @@ public class Player : MonoBehaviour
             {
                 //Debug.Log("Should Attack");
                 shouldSmash = true;
+                shouldWaitToAttack = false;
+                doDelayedAttack = false;
+                shouldAttack = false;
             }
 
             //turn off the didtap var.
