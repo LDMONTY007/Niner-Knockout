@@ -444,6 +444,8 @@ public class Player : MonoBehaviour
         animator.SetBool("inAir", inAir);
         //only when we are falling do we turn this var on.
         animator.SetBool("falling", localVel.y < 0);
+
+        animator.SetFloat("Speed", moveInput.magnitude > 0.7 ? 1f : moveInput.magnitude < 0.1f ? 0f : 0.5f);
     }
 
     private void HandleRotation()

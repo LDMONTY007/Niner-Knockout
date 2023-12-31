@@ -1235,6 +1235,18 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 2935642290051549552, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935642290051549552, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935642290051549552, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4763700084991841778, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
       propertyPath: m_Name
       value: PlayerSprite
@@ -1282,6 +1294,10 @@ PrefabInstance:
     - target: {fileID: 6711993648058681849, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
       propertyPath: m_Name
       value: NormTheNiner
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367962794751940812, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00000002681816
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
