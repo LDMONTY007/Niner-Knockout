@@ -231,7 +231,7 @@ public class Player : MonoBehaviour
             {
                 startedTapInput = true;
                 timeSinceTap = 0f;
-                Debug.Log("STARTED TAP");
+                //Debug.Log("STARTED TAP");
             }
 
             if (Mathf.Abs(curDir.y) > 0.98 && timeSinceTap < tapInputWindow && startedTapInput)
@@ -245,7 +245,7 @@ public class Player : MonoBehaviour
         else if (lastDirectionInput.x < 0.99 && lastDirectionInput.y < 0.99 && startedTapInput && timeSinceTap >= tapInputWindow)
         {
             startedTapInput = false;
-            Debug.Log("STOPPED TAP");
+            //Debug.Log("STOPPED TAP");
             //timeSinceTap = 0f;
         }
         
@@ -455,7 +455,13 @@ public class Player : MonoBehaviour
         //aerial can be registered.
         //if the player is moving the stick in the same direction for more than one frame,
         //set the direction the player is facing.
-        if ((moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && moveInput.x - lastXinput > 0)
+        if (playerInput.currentControlScheme.Equals("Gamepad") && (moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && moveInput.x - lastXinput > 0)
+        {
+            playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
+        }
+        
+        //if user is inputting via keyboard
+        if (playerInput.currentControlScheme.Equals("Keyboard&Mouse") && Mathf.Abs(moveInput.x) > 0)
         {
             Debug.Log("Should Rotate");
             playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
