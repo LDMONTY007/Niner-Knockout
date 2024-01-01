@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    private Animator animator;
+    public Animator animator;
 
     private PlayerInput playerInput;
 
@@ -179,7 +179,8 @@ public class Player : MonoBehaviour
         //get rigidbody.
         rb = GetComponent<Rigidbody2D>();
 
-        //get animator
+        //get animator if it isn't manually assigned.
+        if (animator == null)
         animator = GetComponent<Animator>();
     }
 
