@@ -203,62 +203,24 @@ public class Player : MonoBehaviour
         //this deterimines if the player tapped an input direction this frame.
         Vector2 curDir = dirAction.ReadValue<Vector2>();
 
-        //detect if the player has tapped an input direction.
-        //it uses the tapInputWindow parameter as the window of time
-        //in which the player needs to move the control stick from 
-        //one point to the outermost edge to register tapping.
-        if (Mathf.Abs(curDir.x) > Mathf.Abs(lastDirectionInput.x))
-        {
-            //if we were at the center before
-            if (lastDirectionInput.x < 0.1 && !startedTapInput)
-            {
-                startedTapInput = true;
-                timeSinceTap = 0f;
-                Debug.Log("STARTED");
-            }
+        //Detect if the player tapped.
+        //the first 2 parts of teh conditional
+        //insure that we aren't detecting the joystick 
+        //flinging back to the center after the player lets
+        //go of the joystick.
 
-            //Debug.Log(Mathf.Abs(curDir.x) - Mathf.Abs(lastDirectionInput.x));
-            if (Mathf.Abs(curDir.x) > 0.98 && timeSinceTap < tapInputWindow && startedTapInput)
-            {
-                Debug.Log("Tap!".Color("cyan") + "X: " + curDir.x + ", Y: " + curDir.y);
-                didTap = true;
-                startedTapInput = false;
-            }
-            
-        }
-        else if (Mathf.Abs(curDir.y) > Mathf.Abs(lastDirectionInput.y))
+        //but we are just checking if the speed of the joystick
+        //input is fast enough and if it is we detect a tap.
+        if (curDir.magnitude > 0.09 && curDir.magnitude > lastDirectionInput.magnitude && ((curDir - lastDirectionInput).magnitude / Time.deltaTime) >= 20f)
         {
-            if (lastDirectionInput.y < 0.1 && !startedTapInput)
-            {
-                startedTapInput = true;
-                timeSinceTap = 0f;
-                //Debug.Log("STARTED TAP");
-            }
-
-            if (Mathf.Abs(curDir.y) > 0.98 && timeSinceTap < tapInputWindow && startedTapInput)
-            {
-                Debug.Log("Tap!".Color("cyan") + "X: " + curDir.x + ", Y: " + curDir.y);
-                didTap = true;
-                startedTapInput = false;
-            }
-            
-        }
-        else if (lastDirectionInput.x < 0.99 && lastDirectionInput.y < 0.99 && startedTapInput && timeSinceTap >= tapInputWindow)
-        {
-            startedTapInput = false;
-            //Debug.Log("STOPPED TAP");
-            //timeSinceTap = 0f;
-        }
-        
-        if (startedTapInput)
-        {
-            timeSinceTap += Time.deltaTime;
+            didTap = true;
+            //Debug.Log("TAP! ".Color("red") + ((curDir - lastDirectionInput).magnitude / Time.deltaTime));
         }
 
         
         //window until we stop telling 
         //the code that we tapped. 
-        if (didTap && !startedTapInput)
+        if (didTap /*&& !startedTapInput*/)
         {
             if (tapStopTime >= tapStopWindow)
             {
@@ -271,7 +233,12 @@ public class Player : MonoBehaviour
 
         if (shouldAttack || shouldWaitToAttack)
         {
-            if (attackAction.WasPressedThisFrame())
+            //remove the !shouldWaitToAttack later if need be,
+            //but it makes it so that we attack after the delay
+            //and if we press attack again it DOESN'T reset the 
+            //attack delay thus canceling the attack and extending
+            //the timer. 
+            if (attackAction.WasPressedThisFrame() && !shouldWaitToAttack)
             {
                 attackStopTime = 0f;
                 Debug.Log("Attack hit before tapping".Color("red"));
