@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NormTheNiner : Player
 {
+
     public override void Neutral()
     {
         base.Neutral();
@@ -13,19 +14,19 @@ public class NormTheNiner : Player
     public override void UpTilt()
     {
         base.UpTilt();
-        animator.SetTrigger("UpTilt");
+        animator.SetTrigger("upTilt");
     }
 
     public override void DownTilt()
     {
         base.DownTilt();
-        animator.SetTrigger("DownTilt");
+        animator.SetTrigger("downTilt");
     }
 
     public override void ForwardTilt()
     {
         base.ForwardTilt();
-        animator.SetTrigger("ForwardTilt");
+        animator.SetTrigger("forwardTilt");
     }
 
     #endregion

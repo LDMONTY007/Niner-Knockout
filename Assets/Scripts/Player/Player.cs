@@ -413,7 +413,9 @@ public class Player : MonoBehaviour
         //only when we are falling do we turn this var on.
         animator.SetBool("falling", localVel.y < 0);
 
-        animator.SetFloat("Speed", moveInput.magnitude > 0.7 ? 1f : moveInput.magnitude < 0.1f ? 0f : 0.5f);
+        animator.SetFloat("speed", moveInput.magnitude > 0.7 ? 1f : moveInput.magnitude < 0.1f ? 0f : 0.5f);
+
+        animator.SetBool("holdAttack", shouldAttackContinuous);
     }
 
     private void HandleRotation()
