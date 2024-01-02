@@ -1,14 +1,14 @@
-Up Tilt = High Jump, glide down with hat.
-Down Tilt = Stomp into ground
-Side Tilt = Punch Forward
+Up Tilt = High Jump attack with silver pickaxe, glide down with hat.
+Down Tilt = Silver Pickaxe something
+Side Tilt = Silver Pickaxe something
 
 Up Smash = Gold Pickaxe Up
 Down Smash = Smash Gold Pickaxe down and send out a wave of rocks breaking
 Forward Smash = Gold Pickaxe Slash Forward
 
-Up Special = Silver Pickaxe Up
-Down Special = Silver Pickaxe something
-Side Special = Silver Pickaxe something
+Up Special = Basketball dribble then jump upwards holding basketball above head like they are going to dunk
+Down Special = Basketball dunk.
+Side Special = Football charge forward, 
 
 Up air = flip upwards
 Down air = drop pickaxe onto the ground like Pacman fire hydrant

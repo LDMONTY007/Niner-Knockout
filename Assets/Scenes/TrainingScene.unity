@@ -1133,51 +1133,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2788127572630897552, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 129253552}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4763700084991841778, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1102807288}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
 --- !u!4 &1102807284 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2788127572630897552, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
   m_PrefabInstance: {fileID: 1102807283}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1102807285 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2752017952378910617, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
-  m_PrefabInstance: {fileID: 1102807283}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1102807286 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1924461069148456962, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
-  m_PrefabInstance: {fileID: 1102807283}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1102807287 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4763700084991841778, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
-  m_PrefabInstance: {fileID: 1102807283}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1102807288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1102807287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57c008f954fe54a8bb972de1018a2cb8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RootBone: {fileID: 1102807285}
-  m_BoneTransforms:
-  - {fileID: 1102807286}
-  m_Bounds:
-    m_Center: {x: 1.9719515, y: 2.1069174, z: 0}
-    m_Extent: {x: 0.15625, y: 0.15625, z: 0}
-  m_AlwaysUpdate: 1
-  m_AutoRebind: 0
 --- !u!1 &1274403318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1691,6 +1653,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6125709618933065783, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
+      propertyPath: m_Size.x
+      value: 0.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 6125709618933065783, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
+      propertyPath: m_Size.y
+      value: 1.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 6125709618933065783, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.017
+      objectReference: {fileID: 0}
+    - target: {fileID: 6125709618933065783, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.14048606
+      objectReference: {fileID: 0}
     - target: {fileID: 6711993648058681849, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
       propertyPath: m_Name
       value: NormTheNiner
@@ -1714,28 +1692,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4763700084991841778, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6123576079786921873}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
---- !u!1 &6123576079786921872 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4763700084991841778, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}
-  m_PrefabInstance: {fileID: 6123576079786921871}
-  m_PrefabAsset: {fileID: 0}
---- !u!210 &6123576079786921873
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6123576079786921872}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
 --- !u!1001 &8885030033886963334
 PrefabInstance:
   m_ObjectHideFlags: 0

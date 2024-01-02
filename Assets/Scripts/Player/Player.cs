@@ -580,7 +580,7 @@ public class Player : MonoBehaviour
                         }
                         else
                         {
-                            RightTilt();
+                            ForwardTilt();
                         }
                     }//Left Tilt
                     else
@@ -591,7 +591,7 @@ public class Player : MonoBehaviour
                         }
                         else
                         {
-                            LeftTilt();
+                            ForwardTilt();
                         }
                     }
                 }//choose vertical attack.
@@ -634,7 +634,7 @@ public class Player : MonoBehaviour
                     }
                     else
                     {
-                        RightTilt();
+                        ForwardTilt();
                     }
                 }
                 //Left Tilt
@@ -646,7 +646,7 @@ public class Player : MonoBehaviour
                     }
                     else
                     {
-                        LeftTilt();
+                        ForwardTilt();
                     }
                 }
             }
@@ -800,11 +800,11 @@ public class Player : MonoBehaviour
                     //Right Special
                     if (dotVector.x > 0)
                     {
-                        RightSpecial();
+                        ForwardSpecial();
                     }//Left Special
                     else
                     {
-                        LeftSpecial();
+                        ForwardSpecial();
                     }
                 }//choose vertical attack.
                 else
@@ -826,12 +826,12 @@ public class Player : MonoBehaviour
                 //Right Special
                 if (dotVector.x > 0)
                 {
-                    RightSpecial();
+                    ForwardSpecial();
                 }
                 //Left Special
                 else
                 {
-                    LeftSpecial();
+                    ForwardSpecial();
                 }
             }
             //Vertical attacking (Up & Down Special)
@@ -863,7 +863,7 @@ public class Player : MonoBehaviour
 
     #region Attack Methods
 
-    private void Neutral()
+    public virtual void Neutral()
     {
         if (state == PlayerState.attacking)
         {
@@ -884,7 +884,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void LeftTilt()
+    public virtual void ForwardTilt()
     {
         if (state == PlayerState.attacking)
         {
@@ -896,36 +896,20 @@ public class Player : MonoBehaviour
             state = PlayerState.attacking;
         }
 
-        Debug.Log("Player 1: LeftTilt ".Color("yellow"));
-        
+        Debug.Log("Player 1: ForwardTilt ".Color("yellow"));
+
+        //handle rotation
+
+        HandleRotation();
+
         //TODO: Actually code this attack.
+
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
     }
 
-    private void RightTilt()
-    {
-        if (state == PlayerState.attacking)
-        {
-            //cannot attack because we are already attacking.
-            return;
-        }
-        else
-        {
-            state = PlayerState.attacking;
-        }
-
-        Debug.Log("Player 1: RightTilt ".Color("yellow"));
-        
-        //TODO: Actually code this attack.
-
-        //lastly set the playerState back to none.
-        state = PlayerState.None;
-
-    }
-
-    private void UpTilt()
+    public virtual void UpTilt()
     {
         if (state == PlayerState.attacking)
         {
@@ -946,7 +930,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void DownTilt()
+    public virtual void DownTilt()
     {
         if (state == PlayerState.attacking)
         {
@@ -971,7 +955,7 @@ public class Player : MonoBehaviour
 
     #region Aerial Methods
 
-    private void NeutralAerial()
+    public virtual void NeutralAerial()
     {
         if (state == PlayerState.attacking)
         {
@@ -992,7 +976,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void ForwardAerial()
+    public virtual void ForwardAerial()
     {
         if (state == PlayerState.attacking)
         {
@@ -1013,7 +997,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void BackAerial()
+    public virtual void BackAerial()
     {
         if (state == PlayerState.attacking)
         {
@@ -1040,7 +1024,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void UpAerial()
+    public virtual void UpAerial()
     {
         if (state == PlayerState.attacking)
         {
@@ -1061,7 +1045,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void DownAerial()
+    public virtual void DownAerial()
     {
         if (state == PlayerState.attacking)
         {
@@ -1086,7 +1070,7 @@ public class Player : MonoBehaviour
 
     #region Special Attack Methods
 
-    private void NeutralSpecial()
+    public virtual void NeutralSpecial()
     {
         if (state == PlayerState.attacking)
         {
@@ -1107,7 +1091,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void LeftSpecial()
+    public virtual void ForwardSpecial()
     {
         if (state == PlayerState.attacking)
         {
@@ -1119,8 +1103,11 @@ public class Player : MonoBehaviour
             state = PlayerState.attacking;
         }
 
-        Debug.Log("Player 1: LeftSpecial ".Color("orange"));
-        
+        Debug.Log("Player 1: ForwardSpecial ".Color("orange"));
+
+        //Handle switching facing directions
+        HandleRotation();
+
         //TODO: Actually code this attack.
 
         //lastly set the playerState back to none.
@@ -1128,28 +1115,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void RightSpecial()
-    {
-        if (state == PlayerState.attacking)
-        {
-            //cannot attack because we are already attacking.
-            return;
-        }
-        else
-        {
-            state = PlayerState.attacking;
-        }
-
-        Debug.Log("Player 1: RightSpecial ".Color("orange"));
-        
-        //TODO: Actually code this attack.
-
-        //lastly set the playerState back to none.
-        state = PlayerState.None;
-
-    }
-
-    private void UpSpecial()
+    public virtual void UpSpecial()
     {
         if (state == PlayerState.attacking)
         {
@@ -1170,7 +1136,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void DownSpecial()
+    public virtual void DownSpecial()
     {
         if (state == PlayerState.attacking)
         {
@@ -1195,7 +1161,7 @@ public class Player : MonoBehaviour
 
     #region Smash Attack Methods
 
-    private void ForwardSmash()
+    public virtual void ForwardSmash()
     {
         //please call "HandleRotation" before calling this method.
         //it is imperative so that your character is facing forward. (the direction of input horizontally)
@@ -1225,7 +1191,7 @@ public class Player : MonoBehaviour
         state = PlayerState.None;
     }
 
-    private void UpSmash()
+    public virtual void UpSmash()
     {
         //you cannot smash attack while in the air.
         if (inAir)
@@ -1251,7 +1217,7 @@ public class Player : MonoBehaviour
         state = PlayerState.None;
     }
 
-    private void DownSmash()
+    public virtual void DownSmash()
     {
         if (state == PlayerState.attacking)
         {

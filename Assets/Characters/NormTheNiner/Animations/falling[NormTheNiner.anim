@@ -19,7 +19,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 0, y: 0, z: -15}
+        value: {x: 0, y: 0, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -29,23 +29,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: {x: 0, y: 0, z: 90}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso
+    path: Torso/Torso
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -61,7 +45,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -77,7 +61,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -93,7 +77,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -109,7 +93,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -125,7 +109,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -141,7 +125,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -157,7 +141,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -173,7 +157,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -189,7 +173,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -205,7 +189,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -221,7 +205,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -237,7 +221,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -253,7 +237,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -269,7 +253,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -285,7 +269,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -301,7 +285,23 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: 0, y: 0, z: 75}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: 
   m_PositionCurves:
   - curve:
       serializedVersion: 2
@@ -318,23 +318,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: {x: 0, y: 0, z: 0}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso
+    path: Torso/Torso
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -350,7 +334,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -366,7 +350,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -382,7 +366,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -398,7 +382,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -414,7 +398,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -430,7 +414,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -446,7 +430,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -462,7 +446,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -478,13 +462,13 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
   - curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 0.3, y: 0.00000030547383, z: 0}
+        value: {x: 0.58, y: 0, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -494,7 +478,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -510,7 +494,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -526,7 +510,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -542,7 +526,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -558,7 +542,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -574,7 +558,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -590,7 +574,23 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: 0, y: 0, z: 0}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: 
   m_ScaleCurves:
   - curve:
       serializedVersion: 2
@@ -607,7 +607,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: SpriteParent/PlayerSprite
+    path: 
   m_FloatCurves: []
   m_PPtrCurves: []
   m_SampleRate: 60
@@ -618,7 +618,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 2825833047
+      path: 0
       attribute: 3
       script: {fileID: 0}
       typeID: 4
@@ -627,7 +627,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2825833047
+      path: 3560887012
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -636,7 +636,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3644339713
+      path: 733527679
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -645,7 +645,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3031151279
+      path: 311921535
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -654,7 +654,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2642713424
+      path: 3314087862
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -663,7 +663,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1957593729
+      path: 2671329859
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -672,7 +672,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1113437878
+      path: 3048545023
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -681,7 +681,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1319407564
+      path: 1045561898
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -690,7 +690,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 694815833
+      path: 1839224961
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -699,7 +699,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3750219255
+      path: 2580943592
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -708,7 +708,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2673804556
+      path: 3237490456
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -717,7 +717,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 831819205
+      path: 2284122691
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -726,7 +726,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1621068300
+      path: 4293157306
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -735,7 +735,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1584943696
+      path: 4195576415
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -744,7 +744,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1419539092
+      path: 2277982696
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -753,7 +753,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 945439514
+      path: 3770835515
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -762,7 +762,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2759290675
+      path: 2665057840
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -771,7 +771,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1377017914
+      path: 2583857469
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -780,7 +780,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2632586225
+      path: 0
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -789,7 +789,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2825833047
+      path: 3560887012
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -798,7 +798,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3644339713
+      path: 733527679
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -807,7 +807,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3031151279
+      path: 311921535
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -816,7 +816,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2642713424
+      path: 3314087862
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -825,7 +825,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1957593729
+      path: 2671329859
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -834,7 +834,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1113437878
+      path: 3048545023
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -843,7 +843,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1319407564
+      path: 1045561898
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -852,7 +852,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 694815833
+      path: 1839224961
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -861,7 +861,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3750219255
+      path: 2580943592
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -870,7 +870,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2673804556
+      path: 3237490456
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -879,7 +879,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 831819205
+      path: 2284122691
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -888,7 +888,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1621068300
+      path: 4293157306
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -897,7 +897,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1584943696
+      path: 4195576415
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -906,7 +906,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1419539092
+      path: 2277982696
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -915,7 +915,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 945439514
+      path: 3770835515
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -924,7 +924,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2759290675
+      path: 2665057840
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -933,7 +933,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1377017914
+      path: 2583857469
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -942,7 +942,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2632586225
+      path: 0
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -989,7 +989,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite
+    path: Torso/Torso
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1010,7 +1010,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite
+    path: Torso/Torso
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1031,7 +1031,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite
+    path: Torso/Torso
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1052,7 +1052,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite
+    path: Torso/Torso
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1073,7 +1073,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite
+    path: Torso/Torso
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1083,7 +1083,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -15
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1094,70 +1094,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 2.6379075
-        outSlope: 2.6379075
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.15392976
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalScale.x
-    path: SpriteParent/PlayerSprite
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: -4.3840227
-        outSlope: -4.3840227
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.13165042
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalScale.y
-    path: SpriteParent/PlayerSprite
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalScale.z
-    path: SpriteParent/PlayerSprite
+    path: Torso/Torso
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1178,133 +1115,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 90
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1325,7 +1136,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1346,7 +1157,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1367,7 +1178,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1388,7 +1199,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1409,7 +1220,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1430,7 +1241,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1451,7 +1262,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1472,7 +1283,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1493,7 +1304,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1514,7 +1325,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1535,7 +1346,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1556,7 +1367,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1577,7 +1388,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1598,7 +1409,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1619,7 +1430,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1640,7 +1451,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1661,7 +1472,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1682,7 +1493,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1703,7 +1514,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1724,7 +1535,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1745,7 +1556,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1766,7 +1577,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1787,7 +1598,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1808,7 +1619,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1829,7 +1640,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1850,7 +1661,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1871,7 +1682,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1892,7 +1703,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1913,7 +1724,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1934,7 +1745,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1955,7 +1766,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1976,7 +1787,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1997,7 +1808,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2018,7 +1829,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2039,7 +1850,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2060,7 +1871,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2081,7 +1892,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2102,7 +1913,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2123,7 +1934,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2144,7 +1955,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2165,7 +1976,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2186,7 +1997,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2207,7 +2018,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2228,7 +2039,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2249,7 +2060,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2270,7 +2081,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2291,7 +2102,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2312,7 +2123,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2333,7 +2144,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2354,7 +2165,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2375,7 +2186,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2396,7 +2207,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2417,7 +2228,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2427,7 +2238,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.3
+        value: 0.58
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2438,7 +2249,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2448,7 +2259,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.00000030547383
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2459,7 +2270,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2480,7 +2291,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2501,7 +2312,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2522,7 +2333,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2543,7 +2354,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2564,7 +2375,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2585,7 +2396,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2606,7 +2417,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2627,7 +2438,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2648,7 +2459,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2669,7 +2480,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2690,7 +2501,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2711,7 +2522,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2732,7 +2543,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2753,7 +2564,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2774,7 +2585,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2795,7 +2606,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2816,7 +2627,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2837,7 +2648,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2858,7 +2669,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2879,7 +2690,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2900,7 +2711,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2921,7 +2732,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2942,7 +2753,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2963,7 +2774,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2984,7 +2795,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3005,7 +2816,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3026,7 +2837,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3047,7 +2858,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3068,7 +2879,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3089,7 +2900,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3110,7 +2921,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3131,7 +2942,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3152,7 +2963,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3173,7 +2984,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3194,7 +3005,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3215,7 +3026,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3236,7 +3047,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3257,7 +3068,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3278,7 +3089,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3299,7 +3110,196 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.x
+    path: 
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.y
+    path: 
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.z
+    path: 
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.x
+    path: 
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.y
+    path: 
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 75
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.z
+    path: 
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 2.6379075
+        outSlope: 2.6379075
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.15392976
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalScale.x
+    path: 
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -4.3840227
+        outSlope: -4.3840227
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.13165042
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalScale.y
+    path: 
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalScale.z
+    path: 
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3312,7 +3312,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3324,7 +3324,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3336,7 +3336,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R
+    path: Arm_R/Shoulder_R/Forearm_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3348,7 +3348,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3360,7 +3360,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3372,7 +3372,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite
+    path: Arm_R/Shoulder_R/Forearm_R/Hand_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3384,7 +3384,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso
+    path: 
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3396,7 +3396,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso
+    path: 
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3408,7 +3408,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso
+    path: 
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3420,7 +3420,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3432,7 +3432,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3444,7 +3444,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L
+    path: Leg_L/Groin_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3456,7 +3456,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3468,7 +3468,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3480,7 +3480,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L
+    path: Leg_L/Groin_L/Leg_Upper_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3492,7 +3492,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3504,7 +3504,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3516,7 +3516,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3528,7 +3528,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3540,7 +3540,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3552,7 +3552,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
+    path: Leg_L/Groin_L/Leg_Upper_L/Leg_Lower_L/Foot_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3564,7 +3564,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3576,7 +3576,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3588,7 +3588,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R
+    path: Leg_R/Groin_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3600,7 +3600,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3612,7 +3612,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3624,7 +3624,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R
+    path: Leg_R/Groin_R/Leg_Upper_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3636,7 +3636,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3648,7 +3648,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3660,7 +3660,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3672,7 +3672,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3684,7 +3684,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3696,7 +3696,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
+    path: Leg_R/Groin_R/Leg_Upper_R/Leg_Lower_R/Foot_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3708,7 +3708,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3720,7 +3720,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3732,7 +3732,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Head
+    path: Head/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3744,7 +3744,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3756,7 +3756,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3768,7 +3768,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Head/Hat
+    path: Hat/Hat
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3780,7 +3780,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3792,7 +3792,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3804,7 +3804,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L
+    path: Arm_L/Shoulder_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3816,7 +3816,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3828,7 +3828,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3840,7 +3840,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L
+    path: Arm_L/Shoulder_L/Forearm_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3852,7 +3852,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3864,7 +3864,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3876,7 +3876,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_L/Forearm_L/Hand_L
+    path: Arm_L/Shoulder_L/Forearm_L/Hand_L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3888,7 +3888,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3900,7 +3900,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3912,7 +3912,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R
+    path: Arm_R/Shoulder_R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3924,7 +3924,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Torso/Torso
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3936,7 +3936,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Torso/Torso
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3948,10 +3948,10 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/PlayerSprite/Torso/Shoulder_R/Forearm_R/Hand_R
+    path: Torso/Torso
     classID: 4
     script: {fileID: 0}
     flags: 0
-  m_HasGenericRootTransform: 0
+  m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_Events: []
