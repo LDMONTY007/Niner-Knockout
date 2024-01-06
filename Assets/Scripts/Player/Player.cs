@@ -433,7 +433,6 @@ public class Player : MonoBehaviour
         //if user is inputting via keyboard
         if (playerInput.currentControlScheme.Equals("Keyboard&Mouse") && Mathf.Abs(moveInput.x) > 0)
         {
-            Debug.Log("Should Rotate");
             playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
         }
     }
