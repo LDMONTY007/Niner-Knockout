@@ -9,6 +9,7 @@ using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
+    private float knockbackPercent; 
 
     public enum PlayerState
     {
