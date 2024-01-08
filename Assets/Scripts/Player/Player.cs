@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,6 +16,32 @@ public class Player : MonoBehaviour
     public GameObject characterIconPrefab;
     private CharacterIcon characterIcon;
 
+    public Hurtbox hurtbox;
+
+    //Data used to set paramters of the hurtbox during attacks.
+    public Dictionary<string, AttackInfo> attackInfos = new Dictionary<string, AttackInfo>()
+    {
+        //Tilt Attacks
+        { "Neutral", new AttackInfo(Vector2.zero, 0f) },
+        { "ForwardTilt", new AttackInfo(Vector2.right, 15f) },
+        { "UpTilt", new AttackInfo(Vector2.zero, 0f) },
+        { "DownTilt", new AttackInfo(Vector2.zero, 0f) },
+        //Aerial Attacks
+        { "NeutralAerial", new AttackInfo(Vector2.zero, 0f) },
+        { "ForwardAerial", new AttackInfo(Vector2.zero, 0f) },
+        { "BackAerial", new AttackInfo(Vector2.zero, 0f) },
+        { "UpAerial", new AttackInfo(Vector2.zero, 0f) },
+        { "DownAerial", new AttackInfo(Vector2.zero, 0f) },
+        //Special Attacks
+        { "NeutralSpecial", new AttackInfo(Vector2.zero, 0f) },
+        { "ForwardSpecial", new AttackInfo(Vector2.zero, 0f) },
+        { "UpSpecial", new AttackInfo(Vector2.zero, 0f) },
+        { "DownSpecial", new AttackInfo(Vector2.zero, 0f) },
+        //Smash Attacks
+        { "ForwardSmash", new AttackInfo(Vector2.zero, 0f) },
+        { "UpSmash", new AttackInfo(Vector2.zero, 0f) },
+        { "DownSmash", new AttackInfo(Vector2.zero, 0f) }
+    };
 
     public enum PlayerState
     {
@@ -21,6 +49,8 @@ public class Player : MonoBehaviour
         attacking,
         falling
     }
+
+
 
     public PlayerState state = PlayerState.None;
 
@@ -896,7 +926,10 @@ public class Player : MonoBehaviour
         HandleRotation();
 
         //TODO: Actually code this attack.
-
+        if (hurtbox != null)
+        {
+            hurtbox.attackInfo = attackInfos["ForwardTilt"];
+        }
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1239,9 +1272,12 @@ public class Player : MonoBehaviour
             //get hurtbox
             Hurtbox h = collision.gameObject.GetComponent<Hurtbox>();
             //add the attack's damage to our damage
-            damagePercent += h.attackDamage;
+            damagePercent += h.attackInfo.attackDamage;
+            
+            //THIS DOESN'T WORK BECAUSE WE OVERRIDE THE VELOCITY WHEN SETTING MOVEMENT INPUT.
+            //WE NEED TO MAKE A METHOD CALLED "launch" THAT LAUNCHES THE CHARACTER.
             //launch the player based off of the attack damage.
-            rb.AddForce(h.launchDir * damagePercent, ForceMode2D.Impulse);
+            rb.AddForce(h.attackInfo.launchDir * damagePercent, ForceMode2D.Impulse);
         }
         //the player entered the kill trigger. (kill bounds).
         else if (collision.gameObject.CompareTag("Kill"))
@@ -1269,4 +1305,25 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Player is Onscreen!");
     }
+}
+
+//used for storing the data of attacks in 
+//the player's attack data dictionary.
+public struct AttackInfo
+{
+    public AttackInfo(Vector2 launchDir,  float attackDamage)
+    {
+        this.launchDir = launchDir;
+        this.attackDamage = attackDamage;
+    }
+
+    /// <summary>
+    /// The direction the enemy is sent in if this attack lands. Keep normalized.
+    /// </summary>
+    public Vector2 launchDir { get; }
+
+    /// <summary>
+    /// The percentage of damage added to the player's damage meter upon a successful hit.
+    /// </summary>
+    public float attackDamage { get; }
 }
