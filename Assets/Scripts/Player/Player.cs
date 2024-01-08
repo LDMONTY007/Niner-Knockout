@@ -202,6 +202,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(isGrounded);
 
         #region input bools
 
@@ -566,7 +567,12 @@ public class Player : MonoBehaviour
                 //Actually, if they are equal it means they want to do a
                 //side attack but they also are aiming up, so we should
                 //probably do a side tilt here.
-                Debug.LogWarning("The user input equal weight on both the x and y axes when attacking. Please figure out how to avoid this happening.");
+
+                //Actually, it should probably be an up attack if we are grounded,
+                //and be a side attack if we are in the air bc WAIT WHAT?
+                //I've confused myself.
+         
+                Debug.LogWarning("The user input equal weight on both the x and y axes when attacking. Please figure out how to determine what to do here.");
             }
             //if we have a mixed input, let's see which is greater.
             else if (dotVector.x != 0 && dotVector.y != 0)

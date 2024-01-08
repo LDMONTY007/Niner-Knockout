@@ -307,39 +307,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Left Stick/Up + Button East [Gamepad]",
-                    "id": "1dcf9b70-78e5-41ca-affd-4313254e8480",
-                    "path": "OneModifier",
-                    "interactions": "Tap(duration=0.2,pressPoint=1)",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UpSmash",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "modifier",
-                    "id": "1af1f8f2-ac55-43f7-95b5-8ed90d7c1812",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "UpSmash",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "binding",
-                    "id": "19a0de2b-a5ad-4e27-9bdf-4c10ab0072f9",
-                    "path": "<Gamepad>/leftStick/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "UpSmash",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "W + O [Keyboard]",
                     "id": "8e3cfb70-26d0-4578-92e6-2e5d26db51f0",
                     "path": "OneModifier",
@@ -382,39 +349,6 @@
                     "action": "DownSmash",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "Left Stick/Down + Button East [Gamepad]",
-                    "id": "7cb2d57d-330d-4d3d-85a5-0f4d924f6902",
-                    "path": "OneModifier",
-                    "interactions": "Press(pressPoint=1)",
-                    "processors": "",
-                    "groups": "",
-                    "action": "DownSmash",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "modifier",
-                    "id": "d0e802df-1b34-4a3d-800c-2716c8a31e0a",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "DownSmash",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "binding",
-                    "id": "429b4e44-997f-4b99-b461-ae3c63a4bcc9",
-                    "path": "<Gamepad>/leftStick/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "DownSmash",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "S + O [Keyboard]",
@@ -461,39 +395,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Left Stick/Right + Button East [Gamepad]",
-                    "id": "b508df65-bd2b-46e2-a7bd-43e43a578f36",
-                    "path": "OneModifier",
-                    "interactions": "Press(pressPoint=1)",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RightSmash",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "binding",
-                    "id": "74fe056d-b70b-4005-a608-bd7239f57d44",
-                    "path": "<Gamepad>/leftStick/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "RightSmash",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "modifier",
-                    "id": "9c286514-c108-4153-b828-1c98b6c41b47",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "RightSmash",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "D + O [Keyboard]",
                     "id": "34e0efdb-ba18-4512-b957-658422392b18",
                     "path": "OneModifier",
@@ -536,39 +437,6 @@
                     "action": "LeftSmash",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "Left Stick/Left + Button East [Gamepad]",
-                    "id": "d5f8b87f-34e5-448f-9caf-0729541ac564",
-                    "path": "OneModifier",
-                    "interactions": "Press(pressPoint=1)",
-                    "processors": "",
-                    "groups": "",
-                    "action": "LeftSmash",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "binding",
-                    "id": "2d82fc58-e45e-49a6-b407-ce1d94e311ef",
-                    "path": "<Gamepad>/leftStick/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "LeftSmash",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "modifier",
-                    "id": "8ceeb2c0-ba48-46ef-ba65-57900b66aca0",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "LeftSmash",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "A + O [Keyboard]",
@@ -653,7 +521,62 @@
                     "path": "<Gamepad>/leftStick/right",
                     "interactions": "",
                     "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "WASD",
+                    "id": "d44a0ec4-c726-4db1-9f1a-97b9680ba4ba",
+                    "path": "Dpad",
+                    "interactions": "",
+                    "processors": "",
                     "groups": "",
+                    "action": "Direction",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "e4689232-1fd0-42a0-ac66-10c1b22b59dd",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "fc198b8c-f199-4d3b-b807-bebb259a874c",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "2c9e219f-ad66-41fd-86e9-a2ac4035b49c",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "708bc101-c39b-4bad-a384-924aa8210cff",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Direction",
                     "isComposite": false,
                     "isPartOfComposite": true

@@ -1642,7 +1642,7 @@ GameObject:
   - component: {fileID: 2108305863}
   - component: {fileID: 2108305862}
   - component: {fileID: 2108305864}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CameraConfines2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
