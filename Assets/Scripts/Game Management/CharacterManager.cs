@@ -10,6 +10,8 @@ public class CharacterManager : MonoBehaviour
 
     public Transform playerIconPanel;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {

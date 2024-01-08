@@ -1,14 +1,15 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
-    private float _knockbackPercent = 0f;
+    private float _damagePercent = 0f;
 
-    public float knockbackPercent { get { return _knockbackPercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _knockbackPercent = clamped; } }
+    public float damagePercent { get { return _damagePercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _damagePercent = clamped; } }
 
     public GameObject characterIconPrefab;
     private CharacterIcon characterIcon;
@@ -175,7 +176,7 @@ public class Player : MonoBehaviour
             characterIcon = GameManager.instance.characterManager.AddPlayerIcon(characterIconPrefab);
         }
 
-        rCasting = LayerMask.GetMask("Player"); //Assign our layer mask to player
+        rCasting = LayerMask.GetMask("Player", "IgnoreRaycast"); //Assign our layer mask to player
         rCasting = ~rCasting; //Invert the layermask value so instead of being just the player it becomes every layer but the mask
 
         //get the main camera's transform.
@@ -193,7 +194,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(isGrounded);
 
         #region input bools
 
@@ -359,13 +359,6 @@ public class Player : MonoBehaviour
         {
             yAxis = 0;
         }
-
-        //REMOVE THIS
-        if (shouldAttack)
-        {
-            Debug.Log("Should attack");
-            knockbackPercent += 5f;
-        }
         
         if (isGrounded)
         {
@@ -423,8 +416,8 @@ public class Player : MonoBehaviour
     {
         if (characterIcon)
         {
-            if (characterIcon.GetPercent() != knockbackPercent)
-            characterIcon.SetPercent(knockbackPercent);
+            if (characterIcon.GetPercent() != damagePercent)
+            characterIcon.SetPercent(damagePercent);
         }
         else
         {
@@ -1236,4 +1229,50 @@ public class Player : MonoBehaviour
     }
 
     #endregion
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log(collision.gameObject.name);
+        //if we are hit by a hurtbox that isn't a child of us then calculate damage and launch.
+        if (collision.CompareTag("Hurtbox") && !collision.transform.IsChildOf(this.transform))
+        {
+            Debug.Log("We were Hit!".Color("red"));
+            //get hurtbox
+            Hurtbox h = collision.gameObject.GetComponent<Hurtbox>();
+            //add the attack's damage to our damage
+            damagePercent += h.attackDamage;
+            //launch the player based off of the attack damage.
+            rb.AddForce(h.launchDir * damagePercent, ForceMode2D.Impulse);
+        }
+        //the player entered the kill trigger. (kill bounds).
+        else if (collision.gameObject.CompareTag("Kill"))
+        {
+            Debug.Log(gameObject.name + " was killed!");
+            //kill player.
+            //we destroy both player and the icon for it
+            //because I am too lazy to just make code
+            //to re-assign it.
+            Destroy(characterIcon.gameObject);
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        Debug.Log(collision.gameObject.name);
+    }
+
+
+    //Use the following methods below if you ever decide to add
+    //the warning for the player that they've gone too close to the
+    //kill area like in smash where it shows a little circle.
+    private void OnBecameInvisible()
+    {
+        Debug.Log("Player is Offscreen!");
+    }
+
+    private void OnBecameVisible()
+    {
+        Debug.Log("Player is Onscreen!");
+    }
 }

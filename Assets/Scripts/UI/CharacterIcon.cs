@@ -18,7 +18,7 @@ public class CharacterIcon : MonoBehaviour
 
     /// <summary>
     /// The TextMeshProUGUI object that displays
-    /// the percent of knockback on this character.
+    /// the percent of damage on this character.
     /// </summary>
     public TextMeshProUGUI percentText;
 
