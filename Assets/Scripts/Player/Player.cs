@@ -176,7 +176,7 @@ public class Player : MonoBehaviour
             characterIcon = GameManager.instance.characterManager.AddPlayerIcon(characterIconPrefab);
         }
 
-        rCasting = LayerMask.GetMask("Player", "IgnoreRaycast"); //Assign our layer mask to player
+        rCasting = LayerMask.GetMask("Player", "Ignore Raycast"); //Assign our layer mask to player
         rCasting = ~rCasting; //Invert the layermask value so instead of being just the player it becomes every layer but the mask
 
         //get the main camera's transform.
@@ -1232,7 +1232,6 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.gameObject.name);
         //if we are hit by a hurtbox that isn't a child of us then calculate damage and launch.
         if (collision.CompareTag("Hurtbox") && !collision.transform.IsChildOf(this.transform))
         {
@@ -1255,11 +1254,6 @@ public class Player : MonoBehaviour
             Destroy(characterIcon.gameObject);
             Destroy(gameObject);
         }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        Debug.Log(collision.gameObject.name);
     }
 
 

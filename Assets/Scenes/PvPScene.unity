@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 415399379}
   - component: {fileID: 415399378}
   - component: {fileID: 415399377}
-  m_Layer: 1
+  m_Layer: 2
   m_Name: CameraConfines2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1637,81 +1637,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!1 &1696281084
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1696281087}
-  - component: {fileID: 1696281088}
-  m_Layer: 1
-  m_Name: KillBounds
-  m_TagString: Kill
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1696281087
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1696281084}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 50, y: 35, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!68 &1696281088
-EdgeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1696281084}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 20
-  m_Points:
-  - {x: -0.95, y: -1.15}
-  - {x: -0.95, y: 1.15}
-  - {x: 0.95, y: 1.15}
-  - {x: 0.95, y: -1.15}
-  m_AdjacentStartPoint: {x: 0.95, y: -1.15}
-  m_AdjacentEndPoint: {x: -0.95, y: -1.15}
-  m_UseAdjacentStartPoint: 1
-  m_UseAdjacentEndPoint: 1
 --- !u!1 &1841573010
 GameObject:
   m_ObjectHideFlags: 0
@@ -1852,8 +1777,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1843356511}
   - component: {fileID: 1843356512}
-  m_Layer: 1
-  m_Name: KillBounds (1)
+  m_Layer: 2
+  m_Name: KillBounds
   m_TagString: Kill
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1869,7 +1794,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 50, y: 35, z: 1}
+  m_LocalScale: {x: 65, y: 50, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1922,10 +1847,10 @@ PolygonCollider2D:
       - {x: 0.5, y: -0.5}
       - {x: -0.5, y: -0.5}
       - {x: -0.5, y: 0.5}
-    - - {x: 1, y: 1}
-      - {x: 1, y: -1}
-      - {x: -1, y: -1}
-      - {x: -1, y: 1}
+    - - {x: 2, y: 2}
+      - {x: 2, y: -2}
+      - {x: -2, y: -2}
+      - {x: -2, y: 2}
   m_UseDelaunayMesh: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -1937,7 +1862,6 @@ SceneRoots:
   - {fileID: 577452830}
   - {fileID: 396757187}
   - {fileID: 415399379}
-  - {fileID: 1696281087}
   - {fileID: 1843356511}
   - {fileID: 1609927267}
   - {fileID: 194091762}
