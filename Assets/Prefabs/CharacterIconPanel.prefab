@@ -475,11 +475,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6389730758348563700}
+  - component: {fileID: 9063787020179331867}
   - component: {fileID: 4898824034943507574}
   - component: {fileID: 933774026905017513}
   - component: {fileID: 1550316873496096145}
   m_Layer: 5
-  m_Name: CharacterPanel
+  m_Name: CharacterIconPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -508,6 +509,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &9063787020179331867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3979263912656741114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1127e5e478fa60546812a8f689539706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  percentText: {fileID: 9150950343589686034}
 --- !u!222 &4898824034943507574
 CanvasRenderer:
   m_ObjectHideFlags: 0

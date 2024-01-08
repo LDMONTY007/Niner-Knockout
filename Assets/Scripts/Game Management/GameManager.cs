@@ -26,6 +26,8 @@ public class GameManager
     [HideInInspector]
     public static Scene currentScene;
 
+    public CharacterManager characterManager;
+
     public List<string> scenes = new List<string>()
     {
         "TitleScene",

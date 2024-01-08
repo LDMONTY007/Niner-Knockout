@@ -629,6 +629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cc3f5006d8a16f4db6f6b5605310821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterIconPrefab: {fileID: 3979263912656741114, guid: 2a673ec157f21ca4fadea82e3826ca7c, type: 3}
   state: 0
   playerSprite: {fileID: 1290544984572531759}
   groundCheckDist: 0.1

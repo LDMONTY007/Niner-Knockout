@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -9,7 +11,13 @@ using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
-    private float knockbackPercent; 
+    private float _knockbackPercent = 0f;
+
+    public float knockbackPercent { get { return _knockbackPercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _knockbackPercent = clamped; } }
+
+    public GameObject characterIconPrefab;
+    private CharacterIcon characterIcon;
+
 
     public enum PlayerState
     {
@@ -169,6 +177,12 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Creates the characterIcon
+        //in our UI and gives us a reference to it.
+        if (characterIconPrefab != null)
+        {
+            characterIcon = GameManager.instance.characterManager.AddPlayerIcon(characterIconPrefab);
+        }
 
         rCasting = LayerMask.GetMask("Player"); //Assign our layer mask to player
         rCasting = ~rCasting; //Invert the layermask value so instead of being just the player it becomes every layer but the mask
@@ -354,7 +368,12 @@ public class Player : MonoBehaviour
             yAxis = 0;
         }
 
-
+        //REMOVE THIS
+        if (shouldAttack)
+        {
+            Debug.Log("Should attack");
+            knockbackPercent += 5f;
+        }
         
         if (isGrounded)
         {
@@ -404,6 +423,21 @@ public class Player : MonoBehaviour
         ApplyFinalMovements();
 
         HandlePassiveAnimation();
+
+        HandleUI();
+    }
+
+    private void HandleUI()
+    {
+        if (characterIcon)
+        {
+            if (characterIcon.GetPercent() != knockbackPercent)
+            characterIcon.SetPercent(knockbackPercent);
+        }
+        else
+        {
+            Debug.LogWarning("This character has no icon assigned!");
+        }
     }
 
     private void HandlePassiveAnimation()
