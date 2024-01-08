@@ -1,12 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Editor;
 using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
@@ -91,9 +86,6 @@ public class Player : MonoBehaviour
 
     //did the player tap this frame?
     bool didTap;
-    float tapInputWindow = 0.1f;
-    float timeSinceTap;
-    bool startedTapInput;
     float tapStopWindow = 0.2f;
     float tapStopTime;
 
@@ -129,7 +121,6 @@ public class Player : MonoBehaviour
     public Vector2 ogJump; //Not included just like what I said above.
     public float fallMultiplier = 9f; //When you reach the peak of the expected arc this is the force applied to make falling more fluid.
     public float lowJumpMultiplier = 15f; //When you stop holding jump to do a low jump this is the force applied to make the jump stop short.
-    private float Multiplier = 100f; //This is so we can scale with deltatime properly.
 
     #endregion
 
