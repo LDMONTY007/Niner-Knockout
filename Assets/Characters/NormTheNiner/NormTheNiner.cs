@@ -7,7 +7,8 @@ public class NormTheNiner : Player
 
     public override void Neutral()
     {
-        base.Neutral();
+        //we do forward tilt, he doesn't have a different neutral.
+        ForwardTilt();
     }
 
     #region Tilt Attacks

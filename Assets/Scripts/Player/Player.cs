@@ -22,25 +22,25 @@ public class Player : MonoBehaviour
     public Dictionary<string, AttackInfo> attackInfos = new Dictionary<string, AttackInfo>()
     {
         //Tilt Attacks
-        { "Neutral", new AttackInfo(Vector2.zero, 0f) },
-        { "ForwardTilt", new AttackInfo(new Vector2(0.5f, 0.5f), 1f) },
-        { "UpTilt", new AttackInfo(Vector2.zero, 0f) },
-        { "DownTilt", new AttackInfo(Vector2.zero, 0f) },
+        { "Neutral", new AttackInfo(Vector2.zero, 0f, 55f, 70f) },
+        { "ForwardTilt", new AttackInfo(new Vector2(1f, 1f), 7f, 55f, 70f) },
+        { "UpTilt", new AttackInfo(Vector2.up, 13.5f, 0f, 0f) },
+        { "DownTilt", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
         //Aerial Attacks
-        { "NeutralAerial", new AttackInfo(Vector2.zero, 0f) },
-        { "ForwardAerial", new AttackInfo(Vector2.zero, 0f) },
-        { "BackAerial", new AttackInfo(Vector2.zero, 0f) },
-        { "UpAerial", new AttackInfo(Vector2.zero, 0f) },
-        { "DownAerial", new AttackInfo(Vector2.zero, 0f) },
+        { "NeutralAerial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
+        { "ForwardAerial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
+        { "BackAerial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
+        { "UpAerial", new AttackInfo(Vector2.zero, 0f   , 0f, 0f    ) },
+        { "DownAerial", new AttackInfo(Vector2.zero, 0f, 0f, 0f ) },
         //Special Attacks
-        { "NeutralSpecial", new AttackInfo(Vector2.zero, 0f) },
-        { "ForwardSpecial", new AttackInfo(Vector2.zero, 0f) },
-        { "UpSpecial", new AttackInfo(Vector2.zero, 0f) },
-        { "DownSpecial", new AttackInfo(Vector2.zero, 0f) },
+        { "NeutralSpecial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
+        { "ForwardSpecial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
+        { "UpSpecial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
+        { "DownSpecial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
         //Smash Attacks
-        { "ForwardSmash", new AttackInfo(Vector2.zero, 0f) },
-        { "UpSmash", new AttackInfo(Vector2.zero, 0f) },
-        { "DownSmash", new AttackInfo(Vector2.zero, 0f) }
+        { "ForwardSmash", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
+        { "UpSmash", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
+        { "DownSmash", new AttackInfo(Vector2.zero, 0f, 0f, 0f) }
     };
 
     public enum PlayerState
@@ -515,9 +515,9 @@ public class Player : MonoBehaviour
             //end so that it reaches the height regardless of weight.
             buttonTime = (jumpForce / (rb.mass * Physics2D.gravity.magnitude)); //initial velocity divided by player accel for gravity gives us the amount of time it will take to reach the apex.
             
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce); //Reset y velocity before we jump so it is always reaching desired height.
+            rb.velocity = new Vector2(rb.velocity.x, 0f); //Reset y velocity before we jump so it is always reaching desired height.
             
-            //rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse); //don't normalize transform.up cus it makes jumping more inconsistent.
+            rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse); //don't normalize transform.up cus it makes jumping more inconsistent.
             jumpTime = 0;
             jumping = true;
             jumpCanceled = false;
@@ -540,6 +540,7 @@ public class Player : MonoBehaviour
             Vector2 jumpVec = /*Multiplier * */-transform.up * (lowJumpMultiplier - 1) /* Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
+
     }
 
     private void HandleAttack()
@@ -579,15 +580,42 @@ public class Player : MonoBehaviour
             Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));
             if (dotVector.x != 0 && dotVector.x == dotVector.y)
             {
-                //Actually, if they are equal it means they want to do a
-                //side attack but they also are aiming up, so we should
-                //probably do a side tilt here.
+                //These are only reached if the user is inputting
+                //the same value for both xAxis and yAxis.
+                //we should just assume that if the user 
+                //is inputting up, it's with intent
+                //and if they are inputting down,
+                //it's probably not on purpose.
 
-                //Actually, it should probably be an up attack if we are grounded,
-                //and be a side attack if we are in the air bc WAIT WHAT?
-                //I've confused myself.
-         
-                Debug.LogWarning("The user input equal weight on both the x and y axes when attacking. Please figure out how to determine what to do here.");
+                //if we are grounded and aiming down
+                //then assume we are doing a side attack.
+                if (isGrounded && yAxis < 0)
+                {
+                    if (shouldSmash)
+                    {
+                        ForwardSmash();
+                    }
+                    else
+                    {
+                        ForwardTilt();
+                    }
+                }
+
+                //if grounded and aiming up
+                //then assume we are trying to do an
+                //up attack while moving in a direction.
+                if (isGrounded && yAxis > 0)
+                {
+                    if (shouldSmash)
+                    {
+                        UpSmash();
+                    }
+                    else
+                    {
+                        UpTilt();
+                    }
+                }
+              
             }
             //if we have a mixed input, let's see which is greater.
             else if (dotVector.x != 0 && dotVector.y != 0)
@@ -595,28 +623,13 @@ public class Player : MonoBehaviour
                 //Choose horizontal attack
                 if (Mathf.Abs(dotVector.x) > Mathf.Abs(dotVector.y))
                 {
-                    //Right Tilt
-                    if (dotVector.x > 0)
+                    if (shouldSmash)
                     {
-                        if (shouldSmash)
-                        {
-                            ForwardSmash();
-                        }
-                        else
-                        {
-                            ForwardTilt();
-                        }
-                    }//Left Tilt
+                        ForwardSmash();
+                    }
                     else
                     {
-                        if (shouldSmash)
-                        {
-                            ForwardSmash();
-                        }
-                        else
-                        {
-                            ForwardTilt();
-                        }
+                        ForwardTilt();
                     }
                 }//choose vertical attack.
                 else
@@ -649,29 +662,13 @@ public class Player : MonoBehaviour
             //Horizontal attacking (Left & Right Tilt)
             else if (xAxis != 0 && yAxis == 0)
             {
-                //Right Tilt
-                if (dotVector.x > 0)
+                if (shouldSmash)
                 {
-                    if (shouldSmash)
-                    {
-                        ForwardSmash();
-                    }
-                    else
-                    {
-                        ForwardTilt();
-                    }
+                    ForwardSmash();
                 }
-                //Left Tilt
                 else
                 {
-                    if (shouldSmash)
-                    {
-                        ForwardSmash();
-                    }
-                    else
-                    {
-                        ForwardTilt();
-                    }
+                    ForwardTilt();
                 }
             }
             //Vertical attacking (Up & Down Tilt)
@@ -1270,16 +1267,17 @@ public class Player : MonoBehaviour
     #endregion
 
 
-    public void Launch(Vector2 direction, float damageDelt)
+    public void Launch(Vector2 direction, float damageDelt, float baseKnockback, float knockbackScale)
     {
         state = PlayerState.launched;
-        //rb.AddForce(direction * SmashKnockback(damageDelt, damagePercent), ForceMode2D.Impulse);
-        rb.AddForce(direction * SmashKnockback(damageDelt, damagePercent), ForceMode2D.Impulse);
+        //rb.AddForce(direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale), ForceMode2D.Impulse);
+        Debug.Log(rb.velocity + " " + direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale));
+        rb.velocity = direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f;
     }
 
 
     //https://www.ssbwiki.com/Knockback#Formula
-    public float SmashKnockback(float damageDelt, float currentDamage)
+    public float SmashKnockback(float damageDelt, float currentDamage, float baseKnockback, float knockbackScale)
     {
         float knockback = 0f;
         float p = currentDamage;
@@ -1287,10 +1285,10 @@ public class Player : MonoBehaviour
         //if an attack is weight independent set this value to 100.
         float w = rb.mass;
         //knockback scaling (s / 100) so s = 110 would be 110/100 = 1.1 scale.
-        float s = 100f;
+        float s = knockbackScale;
         s /= 100f;
         //the attack's base knockback.
-        float b = 1f;
+        float b = baseKnockback;
         //we aren't going to use the r yet as it is overly complex for our current design.
 
         //SUPER IMPORTANT NOTE:
@@ -1300,8 +1298,8 @@ public class Player : MonoBehaviour
         //are disabled; however, falling speed still takes effect, giving fast fallers better endurance against vertical knockback
         //than others of their weight.
 
-        knockback = (((((p / 10f + p * d / 20f) * 200f / (w + 100f) * 1.4f) + 18) * s) + b);
-
+        knockback = ((((p / 10f + p * d / 20f) * 200f / (w + 100f) * 1.4f) + 18) * s) + b;
+        Debug.Log(knockback.ToString().Color("blue"));
         return knockback;
     }
 
@@ -1314,10 +1312,14 @@ public class Player : MonoBehaviour
             //get hurtbox
             Hurtbox h = collision.gameObject.GetComponent<Hurtbox>();
             //add damage delt to the total percent
-            damagePercent += h.attackInfo.attackDamage;
+            //https://rubendal.github.io/SSBU-Calculator/
+            //Set the damage of a custom attack to 1 and you'll get the constant
+            //1.26 and it doesn't scale with percent, the attach damage is always
+            //multiplied by this value.
+            damagePercent += (h.attackInfo.attackDamage * 1.26f);
 
             //launch the player based off of the attack damage.
-            Launch(h.attackInfo.launchDir, h.attackInfo.attackDamage);
+            Launch(h.attackInfo.launchDir, h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale);
         }
         //the player entered the kill trigger. (kill bounds).
         else if (collision.gameObject.CompareTag("Kill"))
@@ -1351,10 +1353,12 @@ public class Player : MonoBehaviour
 //the player's attack data dictionary.
 public struct AttackInfo
 {
-    public AttackInfo(Vector2 launchDir,  float attackDamage)
+    public AttackInfo(Vector2 launchDir,  float attackDamage, float baseKnockback, float knockbackScale)
     {
         this.launchDir = launchDir;
         this.attackDamage = attackDamage;
+        this.baseKnockback = baseKnockback;
+        this.knockbackScale = knockbackScale;
     }
 
     /// <summary>
@@ -1366,4 +1370,15 @@ public struct AttackInfo
     /// The percentage of damage added to the player's damage meter upon a successful hit.
     /// </summary>
     public float attackDamage { get; }
+
+    /// <summary>
+    /// The base knockback of this attack, regardless of the player's percentage.
+    /// </summary>
+    public float baseKnockback { get; }
+
+    /// <summary>
+    /// Describes how much knockback and percent scale.
+    /// </summary>
+    public float knockbackScale { get; }
+
 }
