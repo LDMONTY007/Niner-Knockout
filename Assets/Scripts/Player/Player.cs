@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     {
         //Tilt Attacks
         { "Neutral", new AttackInfo(Vector2.zero, 0f) },
-        { "ForwardTilt", new AttackInfo(Vector2.right, 15f) },
+        { "ForwardTilt", new AttackInfo(new Vector2(0.5f, 0.5f), 1f) },
         { "UpTilt", new AttackInfo(Vector2.zero, 0f) },
         { "DownTilt", new AttackInfo(Vector2.zero, 0f) },
         //Aerial Attacks
@@ -47,7 +47,8 @@ public class Player : MonoBehaviour
     {
         None,
         attacking,
-        falling
+        launched,
+        tumbling,
     }
 
 
@@ -880,6 +881,11 @@ public class Player : MonoBehaviour
 
     private void ApplyFinalMovements() //Step 1
     {
+        //Do not let player use inputs when launched.
+        if (state == PlayerState.launched)
+        {
+            return;
+        }
         //set velocity directly, don't override y velocity.
         rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
     }
@@ -1263,6 +1269,42 @@ public class Player : MonoBehaviour
 
     #endregion
 
+
+    public void Launch(Vector2 direction, float damageDelt)
+    {
+        state = PlayerState.launched;
+        //rb.AddForce(direction * SmashKnockback(damageDelt, damagePercent), ForceMode2D.Impulse);
+        rb.AddForce(direction * SmashKnockback(damageDelt, damagePercent), ForceMode2D.Impulse);
+    }
+
+
+    //https://www.ssbwiki.com/Knockback#Formula
+    public float SmashKnockback(float damageDelt, float currentDamage)
+    {
+        float knockback = 0f;
+        float p = currentDamage;
+        float d = damageDelt;
+        //if an attack is weight independent set this value to 100.
+        float w = rb.mass;
+        //knockback scaling (s / 100) so s = 110 would be 110/100 = 1.1 scale.
+        float s = 100f;
+        s /= 100f;
+        //the attack's base knockback.
+        float b = 1f;
+        //we aren't going to use the r yet as it is overly complex for our current design.
+
+        //SUPER IMPORTANT NOTE:
+        //To determine how far a character is launched away, the numerical amount of knockback caused is multiplied by 0.03 to
+        //calculate launch speed, and the initial value of launch speed then decays by 0.051 every frame, so that the character
+        //eventually loses all momentum from the knockback. During this time, character-specific attributes such as air friction
+        //are disabled; however, falling speed still takes effect, giving fast fallers better endurance against vertical knockback
+        //than others of their weight.
+
+        knockback = (((((p / 10f + p * d / 20f) * 200f / (w + 100f) * 1.4f) + 18) * s) + b);
+
+        return knockback;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //if we are hit by a hurtbox that isn't a child of us then calculate damage and launch.
@@ -1271,13 +1313,11 @@ public class Player : MonoBehaviour
             Debug.Log("We were Hit!".Color("red"));
             //get hurtbox
             Hurtbox h = collision.gameObject.GetComponent<Hurtbox>();
-            //add the attack's damage to our damage
+            //add damage delt to the total percent
             damagePercent += h.attackInfo.attackDamage;
-            
-            //THIS DOESN'T WORK BECAUSE WE OVERRIDE THE VELOCITY WHEN SETTING MOVEMENT INPUT.
-            //WE NEED TO MAKE A METHOD CALLED "launch" THAT LAUNCHES THE CHARACTER.
+
             //launch the player based off of the attack damage.
-            rb.AddForce(h.attackInfo.launchDir * damagePercent, ForceMode2D.Impulse);
+            Launch(h.attackInfo.launchDir, h.attackInfo.attackDamage);
         }
         //the player entered the kill trigger. (kill bounds).
         else if (collision.gameObject.CompareTag("Kill"))
