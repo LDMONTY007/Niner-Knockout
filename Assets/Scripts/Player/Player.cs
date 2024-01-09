@@ -9,7 +9,7 @@ using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
-    private float _damagePercent = 0f;
+    private float _damagePercent = 100f;
 
     public float damagePercent { get { return _damagePercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _damagePercent = clamped; } }
 
@@ -1271,8 +1271,16 @@ public class Player : MonoBehaviour
     {
         state = PlayerState.launched;
         //rb.AddForce(direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale), ForceMode2D.Impulse);
+        //apparently I'm supposed to multiply the knockback value by 0.03 for the launch but it isn't the right value
+        //I don't think. I'm very tired so I'll have to come back and work on this.
+
+        //Ok, so I'm pretty sure that they don't use a weight while applying forces to the character,
+        //as in they only add the weight in the formula and don't account for it later because their 
+        //formula does 200 / w + 100 which scales the weight to be a 0-2f value. 
+        rb.velocity = direction.normalized * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.1f;
         Debug.Log(rb.velocity + " " + direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale));
-        rb.velocity = direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f;
+        //rb.mass = 1f;
+        //rb.AddForce(direction.normalized * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f/* * damagePercent*/, ForceMode2D.Impulse);
     }
 
 
@@ -1298,6 +1306,7 @@ public class Player : MonoBehaviour
         //are disabled; however, falling speed still takes effect, giving fast fallers better endurance against vertical knockback
         //than others of their weight.
 
+        //because weight is input to our rigidbody by the default physics we have to modify this a little bit.
         knockback = ((((p / 10f + p * d / 20f) * 200f / (w + 100f) * 1.4f) + 18) * s) + b;
         Debug.Log(knockback.ToString().Color("blue"));
         return knockback;
