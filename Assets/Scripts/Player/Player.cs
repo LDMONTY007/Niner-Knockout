@@ -9,7 +9,7 @@ using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
-    private float _damagePercent = 100f;
+    private float _damagePercent = 0f;
 
     public float damagePercent { get { return _damagePercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _damagePercent = clamped; } }
 
