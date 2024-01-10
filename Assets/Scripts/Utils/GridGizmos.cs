@@ -24,8 +24,8 @@ public class GridGizmos : MonoBehaviour
         for (int i = 0; i < 100;  i++)
         {
             Handles.color = i % 2 == 0 ? Color.red : Color.green;
-            Handles.Label(new Vector3(i, 0f, 0f), i.ToString());
-            Handles.Label(new Vector3(-i, 0f, 0f), i.ToString());
+            Handles.Label(new Vector3(i, 0f, 0f), (i* 10).ToString());
+            Handles.Label(new Vector3(-i, 0f, 0f), (i * 10).ToString());
         }
     }
 #endif

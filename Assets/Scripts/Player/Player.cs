@@ -22,25 +22,25 @@ public class Player : MonoBehaviour
     public Dictionary<string, AttackInfo> attackInfos = new Dictionary<string, AttackInfo>()
     {
         //Tilt Attacks
-        { "Neutral", new AttackInfo(Vector2.zero, 0f, 55f, 70f) },
-        { "ForwardTilt", new AttackInfo(new Vector2(1f, 1f), 7f, 55f, 70f) },
-        { "UpTilt", new AttackInfo(Vector2.up, 13.5f, 0f, 0f) },
-        { "DownTilt", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
+        { "Neutral", new AttackInfo(0f, 0f, 55f, 70f) },
+        { "ForwardTilt", new AttackInfo(39.111706f, 7f, 55f, 70f) },
+        { "UpTilt", new AttackInfo(0f, 13.5f, 0f, 0f) },
+        { "DownTilt", new AttackInfo(0f, 0f, 0f, 0f) },
         //Aerial Attacks
-        { "NeutralAerial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
-        { "ForwardAerial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
-        { "BackAerial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
-        { "UpAerial", new AttackInfo(Vector2.zero, 0f   , 0f, 0f    ) },
-        { "DownAerial", new AttackInfo(Vector2.zero, 0f, 0f, 0f ) },
+        { "NeutralAerial", new AttackInfo(0f, 0f, 0f, 0f) },
+        { "ForwardAerial", new AttackInfo(0f, 0f, 0f, 0f) },
+        { "BackAerial", new AttackInfo(0f, 0f, 0f, 0f) },
+        { "UpAerial", new AttackInfo(0f, 0f   , 0f, 0f    ) },
+        { "DownAerial", new AttackInfo(0f, 0f, 0f, 0f ) },
         //Special Attacks
-        { "NeutralSpecial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
-        { "ForwardSpecial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
-        { "UpSpecial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
-        { "DownSpecial", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
+        { "NeutralSpecial", new AttackInfo(0f, 0f, 0f, 0f) },
+        { "ForwardSpecial", new AttackInfo(0f, 0f, 0f, 0f) },
+        { "UpSpecial", new AttackInfo(0f, 0f, 0f, 0f) },
+        { "DownSpecial", new AttackInfo(0f, 0f, 0f, 0f) },
         //Smash Attacks
-        { "ForwardSmash", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
-        { "UpSmash", new AttackInfo(Vector2.zero, 0f, 0f, 0f) },
-        { "DownSmash", new AttackInfo(Vector2.zero, 0f, 0f, 0f) }
+        { "ForwardSmash", new AttackInfo(0f, 0f, 0f, 0f) },
+        { "UpSmash", new AttackInfo(0f, 0f, 0f, 0f) },
+        { "DownSmash", new AttackInfo(0f, 0f, 0f, 0f) }
     };
 
     public enum PlayerState
@@ -1277,8 +1277,10 @@ public class Player : MonoBehaviour
         //Ok, so I'm pretty sure that they don't use a weight while applying forces to the character,
         //as in they only add the weight in the formula and don't account for it later because their 
         //formula does 200 / w + 100 which scales the weight to be a 0-2f value. 
-        rb.velocity = direction.normalized * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.1f;
-        Debug.Log(rb.velocity + " " + direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale));
+        //rb.velocity = direction.normalized * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.1f;
+        //rb.AddForce(direction * Mathf.Sqrt(2 * 9.81f * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale)), ForceMode2D.Impulse);
+        StartCoroutine(LaunchCoroutine(direction, damageDelt, damagePercent, baseKnockback, knockbackScale));
+        //Debug.Log(rb.velocity + " " + direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale));
         //rb.mass = 1f;
         //rb.AddForce(direction.normalized * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f/* * damagePercent*/, ForceMode2D.Impulse);
     }
@@ -1312,6 +1314,91 @@ public class Player : MonoBehaviour
         return knockback;
     }
 
+    public void Knockback(Vector2 hitDirection, float damageDelt, float currentDamage, float baseKnockback, float knockbackScale)
+    {
+        float knockback = 0f;
+        float p = currentDamage;
+        float d = damageDelt;
+        //if an attack is weight independent set this value to 100.
+        float w = rb.mass;
+        //knockback scaling (s / 100) so s = 110 would be 110/100 = 1.1 scale.
+        float s = knockbackScale;
+        s /= 100f;
+        //the attack's base knockback.
+        float b = baseKnockback;
+        //we aren't going to use the r yet as it is overly complex for our current design.
+
+        //SUPER IMPORTANT NOTE:
+        //To determine how far a character is launched away, the numerical amount of knockback caused is multiplied by 0.03 to
+        //calculate launch speed, and the initial value of launch speed then decays by 0.051 every frame, so that the character
+        //eventually loses all momentum from the knockback. During this time, character-specific attributes such as air friction
+        //are disabled; however, falling speed still takes effect, giving fast fallers better endurance against vertical knockback
+        //than others of their weight.
+
+        //because weight is input to our rigidbody by the default physics we have to modify this a little bit.
+        knockback = ((((p / 10f + p * d / 20f) * 200f / (w + 100f) * 1.4f) + 18) * s) + b;
+        Debug.Log(knockback.ToString().Color("green"));
+
+        // Apply the force to the Rigidbody in the hitDirection
+        //launch speed is calculated by multiplying knockback by 0.3. 
+        rb.velocity = hitDirection.normalized * knockback * 0.03f;
+
+        //Directly from Unity's rb.AddForce docs:
+        //"Apply the impulse force instantly with a single function call. This mode depends on the mass of rigidbody so more force must be applied to push or twist higher-mass objects the same amount as lower-mass objects. This mode is useful for applying forces that happen instantly, such as forces from explosions or collisions. In this mode, the unit of the force parameter is applied to the rigidbody as mass*distance/time."
+
+        //mass*distance/time is the important part.
+        //What does it mean distance? the magnitude of the vector?
+    }
+
+    public IEnumerator LaunchCoroutine(Vector2 hitDirection, float damageDelt, float currentDamage, float baseKnockback, float knockbackScale)
+    {
+        //I need to make this coroutine exit when we start a new LaunchCoroutine.
+
+        state = PlayerState.launched;
+        float knockback = 0f;
+        float p = currentDamage;
+        float d = damageDelt;
+        //if an attack is weight independent set this value to 100.
+        float w = rb.mass;
+        //knockback scaling (s / 100) so s = 110 would be 110/100 = 1.1 scale.
+        float s = knockbackScale;
+        s /= 100f;
+        //the attack's base knockback.
+        float b = baseKnockback;
+        //we aren't going to use the r yet as it is overly complex for our current design.
+
+        //SUPER IMPORTANT NOTE:
+        //To determine how far a character is launched away, the numerical amount of knockback caused is multiplied by 0.03 to
+        //calculate launch speed, and the initial value of launch speed then decays by 0.051 every frame, so that the character
+        //eventually loses all momentum from the knockback. During this time, character-specific attributes such as air friction
+        //are disabled; however, falling speed still takes effect, giving fast fallers better endurance against vertical knockback
+        //than others of their weight.
+
+        //because weight is input to our rigidbody by the default physics we have to modify this a little bit.
+        knockback = ((((p / 10f + p * d / 20f) * 200f / (w + 100f) * 1.4f) + 18) * s) + b;
+        Debug.Log(knockback.ToString().Color("red"));
+
+        float launchSpeed = knockback * 0.03f;
+        float mass = rb.mass;
+        //rb.mass = 1f;
+        while (launchSpeed > 0)
+        {
+            rb.velocity = hitDirection * launchSpeed * 10f;
+            Debug.Log((rb.position + (hitDirection * launchSpeed * 10 * Time.deltaTime)).ToString().Color("red"));
+            //rb.MovePosition(rb.position + (hitDirection * launchSpeed * 10 * Time.deltaTime));
+            //rb.AddForce(rb.position + (hitDirection * launchSpeed * 10 * Time.deltaTime), ForceMode2D.Impulse);
+            //rb.velocity = hitDirection * launchSpeed / 0.3f * Time.deltaTime;
+
+            launchSpeed -= 0.051f;
+            yield return null;
+        }
+        Debug.Log("CoroutineStop");
+        //rb.mass = mass;
+        //rb.velocity = Vector2.zero;
+        state = PlayerState.None;
+    }
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //if we are hit by a hurtbox that isn't a child of us then calculate damage and launch.
@@ -1328,7 +1415,7 @@ public class Player : MonoBehaviour
             damagePercent += (h.attackInfo.attackDamage * 1.26f);
 
             //launch the player based off of the attack damage.
-            Launch(h.attackInfo.launchDir, h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale);
+            Launch(RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle)), h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale);
         }
         //the player entered the kill trigger. (kill bounds).
         else if (collision.gameObject.CompareTag("Kill"))
@@ -1356,24 +1443,29 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Player is Onscreen!");
     }
+
+    private Vector2 RadiansToVector(float radians)
+    {
+        return new Vector2((float)Math.Cos(radians), (float)Math.Sin(radians));
+    }
 }
 
 //used for storing the data of attacks in 
 //the player's attack data dictionary.
 public struct AttackInfo
 {
-    public AttackInfo(Vector2 launchDir,  float attackDamage, float baseKnockback, float knockbackScale)
+    public AttackInfo(float launchAngle,  float attackDamage, float baseKnockback, float knockbackScale)
     {
-        this.launchDir = launchDir;
+        this.launchAngle = launchAngle;
         this.attackDamage = attackDamage;
         this.baseKnockback = baseKnockback;
         this.knockbackScale = knockbackScale;
     }
 
     /// <summary>
-    /// The direction the enemy is sent in if this attack lands. Keep normalized.
+    /// The direction the enemy is sent in if this attack lands. In Degrees.
     /// </summary>
-    public Vector2 launchDir { get; }
+    public float launchAngle { get; }
 
     /// <summary>
     /// The percentage of damage added to the player's damage meter upon a successful hit.

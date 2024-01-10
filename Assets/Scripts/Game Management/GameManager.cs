@@ -51,7 +51,13 @@ public class GameManager
 
     private GameManager()
     {
-
+        //set the target frame rate to be 60, DO NOT GO FASTER.
+        //unity still somehow gets to 70fps. This makes certain attacks not consistent, especially bc
+        //our launch formula sets velocity to launch and multiplying by Time.deltaTime makes it slower. 
+        Application.targetFrameRate = 60;
+        Debug.Log(Application.targetFrameRate);
+        //only call update every 1/60th of a second. 
+        Time.captureFramerate = 60;
         currentScene = SceneManager.GetActiveScene(); //set current scene.
     }
 
