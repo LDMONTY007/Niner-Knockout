@@ -9,7 +9,7 @@ using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
-    private float _damagePercent = 0f;
+    private float _damagePercent = 100f;
 
     public float damagePercent { get { return _damagePercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _damagePercent = clamped; } }
 
@@ -1409,34 +1409,18 @@ public class Player : MonoBehaviour
         float t = 0f;
         while (launchSpeed > 0)
         {
-            //rb.velocity += hitDirection * launchSpeed * 10f * Time.deltaTime;
-
-
-            //Vector2 vel = hitDirection * launchSpeed/** Time.deltaTime*/;
-            //rb.velocity = vel - new Vector2(0f, 0.5f * Physics2D.gravity.magnitude * Mathf.Pow(t, 2));
-            //rb.MovePosition(new Vector2(launchSpeed * Mathf.Cos(angleRad) * t, launchSpeed * Mathf.Sin(angleRad) * t - 0.5f * Physics2D.gravity.magnitude * Mathf.Pow(t, 2)));
-            //Debug.Log(rb.position.ToString().Color("cyan"));
+            //If you decide not to apply gravity to the y axis during a launch don't forget
+            //to remove these floats and just do rb.velocity = hitDirection * launchSpeed;
             float horizontalLaunchSpeed = launchSpeed * Mathf.Cos(angleRad);
-            float verticalLaunchSpeed = launchSpeed * Mathf.Sin(angleRad)/* - Physics2D.gravity.magnitude * t*/;
-            //rb.MovePosition(rb.position + new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed));
-            //rb.velocity = new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
-            //rb.AddForce(new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed), ForceMode2D.Impulse);
-            //Debug.Log((rb.position + (hitDirection * launchSpeed * Time.deltaTime)).ToString().Color("red"));
+            float verticalLaunchSpeed = launchSpeed * Mathf.Sin(angleRad)/* - 0.5f * Physics2D.gravity.magnitude * t*/;
             Debug.Log(new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed).ToString().Color("cyan"));
-            //rb.MovePosition(rb.position + (hitDirection * launchSpeed * Time.deltaTime));
-            //rb.AddForce(rb.position + (hitDirection * launchSpeed * 10 * Time.deltaTime), ForceMode2D.Impulse);
-            rb.velocity = hitDirection * launchSpeed;
+            rb.velocity = new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
 
             launchSpeed -= 0.51f;
             t += Time.deltaTime;
             yield return null;
         }
-
-        //rb.velocity = new Vector2(50f, 0f);
         Debug.Log("CoroutineStop");
-        //rb.velocity = new Vector2(20f, 0f);
-        //rb.mass = mass;
-        //rb.velocity = Vector2.zero;
         state = PlayerState.None;
     }
 
