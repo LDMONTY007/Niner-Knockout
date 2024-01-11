@@ -23,7 +23,8 @@ public class Player : MonoBehaviour
     {
         //Tilt Attacks
         { "Neutral", new AttackInfo(0f, 0f, 55f, 70f) },
-        { "ForwardTilt", new AttackInfo(39.111706f, 7f, 55f, 70f) },
+        //this forward tilt has the same values as mario's forward tilt so it should feel very familar.
+        { "ForwardTilt", new AttackInfo(361f, 7f, 55f, 70f) },
         { "UpTilt", new AttackInfo(0f, 13.5f, 0f, 0f) },
         { "DownTilt", new AttackInfo(0f, 0f, 0f, 0f) },
         //Aerial Attacks
@@ -1267,7 +1268,7 @@ public class Player : MonoBehaviour
     #endregion
 
 
-    public void Launch(Vector2 direction, float damageDelt, float baseKnockback, float knockbackScale)
+    public void Launch(float angleDeg, Vector2 direction, float damageDelt, float baseKnockback, float knockbackScale)
     {
         state = PlayerState.launched;
         //rb.AddForce(direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale), ForceMode2D.Impulse);
@@ -1277,12 +1278,15 @@ public class Player : MonoBehaviour
         //Ok, so I'm pretty sure that they don't use a weight while applying forces to the character,
         //as in they only add the weight in the formula and don't account for it later because their 
         //formula does 200 / w + 100 which scales the weight to be a 0-2f value. 
-        //rb.velocity = direction.normalized * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.1f;
+        //float totalKB = SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale);
+        //rb.velocity = Vector2.one * totalKB * 0.03f * 10f;
+        //Debug.Log(totalKB);
+        //rb.velocity = angleDeg == 361f ? RadiansToVector(Mathf.Deg2Rad * SakuraiAngle(totalKB, false)) : RadiansToVector(Mathf.Deg2Rad * angleDeg) * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f * 10f;
         //rb.AddForce(direction * Mathf.Sqrt(2 * 9.81f * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale)), ForceMode2D.Impulse);
-        StartCoroutine(LaunchCoroutine(direction, damageDelt, damagePercent, baseKnockback, knockbackScale));
+        StartCoroutine(LaunchCoroutine(angleDeg, direction, damageDelt, damagePercent, baseKnockback, knockbackScale));
         //Debug.Log(rb.velocity + " " + direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale));
         //rb.mass = 1f;
-        //rb.AddForce(direction.normalized * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f/* * damagePercent*/, ForceMode2D.Impulse);
+        //rb.AddForce(direction.normalized * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f * 10f, ForceMode2D.Impulse);
     }
 
 
@@ -1350,7 +1354,7 @@ public class Player : MonoBehaviour
         //What does it mean distance? the magnitude of the vector?
     }
 
-    public IEnumerator LaunchCoroutine(Vector2 hitDirection, float damageDelt, float currentDamage, float baseKnockback, float knockbackScale)
+    public IEnumerator LaunchCoroutine(float angleDeg, Vector2 hitDirection, float damageDelt, float currentDamage, float baseKnockback, float knockbackScale)
     {
         //I need to make this coroutine exit when we start a new LaunchCoroutine.
 
@@ -1378,21 +1382,59 @@ public class Player : MonoBehaviour
         knockback = ((((p / 10f + p * d / 20f) * 200f / (w + 100f) * 1.4f) + 18) * s) + b;
         Debug.Log(knockback.ToString().Color("red"));
 
-        float launchSpeed = knockback * 0.03f;
+        float angleRad = 0f;
+        //Sakurai angle check
+        if (angleDeg == 361f)
+        {
+            //for now, we don't know if the other player did this as an aerial so input false.
+            angleRad = Mathf.Deg2Rad * SakuraiAngle(knockback, false);
+            hitDirection = RadiansToVector(angleRad);
+        }
+
+
+
+        //we multiply by 10f because in smash the game unit is actually 1 decimeter, https://www.ssbwiki.com/Distance_unit
+        //so if we want to keep a "normal" sized character to be 1x1 unity units we need to multiply by 10
+        //to scale our formula properly. 
+        //multiply by the launch speed factor 0.03 just like smash.
+        //but here it would be 0.3 because we already multiplied by 10
+        //but I think it's actually 0.2 because the knockback values only
+        //look accurate to the smash ultimate calculator: https://rubendal.github.io/SSBU-Calculator/
+        //at this value. Not sure why.
+        float launchSpeed = knockback * 0.2f;
         float mass = rb.mass;
         //rb.mass = 1f;
+        
+        //used for adding gravity.
+        float t = 0f;
         while (launchSpeed > 0)
         {
-            rb.velocity = hitDirection * launchSpeed * 10f;
-            Debug.Log((rb.position + (hitDirection * launchSpeed * 10 * Time.deltaTime)).ToString().Color("red"));
-            //rb.MovePosition(rb.position + (hitDirection * launchSpeed * 10 * Time.deltaTime));
-            //rb.AddForce(rb.position + (hitDirection * launchSpeed * 10 * Time.deltaTime), ForceMode2D.Impulse);
-            //rb.velocity = hitDirection * launchSpeed / 0.3f * Time.deltaTime;
+            //rb.velocity += hitDirection * launchSpeed * 10f * Time.deltaTime;
 
-            launchSpeed -= 0.051f;
+
+            //Vector2 vel = hitDirection * launchSpeed/** Time.deltaTime*/;
+            //rb.velocity = vel - new Vector2(0f, 0.5f * Physics2D.gravity.magnitude * Mathf.Pow(t, 2));
+            //rb.MovePosition(new Vector2(launchSpeed * Mathf.Cos(angleRad) * t, launchSpeed * Mathf.Sin(angleRad) * t - 0.5f * Physics2D.gravity.magnitude * Mathf.Pow(t, 2)));
+            //Debug.Log(rb.position.ToString().Color("cyan"));
+            float horizontalLaunchSpeed = launchSpeed * Mathf.Cos(angleRad);
+            float verticalLaunchSpeed = launchSpeed * Mathf.Sin(angleRad)/* - Physics2D.gravity.magnitude * t*/;
+            //rb.MovePosition(rb.position + new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed));
+            //rb.velocity = new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
+            //rb.AddForce(new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed), ForceMode2D.Impulse);
+            //Debug.Log((rb.position + (hitDirection * launchSpeed * Time.deltaTime)).ToString().Color("red"));
+            Debug.Log(new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed).ToString().Color("cyan"));
+            //rb.MovePosition(rb.position + (hitDirection * launchSpeed * Time.deltaTime));
+            //rb.AddForce(rb.position + (hitDirection * launchSpeed * 10 * Time.deltaTime), ForceMode2D.Impulse);
+            rb.velocity = hitDirection * launchSpeed;
+
+            launchSpeed -= 0.51f;
+            t += Time.deltaTime;
             yield return null;
         }
+
+        //rb.velocity = new Vector2(50f, 0f);
         Debug.Log("CoroutineStop");
+        //rb.velocity = new Vector2(20f, 0f);
         //rb.mass = mass;
         //rb.velocity = Vector2.zero;
         state = PlayerState.None;
@@ -1415,7 +1457,7 @@ public class Player : MonoBehaviour
             damagePercent += (h.attackInfo.attackDamage * 1.26f);
 
             //launch the player based off of the attack damage.
-            Launch(RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle)), h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale);
+            Launch(h.attackInfo.launchAngle, RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle)), h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale);
         }
         //the player entered the kill trigger. (kill bounds).
         else if (collision.gameObject.CompareTag("Kill"))
@@ -1442,6 +1484,27 @@ public class Player : MonoBehaviour
     private void OnBecameVisible()
     {
         Debug.Log("Player is Onscreen!");
+    }
+
+    //https://github.com/rubendal/SSBU-Calculator
+    private float SakuraiAngle(float kb, bool aerial)
+    {
+        if (aerial)
+        {
+            //I don't know why they used this calculation 
+            //when they could've printed this value and
+            //just put a constant here.
+            return Mathf.Rad2Deg * 0.663225f;
+        }
+        if (kb < 60)
+        {
+            return 0;
+        }
+        if (kb >= 88)
+        {
+            return 38;
+        }
+        return Mathf.Min((kb - 60) / (88 - 60) * 38 + 1, 38); //https://twitter.com/BenArthur_7/status/956316733597503488
     }
 
     private Vector2 RadiansToVector(float radians)
