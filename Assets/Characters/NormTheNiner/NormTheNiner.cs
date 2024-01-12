@@ -36,6 +36,7 @@ public class NormTheNiner : Player
     public override void UpSmash()
     {
         base.UpSmash();
+        animator.SetTrigger("upSmash");
     }
 
     public override void DownSmash()
@@ -46,6 +47,7 @@ public class NormTheNiner : Player
     public override void ForwardSmash()
     {
         base.ForwardSmash();
+        animator.SetTrigger("forwardSmash");
     }
     #endregion
 

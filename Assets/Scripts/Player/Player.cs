@@ -9,7 +9,7 @@ using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
-    private float _damagePercent = 100f;
+    private float _damagePercent = 0f;
 
     public float damagePercent { get { return _damagePercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _damagePercent = clamped; } }
 
@@ -17,6 +17,10 @@ public class Player : MonoBehaviour
     private CharacterIcon characterIcon;
 
     public Hurtbox hurtbox;
+
+    public ParticleSystem launchParticles;
+
+    private bool isFacingLeft;
 
     //Data used to set paramters of the hurtbox during attacks.
     public Dictionary<string, AttackInfo> attackInfos = new Dictionary<string, AttackInfo>()
@@ -480,12 +484,14 @@ public class Player : MonoBehaviour
         if (playerInput.currentControlScheme.Equals("Gamepad") && (moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && moveInput.x - lastXinput > 0)
         {
             playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
+            isFacingLeft = xAxis < 0 ? true : false;
         }
         
         //if user is inputting via keyboard
         if (playerInput.currentControlScheme.Equals("Keyboard&Mouse") && Mathf.Abs(moveInput.x) > 0)
         {
             playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
+            isFacingLeft = xAxis < 0 ? true : false;
         }
     }
 
@@ -932,7 +938,7 @@ public class Player : MonoBehaviour
         //TODO: Actually code this attack.
         if (hurtbox != null)
         {
-            hurtbox.attackInfo = attackInfos["ForwardTilt"];
+            SetHurtboxAttackInfo(attackInfos["ForwardTilt"]);
         }
 
         //lastly set the playerState back to none.
@@ -1268,7 +1274,7 @@ public class Player : MonoBehaviour
     #endregion
 
 
-    public void Launch(float angleDeg, Vector2 direction, float damageDelt, float baseKnockback, float knockbackScale)
+    public void Launch(float angleDeg, Vector2 attackerDirection, float damageDelt, float baseKnockback, float knockbackScale)
     {
         state = PlayerState.launched;
         //rb.AddForce(direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale), ForceMode2D.Impulse);
@@ -1283,7 +1289,7 @@ public class Player : MonoBehaviour
         //Debug.Log(totalKB);
         //rb.velocity = angleDeg == 361f ? RadiansToVector(Mathf.Deg2Rad * SakuraiAngle(totalKB, false)) : RadiansToVector(Mathf.Deg2Rad * angleDeg) * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f * 10f;
         //rb.AddForce(direction * Mathf.Sqrt(2 * 9.81f * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale)), ForceMode2D.Impulse);
-        StartCoroutine(LaunchCoroutine(angleDeg, direction, damageDelt, damagePercent, baseKnockback, knockbackScale));
+        StartCoroutine(LaunchCoroutine(angleDeg, attackerDirection, damageDelt, damagePercent, baseKnockback, knockbackScale));
         //Debug.Log(rb.velocity + " " + direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale));
         //rb.mass = 1f;
         //rb.AddForce(direction.normalized * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f * 10f, ForceMode2D.Impulse);
@@ -1382,7 +1388,7 @@ public class Player : MonoBehaviour
         knockback = ((((p / 10f + p * d / 20f) * 200f / (w + 100f) * 1.4f) + 18) * s) + b;
         Debug.Log(knockback.ToString().Color("red"));
 
-        float angleRad = 0f;
+        float angleRad = Mathf.Deg2Rad * angleDeg;
         //Sakurai angle check
         if (angleDeg == 361f)
         {
@@ -1390,7 +1396,20 @@ public class Player : MonoBehaviour
             angleRad = Mathf.Deg2Rad * SakuraiAngle(knockback, false);
             hitDirection = RadiansToVector(angleRad);
         }
-
+        else
+        {
+            hitDirection = RadiansToVector(angleDeg);
+        }
+        
+        //Change vector direction if angle is facing negative direction.
+        if (Mathf.Cos(angleRad) < 0)
+        {
+            hitDirection.x = -hitDirection.x;
+        }
+        if (Mathf.Sin(angleRad) < 0)
+        {
+            hitDirection.y = -hitDirection.y;
+        }
 
 
         //we multiply by 10f because in smash the game unit is actually 1 decimeter, https://www.ssbwiki.com/Distance_unit
@@ -1407,6 +1426,18 @@ public class Player : MonoBehaviour
         
         //used for adding gravity.
         float t = 0f;
+
+        //Do launch particles when launch 
+        //is strong enough.
+        if (knockback > 30f)
+        {
+            launchParticles.Play();
+        }
+        else
+        {
+            launchParticles.Stop();
+        }
+
         while (launchSpeed > 0)
         {
             //If you decide not to apply gravity to the y axis during a launch don't forget
@@ -1415,11 +1446,13 @@ public class Player : MonoBehaviour
             float verticalLaunchSpeed = launchSpeed * Mathf.Sin(angleRad)/* - 0.5f * Physics2D.gravity.magnitude * t*/;
             Debug.Log(new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed).ToString().Color("cyan"));
             rb.velocity = new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
-
+            launchParticles.gameObject.transform.rotation = Quaternion.LookRotation(rb.velocity);
             launchSpeed -= 0.51f;
             t += Time.deltaTime;
             yield return null;
         }
+        //stop doing launch particles.
+        launchParticles.Stop();
         Debug.Log("CoroutineStop");
         state = PlayerState.None;
     }
@@ -1495,13 +1528,40 @@ public class Player : MonoBehaviour
     {
         return new Vector2((float)Math.Cos(radians), (float)Math.Sin(radians));
     }
+
+    private void SetHurtboxAttackInfo(AttackInfo attackInfo)
+    {
+        if (hurtbox != null)
+        {
+            if (isFacingLeft)
+            {
+                float angle = -attackInfo.launchAngle;
+/*                if (angle < 180)
+                {
+                    angle = 180 - angle;
+                }
+                else
+                {
+                    angle = 360 - (angle - 180);
+                }*/
+
+                AttackInfo invertedX = new AttackInfo(angle, attackInfo.attackDamage, attackInfo.baseKnockback, attackInfo.knockbackScale);
+                
+                hurtbox.attackInfo = invertedX;
+            }
+            else
+            {
+                hurtbox.attackInfo = attackInfo;
+            }
+        }
+    }
 }
 
 //used for storing the data of attacks in 
 //the player's attack data dictionary.
 public struct AttackInfo
 {
-    public AttackInfo(float launchAngle,  float attackDamage, float baseKnockback, float knockbackScale)
+    public AttackInfo(float launchAngle, float attackDamage, float baseKnockback, float knockbackScale)
     {
         this.launchAngle = launchAngle;
         this.attackDamage = attackDamage;
