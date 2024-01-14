@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba52a5829f717c7438029a03e5f3db9a, type: 3}
+  m_Name: NormTheNiner_Moveset
+  m_EditorClassIdentifier: 
+  Neutral:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  ForwardTilt:
+    launchAngle: 361
+    attackDamage: 7
+    baseKnockback: 55
+    knockbackScale: 70
+  UpTilt:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  DownTilt:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  NeutralAerial:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  ForwardAerial:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  BackAerial:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  UpAerial:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  DownAerial:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  NeutralSpecial:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  ForwardSpecial:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  UpSpecial:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  DownSpecial:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  ForwardSmash:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  UpSmash:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
+  DownSmash:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0

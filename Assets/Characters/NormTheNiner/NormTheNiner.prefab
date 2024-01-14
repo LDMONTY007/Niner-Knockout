@@ -633,6 +633,7 @@ MonoBehaviour:
   characterIconPrefab: {fileID: 3979263912656741114, guid: 2a673ec157f21ca4fadea82e3826ca7c, type: 3}
   hurtbox: {fileID: 6967482904829382750}
   launchParticles: {fileID: 4373395401437295738}
+  moveset: {fileID: 11400000, guid: 3a3205b7e2788a145bbe5708977a1de1, type: 2}
   state: 0
   playerSprite: {fileID: 1290544984572531759}
   groundCheckDist: 0.1
@@ -951,6 +952,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6d1bc3dd5d7974eb475e8e67e8bcf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackInfo:
+    launchAngle: 0
+    attackDamage: 0
+    baseKnockback: 0
+    knockbackScale: 0
 --- !u!1 &7222870934182046517
 GameObject:
   m_ObjectHideFlags: 0

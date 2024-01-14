@@ -22,31 +22,10 @@ public class Player : MonoBehaviour
 
     private bool isFacingLeft;
 
-    //Data used to set paramters of the hurtbox during attacks.
-    public Dictionary<string, AttackInfo> attackInfos = new Dictionary<string, AttackInfo>()
-    {
-        //Tilt Attacks
-        { "Neutral", new AttackInfo(0f, 0f, 55f, 70f) },
-        //this forward tilt has the same values as mario's forward tilt so it should feel very familar.
-        { "ForwardTilt", new AttackInfo(361f, 7f, 55f, 70f) },
-        { "UpTilt", new AttackInfo(0f, 13.5f, 0f, 0f) },
-        { "DownTilt", new AttackInfo(0f, 0f, 0f, 0f) },
-        //Aerial Attacks
-        { "NeutralAerial", new AttackInfo(0f, 0f, 0f, 0f) },
-        { "ForwardAerial", new AttackInfo(0f, 0f, 0f, 0f) },
-        { "BackAerial", new AttackInfo(0f, 0f, 0f, 0f) },
-        { "UpAerial", new AttackInfo(0f, 0f   , 0f, 0f    ) },
-        { "DownAerial", new AttackInfo(0f, 0f, 0f, 0f ) },
-        //Special Attacks
-        { "NeutralSpecial", new AttackInfo(0f, 0f, 0f, 0f) },
-        { "ForwardSpecial", new AttackInfo(0f, 0f, 0f, 0f) },
-        { "UpSpecial", new AttackInfo(0f, 0f, 0f, 0f) },
-        { "DownSpecial", new AttackInfo(0f, 0f, 0f, 0f) },
-        //Smash Attacks
-        { "ForwardSmash", new AttackInfo(0f, 0f, 0f, 0f) },
-        { "UpSmash", new AttackInfo(0f, 0f, 0f, 0f) },
-        { "DownSmash", new AttackInfo(0f, 0f, 0f, 0f) }
-    };
+    /// <summary>
+    /// Used to set the angle, damage, and knockback of attacks.
+    /// </summary>
+    public Moveset moveset;
 
     public enum PlayerState
     {
@@ -825,15 +804,8 @@ public class Player : MonoBehaviour
                 //Choose horizontal attack
                 if (Mathf.Abs(dotVector.x) > Mathf.Abs(dotVector.y))
                 {
-                    //Right Special
-                    if (dotVector.x > 0)
-                    {
-                        ForwardSpecial();
-                    }//Left Special
-                    else
-                    {
-                        ForwardSpecial();
-                    }
+                    //Forward Special
+                    ForwardSpecial();
                 }//choose vertical attack.
                 else
                 {
@@ -851,16 +823,8 @@ public class Player : MonoBehaviour
             //Horizontal attacking (Left & Right Special)
             else if (xAxis != 0 && yAxis == 0)
             {
-                //Right Special
-                if (dotVector.x > 0)
-                {
-                    ForwardSpecial();
-                }
-                //Left Special
-                else
-                {
-                    ForwardSpecial();
-                }
+                //Forward Special
+                ForwardSpecial();
             }
             //Vertical attacking (Up & Down Special)
             else if (xAxis == 0 && yAxis != 0)
@@ -909,8 +873,9 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Player 1: Neutral ".Color("yellow"));
-        
+
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.Neutral);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -936,10 +901,7 @@ public class Player : MonoBehaviour
         HandleRotation();
 
         //TODO: Actually code this attack.
-        if (hurtbox != null)
-        {
-            SetHurtboxAttackInfo(attackInfos["ForwardTilt"]);
-        }
+        SetHurtboxAttackInfo(moveset.ForwardTilt);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -958,8 +920,9 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Player 1: UpTilt ".Color("yellow"));
-        
+
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.UpTilt);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -979,8 +942,9 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Player 1: DownTilt ".Color("yellow"));
-        
+
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.DownTilt);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1004,8 +968,10 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Player 1: NeutralAerial ".Color("white"));
-        
+
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.NeutralAerial);
+
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1025,8 +991,9 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Player 1: ForwardAerial ".Color("white"));
-        
+
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.ForwardAerial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1052,8 +1019,9 @@ public class Player : MonoBehaviour
         //invert rotation on this attack.
         playerSprite.transform.rotation = Quaternion.Euler(0f, playerSprite.transform.rotation.eulerAngles.y == 0 ? 180f : 0f, 0f);
         Debug.Log("Player 1: BackAerial ".Color("white"));
-        
+
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.BackAerial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1073,8 +1041,9 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Player 1: UpAerial ".Color("white"));
-        
+
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.UpAerial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1094,8 +1063,9 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Player 1: DownAerial ".Color("white"));
-        
+
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.DownAerial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1119,8 +1089,9 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Player 1: NeutralSpecial ".Color("orange"));
-        
+
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.NeutralSpecial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1145,6 +1116,7 @@ public class Player : MonoBehaviour
         HandleRotation();
 
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.ForwardSpecial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1185,8 +1157,9 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Player 1: DownSpecial ".Color("orange"));
-        
+
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.DownSpecial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1222,6 +1195,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: ForwardSmash ".Color("purple"));
 
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.ForwardSmash);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1248,6 +1222,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: UpSmash ".Color("purple"));
 
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.UpSmash);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1265,6 +1240,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: DownSmash ".Color("purple"));
 
         //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.DownSmash);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1395,13 +1371,20 @@ public class Player : MonoBehaviour
             //for now, we don't know if the other player did this as an aerial so input false.
             angleRad = Mathf.Deg2Rad * SakuraiAngle(knockback, false);
             hitDirection = RadiansToVector(angleRad);
+            //if the angle is negative flip it over the x axis.
+/*            if (angleDeg < 0)
+            {
+                hitDirection = new Vector2(-hitDirection.x, hitDirection.y);
+            }*/
         }
         else
         {
             hitDirection = RadiansToVector(angleDeg);
         }
-        
+
         //Change vector direction if angle is facing negative direction.
+        //this works if the angle is either negative or if it
+        //is over 180. 
         if (Mathf.Cos(angleRad) < 0)
         {
             hitDirection.x = -hitDirection.x;
@@ -1445,7 +1428,7 @@ public class Player : MonoBehaviour
             float horizontalLaunchSpeed = launchSpeed * Mathf.Cos(angleRad);
             float verticalLaunchSpeed = launchSpeed * Mathf.Sin(angleRad)/* - 0.5f * Physics2D.gravity.magnitude * t*/;
             Debug.Log(new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed).ToString().Color("cyan"));
-            rb.velocity = new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
+            rb.velocity = hitDirection * launchSpeed;//new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
             launchParticles.gameObject.transform.rotation = Quaternion.LookRotation(rb.velocity);
             launchSpeed -= 0.51f;
             t += Time.deltaTime;
@@ -1535,15 +1518,8 @@ public class Player : MonoBehaviour
         {
             if (isFacingLeft)
             {
+                //flip angle over x axis.
                 float angle = -attackInfo.launchAngle;
-/*                if (angle < 180)
-                {
-                    angle = 180 - angle;
-                }
-                else
-                {
-                    angle = 360 - (angle - 180);
-                }*/
 
                 AttackInfo invertedX = new AttackInfo(angle, attackInfo.attackDamage, attackInfo.baseKnockback, attackInfo.knockbackScale);
                 
@@ -1559,6 +1535,7 @@ public class Player : MonoBehaviour
 
 //used for storing the data of attacks in 
 //the player's attack data dictionary.
+[Serializable]
 public struct AttackInfo
 {
     public AttackInfo(float launchAngle, float attackDamage, float baseKnockback, float knockbackScale)
@@ -1572,21 +1549,21 @@ public struct AttackInfo
     /// <summary>
     /// The direction the enemy is sent in if this attack lands. In Degrees.
     /// </summary>
-    public float launchAngle { get; }
+    public float launchAngle;
 
     /// <summary>
     /// The percentage of damage added to the player's damage meter upon a successful hit.
     /// </summary>
-    public float attackDamage { get; }
+    public float attackDamage;
 
     /// <summary>
     /// The base knockback of this attack, regardless of the player's percentage.
     /// </summary>
-    public float baseKnockback { get; }
+    public float baseKnockback;
 
     /// <summary>
     /// Describes how much knockback and percent scale.
     /// </summary>
-    public float knockbackScale { get; }
+    public float knockbackScale;
 
 }
