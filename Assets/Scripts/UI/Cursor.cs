@@ -23,8 +23,6 @@ public class Cursor : MonoBehaviour
     [Header("Motion")]
     [Tooltip("Speed in pixels per second with which to move the cursor. Scaled by the input from 'Stick Action'.")]
     [SerializeField] private float cursorSpeed = 400;
-    [Tooltip("Scale factor to apply to 'Scroll Wheel Action' when setting the mouse 'scrollWheel' control.")]
-    [SerializeField] private float scrollSpeed = 45;
 
     public RectTransform cursorTransform;
 
@@ -98,11 +96,35 @@ public class Cursor : MonoBehaviour
     {
         pointerEventData.position = transform.position;
         List<RaycastResult> results = new List<RaycastResult>();
-        gr.Raycast(pointerEventData, results);
-
+        //gr.Raycast(pointerEventData, results);
+        EventSystem.current.RaycastAll(pointerEventData, results);
         if (results.Count > 0)
         {
-            print(results[0].gameObject.name);
+            if (results[0].gameObject.TryGetComponent(out CharacterSelectIcon selectIcon))
+            {
+                //assign the device controlling this player and the character prefab they selected to the GameManager before we load the 
+                //next scene.
+                PlayerInfo playerInfo = new PlayerInfo(playerInput.GetDevice<InputDevice>(), playerInput.currentControlScheme, selectIcon.characterIcon.characterPrefab);
+                if (GameManager.instance.players.Contains(playerInfo))
+                {
+                    Debug.Log("Player attempted to select the same character twice!".Color("yellow"));
+                    //TODO:
+                    //Check if this device already has a character assigned to it and if so, remove the character
+                    //and replace it. 
+                }
+                else
+                {
+                    GameManager.instance.players.Add(playerInfo);
+                    print(results[0].gameObject.name);
+                }
+            }
+            if (results[0].gameObject.TryGetComponent(out Button button))
+            {
+                //tell the button we clicked it with our cursor.
+                button.onClick.Invoke();
+            }
+
+
         }
     }
 

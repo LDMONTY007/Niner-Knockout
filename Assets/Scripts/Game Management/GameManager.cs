@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Scene = UnityEngine.SceneManagement.Scene;
 
@@ -44,8 +45,10 @@ public class GameManager
     //public List<Robot> robotPrefabs = new List<Robot>();
 
 
-    //robots that will die during gameplay.
-    public List<Player> players = new List<Player>();
+    //The input Device and character prefab the player selected. 
+    //Cleared after each match.
+    //assigned during the selection screen.
+    public List<PlayerInfo> players = new List<PlayerInfo>();
 
     public int finalRobotCount = 0;
 
@@ -106,5 +109,20 @@ public class GameManager
     }
 }*/
 
+public struct PlayerInfo
+{
+    public PlayerInfo(InputDevice device, string controlScheme, GameObject prefab)
+    {
+        this.device = device;
+        this.controlScheme = controlScheme; 
+        this.prefab = prefab;
+    }
+
+    public InputDevice device;
+
+    public string controlScheme;
+
+    public GameObject prefab;
+}
 
 

@@ -30,6 +30,10 @@ public class CharacterManager : MonoBehaviour
     /// </summary>
     public CharacterIconList characterIcons;
 
+    public bool useSelectableIcons = false;
+
+    public bool manuallyInitCharacters = false;
+
     private void Awake()
     {
         InputSystem.onDeviceChange +=
@@ -71,9 +75,22 @@ public class CharacterManager : MonoBehaviour
         {
             device.
         }*/
+        if (useSelectableIcons)
         foreach (Icon icon in characterIcons.icons)
         {
             AddSelectableIcon(icon);
+        }
+
+        
+        if (manuallyInitCharacters)
+        {
+            //get the devices and the characters they selected and instantiate them.
+            foreach(PlayerInfo playerInfo in GameManager.instance.players)
+            {
+                //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
+                PlayerInput.Instantiate(playerInfo.prefab, -1, playerInfo.controlScheme, -1, playerInfo.device);
+                //THIS IS WHAT LINKS THE CONTROLLER TO THE SPECIFICALLY SPAWNED PLAYER. 
+            }
         }
     }
 

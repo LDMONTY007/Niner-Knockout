@@ -1323,9 +1323,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8617798651085390458, guid: 1b7c928e4ce94bc4b96d83ad7fb5b342, type: 3}
+      propertyPath: characterIcons
+      value: 
+      objectReference: {fileID: 11400000, guid: c0da51b72e76aa34ebf67d9a615a9d0b, type: 2}
+    - target: {fileID: 8617798651085390458, guid: 1b7c928e4ce94bc4b96d83ad7fb5b342, type: 3}
       propertyPath: playerIconPanel
       value: 
       objectReference: {fileID: 460334373}
+    - target: {fileID: 8617798651085390458, guid: 1b7c928e4ce94bc4b96d83ad7fb5b342, type: 3}
+      propertyPath: manuallyInitCharacters
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
