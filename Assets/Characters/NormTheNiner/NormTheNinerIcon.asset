@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c175cbf2faf0294183c5f56c10a6aeb, type: 3}
+  m_Name: NormTheNinerIcon
+  m_EditorClassIdentifier: 
+  characterSprite: {fileID: 21300000, guid: cfd2a407da12cfa4f8295a87145dae09, type: 3}
+  characterName: Norm The Niner
+  characterAnnouncement: {fileID: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 1}
+  zoom: 0.5
+  characterPrefab: {fileID: 6711993648058681849, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}

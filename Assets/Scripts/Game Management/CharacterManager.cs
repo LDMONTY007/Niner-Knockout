@@ -11,7 +11,7 @@ public class CharacterManager : MonoBehaviour
 
     public Transform playerIconPanel;
 
-    public GameObject playerCursorPrefab;
+    public GameObject playerSelectIconPrefab;
 
     public Canvas selectionCanvas;
 
@@ -24,6 +24,11 @@ public class CharacterManager : MonoBehaviour
     Dictionary<int, InputDevice> devices = new Dictionary<int, InputDevice>();
 
     Dictionary<int, GameObject> characterSelections = new Dictionary<int, GameObject>();
+
+    /// <summary>
+    /// This list is used to create the grid of selectable characters in the player select scene.
+    /// </summary>
+    public CharacterIconList characterIcons;
 
     private void Awake()
     {
@@ -53,12 +58,12 @@ public class CharacterManager : MonoBehaviour
                     break;
             }
         };
+        GameManager.instance.characterManager = this;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.instance.characterManager = this;
         targetGroup = GetComponent<CinemachineTargetGroup>();
         PlayerInputManager.instance.onPlayerJoined += OnPlayerJoined;
         //InputSystem.devices
@@ -66,14 +71,10 @@ public class CharacterManager : MonoBehaviour
         {
             device.
         }*/
-    }
-
-    //used in the player selection screen
-    //and called when a player joins.
-    private void CreateSelectionCursor()
-    {
-        //create the new player as a child of the canvas.
-        Instantiate(playerCursorPrefab, selectionCanvas.transform);
+        foreach (Icon icon in characterIcons.icons)
+        {
+            AddSelectableIcon(icon);
+        }
     }
 
     private void OnPlayerJoined(PlayerInput obj)
@@ -83,10 +84,6 @@ public class CharacterManager : MonoBehaviour
         //required to be kept in the camera view.
         targetGroup.AddMember(obj.transform, 1f, 1f);
         //if this is a cursor parent it to the canvas.
-/*        if (obj.CompareTag("Cursor"))
-        {
-            obj.transform.SetParent(selectionCanvas.transform, false);
-        }*/
     }
 
     // Update is called once per frame
@@ -106,5 +103,18 @@ public class CharacterManager : MonoBehaviour
             return Instantiate(prefab, playerIconPanel).GetComponent<CharacterIcon>();
         }
         return null;
+    }
+
+    /// <summary>
+    /// Adds a character icon to the selectable grid.
+    /// </summary>
+    /// <param name="prefab">The gameobject icon to be added to the selectable grid UI</param>
+    public void AddSelectableIcon(Icon icon)
+    {
+        if (playerSelectIconPrefab != null)
+        {
+            CharacterSelectIcon obj = Instantiate(playerSelectIconPrefab, playerIconPanel).GetComponent<CharacterSelectIcon>();
+            obj.characterIcon = icon;
+        }
     }
 }
