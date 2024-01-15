@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Kill
   - Hurtbox
+  - Cursor
   layers:
   - Default
   - TransparentFX
