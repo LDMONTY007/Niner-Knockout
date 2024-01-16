@@ -1,4 +1,5 @@
 using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -85,10 +86,11 @@ public class CharacterManager : MonoBehaviour
         if (manuallyInitCharacters)
         {
             //get the devices and the characters they selected and instantiate them.
+            int index = 0;
             foreach(PlayerInfo playerInfo in GameManager.instance.players)
-            {
-                //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
-                PlayerInput.Instantiate(playerInfo.prefab, -1, playerInfo.controlScheme, -1, playerInfo.device);
+            {               
+                SpawnPlayer(playerInfo, index);
+                index++;
                 //THIS IS WHAT LINKS THE CONTROLLER TO THE SPECIFICALLY SPAWNED PLAYER. 
             }
         }
@@ -133,5 +135,36 @@ public class CharacterManager : MonoBehaviour
             CharacterSelectIcon obj = Instantiate(playerSelectIconPrefab, playerIconPanel).GetComponent<CharacterSelectIcon>();
             obj.characterIcon = icon;
         }
+    }
+
+    /// <summary>
+    /// Spawn a player from the GameManager's player list.
+    /// </summary>
+    /// <param name="characterIndex">The index of the PlayerInfo in the GameManager PlayerInfo list</param>
+    public void SpawnPlayer(int characterIndex)
+    {
+        PlayerInfo p = GameManager.instance.players[characterIndex];
+        //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
+        PlayerInput.Instantiate(p.prefab, -1, p.controlScheme, -1, p.device).GetComponent<Player>().characterIndex = characterIndex;
+        Debug.Log(("Spawn Player: " + characterIndex).ToString().Color("Green"));
+    }
+
+    /// <summary>
+    /// Spawn a player given the character's player info and their index.
+    /// </summary>
+    /// <param name="playerInfo"></param>
+    public void SpawnPlayer(PlayerInfo playerInfo, int characterIndex)
+    {
+        //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
+        PlayerInput.Instantiate(playerInfo.prefab, -1, playerInfo.controlScheme, -1, playerInfo.device).GetComponent<Player>().characterIndex = characterIndex;
+        Debug.Log(("Spawn Player: " + characterIndex).ToString().Color("Green"));
+    }
+
+    public void PlayerDied(int characterIndex)
+    {
+        //TODO: 
+        //Decrement character stock count
+        //Wait X seconds and then respawn character.
+        StartCoroutine(LDUtil.Wait(SpawnPlayer, characterIndex, 3f));
     }
 }

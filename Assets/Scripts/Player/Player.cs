@@ -22,6 +22,9 @@ public class Player : MonoBehaviour
 
     private bool isFacingLeft;
 
+    //the index of this character in the GameManager.
+    public int characterIndex;
+
     /// <summary>
     /// Used to set the angle, damage, and knockback of attacks.
     /// </summary>
@@ -400,7 +403,7 @@ public class Player : MonoBehaviour
             //play the jump sequence
             animator.SetTrigger("jump");
             //wait 250 ms then actually jump.
-            StartCoroutine(Wait(HandleJump, 0.25f));
+            StartCoroutine(LDUtil.Wait(HandleJump, 0.25f));
         }
         else
         {
@@ -472,15 +475,6 @@ public class Player : MonoBehaviour
             playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
             isFacingLeft = xAxis < 0 ? true : false;
         }
-    }
-
-    private IEnumerator Wait(Action action, float time)
-    {
-
-        //wait for 0.5 seconds
-        yield return new WaitForSeconds(time);
-        //call the given action.
-        action();
     }
 
     private void HandleJump()
@@ -1529,6 +1523,14 @@ public class Player : MonoBehaviour
             {
                 hurtbox.attackInfo = attackInfo;
             }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (GameManager.instance.characterManager != null)
+        {
+            GameManager.instance.characterManager.PlayerDied(characterIndex);
         }
     }
 }
