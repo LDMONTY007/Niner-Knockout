@@ -17,6 +17,8 @@ public class Cursor : MonoBehaviour
 {
     PlayerInput playerInput;
 
+    public GameObject coinPrefab;
+
     InputAction moveAction;
     InputAction selectAction;
 
@@ -34,7 +36,12 @@ public class Cursor : MonoBehaviour
     private PointerEventData pointerEventData = new PointerEventData(null);
     public GraphicRaycaster gr;
 
-    public GameObject selectedCharacter;
+    //used to store the index 
+    //where our character was inserted into 
+    //the list of characters so we can replace it
+    //if they decide to change characters.
+    private int characterIndex;
+    private GameObject coinInstance;
 
     // Start is called before the first frame update
     void Start()
@@ -105,16 +112,30 @@ public class Cursor : MonoBehaviour
                 //assign the device controlling this player and the character prefab they selected to the GameManager before we load the 
                 //next scene.
                 PlayerInfo playerInfo = new PlayerInfo(playerInput.GetDevice<InputDevice>(), playerInput.currentControlScheme, selectIcon.characterIcon.characterPrefab);
-                if (GameManager.instance.players.Contains(playerInfo))
+                //if we already placed our coin, 
+                //then when they click again it 
+                //means they are trying to 
+                //select a different character.
+                if (coinInstance)
                 {
-                    Debug.Log("Player attempted to select the same character twice!".Color("yellow"));
-                    //TODO:
-                    //Check if this device already has a character assigned to it and if so, remove the character
-                    //and replace it. 
+                    //Destroy the coin that was placed before 
+                    //and place a new one. 
+                    Destroy(coinInstance.gameObject);
+                    coinInstance = Instantiate(coinPrefab, cursorTransform.position, Quaternion.identity, canvas.transform);
+                    //replace the reference so that 
+                    //the old character they chose is 
+                    //removed and we assign the new 
+                    //character. 
+                    GameManager.instance.players[characterIndex] = playerInfo;
                 }
                 else
                 {
+                    //add the playerInfo to the GameManager player list.
                     GameManager.instance.players.Add(playerInfo);
+                    //set the character index in case we need to remove it.
+                    characterIndex = GameManager.instance.players.Count - 1;
+                    //create the coin where the cursor currently is.
+                    coinInstance = Instantiate(coinPrefab, cursorTransform.position, Quaternion.identity, canvas.transform);
                     print(results[0].gameObject.name);
                 }
             }

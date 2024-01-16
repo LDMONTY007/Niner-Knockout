@@ -81,11 +81,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc286c501c24f6348894d1cdb0c60fbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coinPrefab: {fileID: 7709565719339301769, guid: feda4f90995be8247bc63d7ca492aaa6, type: 3}
   cursorSpeed: 400
-  scrollSpeed: 45
   cursorTransform: {fileID: 1011745461383208950}
   gr: {fileID: 0}
-  selectedCharacter: {fileID: 0}
 --- !u!222 &615009028042994494
 CanvasRenderer:
   m_ObjectHideFlags: 0
