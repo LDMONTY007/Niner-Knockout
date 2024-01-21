@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
-    private float _damagePercent = 0f;
+    private float _damagePercent = 100f;
 
     public float damagePercent { get { return _damagePercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _damagePercent = clamped; } }
 
@@ -1415,16 +1417,40 @@ public class Player : MonoBehaviour
             launchParticles.Stop();
         }
 
-        while (launchSpeed > 0)
+        float waitTime = launchSpeed;
+
+        //launch for this many frames.
+        int framesToDo = Hitstun(knockback, false);
+
+        while (/*launchSpeed > 0*/ framesToDo > 0)
         {
             //If you decide not to apply gravity to the y axis during a launch don't forget
             //to remove these floats and just do rb.velocity = hitDirection * launchSpeed;
-            float horizontalLaunchSpeed = launchSpeed * Mathf.Cos(angleRad);
-            float verticalLaunchSpeed = launchSpeed * Mathf.Sin(angleRad)/* - 0.5f * Physics2D.gravity.magnitude * t*/;
-            Debug.Log(new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed).ToString().Color("cyan"));
+
+            //you need to look into how coroutines work and make sure this while loop isn't
+            //updated every frame and that you properly applying this formula.
+            //you may need to deprecate the angle so that it applies the force as an arc
+            //or do the thing where you apply gravity again.
+
+            //OG
+            //float horizontalLaunchSpeed = launchSpeed * Mathf.Cos(angleRad);
+            //float verticalLaunchSpeed = launchSpeed * Mathf.Sin(angleRad) - Physics2D.gravity.magnitude * t;
+
+            //NEW
+            //float horizontalLaunchSpeed = launchSpeed * Mathf.Cos(angleRad) * t;
+            //float verticalLaunchSpeed = launchSpeed * Mathf.Sin(angleRad) * t - (9.8f*t*t)/2;
+
+            //Debug.Log(new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed).ToString().Color("cyan"));
+            //rb.velocity = new Vector2(hitDirection.x * Mathf.Clamp(horizontalLaunchSpeed, 0f, Mathf.Infinity), hitDirection.y * verticalLaunchSpeed);
+            
             rb.velocity = hitDirection * launchSpeed;//new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
+            //apply gravity.
+            if (!isGrounded)
+            rb.velocity = rb.velocity + new Vector2(0f, -Physics2D.gravity.magnitude /** t*/);
             launchParticles.gameObject.transform.rotation = Quaternion.LookRotation(rb.velocity);
             launchSpeed -= 0.51f;
+            framesToDo--;
+            //waitTime -= 0.51f;
             t += Time.deltaTime;
             yield return null;
         }
@@ -1434,6 +1460,26 @@ public class Player : MonoBehaviour
         state = PlayerState.None;
     }
 
+    //this is from https://github.com/rubendal/SSBU-Calculator/blob/gh-pages/js/formulas.js#L162
+    private int Hitstun(float kb, bool windbox)
+    {
+        if (windbox)
+        {
+            return 0;
+        }
+        var hitstun = (kb * /*parameters.hitstun*/ 0.4);
+        if (hitstun < 0)
+        {
+            return 0;
+        }
+
+        //Minimum hitstun for non-windbox hitboxes
+        if (hitstun < 5)
+            hitstun = 5;
+
+        //convert from double to int.
+        return (int)Math.Floor(hitstun) - 1;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
