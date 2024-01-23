@@ -36,12 +36,22 @@ public class Player : MonoBehaviour
     /// </summary>
     public Moveset moveset;
 
+
+    //Hitstun should probably be a part of the playerstate
+    //or some sort of substate so that these are 2 layers 
+    //compunded.
+
+    int hitStunFrames = 0;
+    //If hitStunFrames is not 0 we are hitstunned.
+    bool isHitStunned => hitStunFrames > 0;
+
     public enum PlayerState
     {
-        None,
-        attacking,
-        launched,
-        tumbling,
+        None,       //Base state, no additional effects are applied.
+        attacking,  //Induced when attacking. Just allows us to make sure we don't start another attack when already attacking. Might need to delete this.
+        launched,   //Induced when launched. This just lets us know to stop the old launch coroutine and start a new one. Disables some physics.
+        helpless,   //Induced after running out of jumps while in the air. Sometimes called "Freefall" https://www.ssbwiki.com/Helpless
+        intangible, //Induced by dodging. Cannot be hit or pushed by other players. https://www.ssbwiki.com/Intangibility
     }
 
 
@@ -395,45 +405,51 @@ public class Player : MonoBehaviour
         {
             //only rotate when grounded,
             //or doing back aerial.
-            HandleRotation();
-            HandleAttack();
-            HandleSpecial();
-            //HandleSmash();
+            if (!isHitStunned && state != PlayerState.helpless)
+            {
+                HandleRotation();
+                HandleAttack();
+                HandleSpecial();
+            }
         }
         else if (inAir)
         {
-            HandleAerial();
-            HandleSpecial();
-            //HandleSmash();
+            if (!isHitStunned && state != PlayerState.helpless)
+            {
+                HandleAerial();
+                HandleSpecial();
+            }
         }
 
         //currently
         //you can jump while doing an attack,
         //I think this is how smash works.
         
-        if (doJump && isGrounded)
+        if (!isHitStunned)
         {
-            //play the jump sequence
-            animator.SetTrigger("jump");
-            //wait 1 frame then call HandleJump().
-            StartCoroutine(LDUtil.WaitFrames(HandleJump, 1));
-/*            if (doJump)
-            StartCoroutine(JumpCoroutine(10, jumpHeight));*/
-        }
-        else
-        {
-            //if we are air jumping then we don't need a windup frame.
-            HandleJump();
-
-            /*if (doJump)
+            if (doJump && isGrounded)
+            {
+                //play the jump sequence
+                animator.SetTrigger("jump");
+                //wait 1 frame then call HandleJump().
+                StartCoroutine(LDUtil.WaitFrames(HandleJump, 1));
+                /*            if (doJump)
                 StartCoroutine(JumpCoroutine(10, jumpHeight));*/
+            }
+            else
+            {
+                //if we are air jumping then we don't need a windup frame.
+                HandleJump();
+
+                /*if (doJump)
+                    StartCoroutine(JumpCoroutine(10, jumpHeight));*/
+            }
         }
 
 
         lastXinput = moveInput.x;
 
         lastDirectionInput = dirAction.ReadValue<Vector2>();
-
 
 
 
@@ -447,6 +463,34 @@ public class Player : MonoBehaviour
         HandlePassiveAnimation();
 
         HandleUI();
+
+        //we check for the state after
+        //everything else because it would
+        //be annoying to input an attack 
+        //and see it start just for the 
+        //forces from the attack to not
+        //be applied.
+        //Also I don't have a good explanation
+        //for it.
+        HandleState();
+    }
+
+    private void HandleState()
+    {
+        #region Helpless check
+        //did we run out of jumps?
+        if (jumpCount == 0)
+        {
+            //set state to helpless.
+            state = PlayerState.helpless;
+        }
+        if (state == PlayerState.helpless && isGrounded)
+        {
+            state = PlayerState.None;
+        }
+        #endregion
+
+
     }
 
     private void HandleUI()
@@ -910,6 +954,11 @@ public class Player : MonoBehaviour
         {
             return;
         }
+
+        //TODO:
+        //we need to check if we are helpless here and only apply Directional Influence (DI) 
+        //instead of the normal movement input.
+
         //set velocity directly, don't override y velocity.
         rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
 
@@ -1485,9 +1534,9 @@ public class Player : MonoBehaviour
         float waitTime = launchSpeed;
 
         //launch for this many frames.
-        int framesToDo = Hitstun(knockback, false);
+        hitStunFrames = Hitstun(knockback, false);
 
-        while (/*launchSpeed > 0*/ framesToDo > 0)
+        while (/*launchSpeed > 0*/ hitStunFrames > 0)
         {
             //If you decide not to apply gravity to the y axis during a launch don't forget
             //to remove these floats and just do rb.velocity = hitDirection * launchSpeed;
@@ -1514,7 +1563,7 @@ public class Player : MonoBehaviour
             rb.velocity = rb.velocity + new Vector2(0f, -Physics2D.gravity.magnitude /** t*/);
             launchParticles.gameObject.transform.rotation = Quaternion.LookRotation(rb.velocity);
             launchSpeed -= 0.51f;
-            framesToDo--;
+            hitStunFrames--;
             //waitTime -= 0.51f;
             t += Time.deltaTime;
             yield return null;
