@@ -10,7 +10,7 @@ using UnityEngine;
 public class LDUtil : MonoBehaviour
 {
     /// <summary>
-    /// Wait time seconds before calling the given method as an action.
+    /// Wait <paramref name="time"> seconds before calling <paramref name="action">.
     /// </summary>
     /// <param name="action">the action to call</param>
     /// <param name="time">time until we call the action</param>
@@ -24,7 +24,7 @@ public class LDUtil : MonoBehaviour
         action();
     }
 
-    //overload that allows 
+    //overload that allows a parameter to be passed with the wait method.
     public static IEnumerator Wait<T1>(Action<T1> action, T1 parameter, float time)
     {
 
@@ -32,5 +32,21 @@ public class LDUtil : MonoBehaviour
         yield return new WaitForSeconds(time);
         //call the given action.
         action(parameter);
+    }
+
+    /// <summary>
+    /// Waits <paramref name="frames"/> frames until it calls the provided <paramref name="action"/>
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="frames"></param>
+    /// <returns></returns>
+    public static IEnumerator WaitFrames(Action action, int frames)
+    {
+        while (frames > 0)
+        {
+            frames--;
+            yield return null;
+        }
+        action();
     }
 }

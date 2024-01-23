@@ -13,6 +13,10 @@ public class Player : MonoBehaviour
 {
     private float _damagePercent = 0f;
 
+    float baseGravity = 9.81f;
+    float gravity = 9.81f;
+
+
     public float damagePercent { get { return _damagePercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _damagePercent = clamped; } }
 
     public GameObject characterIconPrefab;
@@ -189,6 +193,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+
         //Creates the characterIcon
         //in our UI and gives us a reference to it.
         if (characterIconPrefab != null)
@@ -209,6 +215,9 @@ public class Player : MonoBehaviour
         //get animator if it isn't manually assigned.
         if (animator == null)
         animator = GetComponent<Animator>();
+
+        //DISABLE GRAVITY SO WE CAN USE OUR OWN.
+        rb.gravityScale = 0f;
     }
 
     // Update is called once per frame
@@ -327,6 +336,8 @@ public class Player : MonoBehaviour
             if (jumpTime >= buttonTime) //When we reach our projected time stop jumping and begin falling.
             {
                 Debug.Log("JUMP CANCELED BY BUTTON TIME".Color("Green"));
+                //pause the editor
+                //Debug.Break();
                 jumpCanceled = true;
                 //jumpDist = Vector2.Distance(transform.position, ogJump); //Not needed, just calculates distance from where we started jumping to our highest point in the jump.
                 jumpDist = transform.position.y - ogJump.y;
@@ -404,12 +415,18 @@ public class Player : MonoBehaviour
         {
             //play the jump sequence
             animator.SetTrigger("jump");
-            //wait 250 ms then actually jump.
-            StartCoroutine(LDUtil.Wait(HandleJump, 0.25f));
+            //wait 1 frame then call HandleJump().
+            StartCoroutine(LDUtil.WaitFrames(HandleJump, 1));
+/*            if (doJump)
+            StartCoroutine(JumpCoroutine(10, jumpHeight));*/
         }
         else
         {
+            //if we are air jumping then we don't need a windup frame.
             HandleJump();
+
+            /*if (doJump)
+                StartCoroutine(JumpCoroutine(10, jumpHeight));*/
         }
 
 
@@ -490,16 +507,36 @@ public class Player : MonoBehaviour
             doJump = false;
             jumpCount--;
             ogJump = transform.position;
+            float timeToApex = 0.3f;
             float jumpForce;
 
-            jumpForce = Mathf.Sqrt(2f * Physics2D.gravity.magnitude * jumpHeight) * rb.mass; //multiply by mass at the
+            //I did the work out and 2 * h / t = gravity so I'm going to do that.
+            gravity = 2 * jumpHeight / timeToApex;
+
+            //set gravity so that we jump in the amount of time we want
+            //Gravity = 2 * height / time^2
+            //gravity = 2 * jumpHeight / timeToApex * timeToApex;
+
+            jumpForce = Mathf.Sqrt(2f * gravity * jumpHeight) * rb.mass; //multiply by mass at the
             
             //end so that it reaches the height regardless of weight.
-            buttonTime = (jumpForce / (rb.mass * Physics2D.gravity.magnitude)); //initial velocity divided by player accel for gravity gives us the amount of time it will take to reach the apex.
-            
+            buttonTime = (jumpForce / (rb.mass * gravity)); //initial velocity divided by player accel for gravity gives us the amount of time it will take to reach the apex.
+
+            /*            Debug.Log(("Force: " + jumpForce + " " + "Time: " + buttonTime).ToString().Color("white"));
+
+
+                        jumpForce = Mathf.Sqrt(2f * gravity * jumpHeight * 2f) * rb.mass;*/
+
+            //get the new button time.
+            //buttonTime /= 2;
+
+            Debug.Log(("Force: " + jumpForce + " " + "Time: " + buttonTime).ToString().Color("orange"));
+
             rb.velocity = new Vector2(rb.velocity.x, 0f); //Reset y velocity before we jump so it is always reaching desired height.
             
             rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse); //don't normalize transform.up cus it makes jumping more inconsistent.
+
+
             jumpTime = 0;
             jumping = true;
             jumpCanceled = false;
@@ -513,16 +550,39 @@ public class Player : MonoBehaviour
         {
             animator.SetBool("falling", true);
             //we don't multiply by mass because forceMode2D.Force includes that in it's calculation.
-            Vector2 jumpVec = /*Multiplier * */-transform.up * (fallMultiplier - 1) /** Time.deltaTime*/;
+            Vector2 jumpVec = -transform.up * (fallMultiplier - 1);
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
         else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
         {
-            animator.SetBool("falling", false);
-            Vector2 jumpVec = /*Multiplier * */-transform.up * (lowJumpMultiplier - 1) /* Time.deltaTime*/;
+            animator.SetBool("falling", true);
+            Vector2 jumpVec = -transform.up * (lowJumpMultiplier - 1);
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
 
+/*        if (localVel.y > 0 && jumpTime >= buttonTime)
+        {
+            //rb.AddForce(-transform.up * Mathf.Sqrt(2f * Physics2D.gravity.magnitude * jumpHeight) * rb.mass);
+            rb.AddForce(-transform.up * Physics2D.gravity.magnitude);
+        }*/
+
+    }
+
+    private IEnumerator JumpCoroutine(int framesTotal, float height)
+    {
+        int frames = framesTotal;
+        float jumpForce = Mathf.Sqrt(2f * Physics2D.gravity.magnitude * height) * rb.mass;
+
+        while (frames > 0)
+        {
+            /*if (frames / framesTotal > 2f/3f)
+            {
+                rb.AddForce(transform.up * jumpForce / framesTotal, ForceMode2D.Force);
+            }*/
+            rb.AddForce(transform.up * jumpForce / framesTotal, ForceMode2D.Force);
+            frames--;
+            yield return null;
+        }
     }
 
     private void HandleAttack()
@@ -852,6 +912,11 @@ public class Player : MonoBehaviour
         }
         //set velocity directly, don't override y velocity.
         rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
+
+        //Apply gravity, because gravity is not affected by mass and 
+        //we can't use ForceMode.acceleration with 2D just multiply
+        //by mass at the end. It's basically the same.
+        rb.AddForce(-transform.up * gravity * rb.mass);
     }
 
     #region Attack Methods
