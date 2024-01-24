@@ -1473,13 +1473,15 @@ public class Player : MonoBehaviour
         //because weight is input to our rigidbody by the default physics we have to modify this a little bit.
         knockback = ((((p / 10f + p * d / 20f) * 200f / (w + 100f) * 1.4f) + 18) * s) + b;
         Debug.Log(knockback.ToString().Color("red"));
-
+        Debug.Log(angleDeg);
         float angleRad = Mathf.Deg2Rad * angleDeg;
+        Debug.Log(angleRad + ":" + angleRad * Mathf.Rad2Deg);
         //Sakurai angle check
-        if (angleDeg == 361f)
+        if (Mathf.Abs(angleDeg) == 361f)
         {
             //for now, we don't know if the other player did this as an aerial so input false.
             angleRad = Mathf.Deg2Rad * SakuraiAngle(knockback, false);
+            Debug.Log(angleRad + ":" + angleRad * Mathf.Rad2Deg);
             hitDirection = RadiansToVector(angleRad);
             //if the angle is negative flip it over the x axis.
 /*            if (angleDeg < 0)
@@ -1489,19 +1491,15 @@ public class Player : MonoBehaviour
         }
         else
         {
+            Debug.Log("Shouldn't be here!");
             hitDirection = RadiansToVector(angleDeg);
         }
+        Debug.DrawRay(transform.position, hitDirection * 5f, Color.blue, 1.5f);
 
-        //Change vector direction if angle is facing negative direction.
-        //this works if the angle is either negative or if it
-        //is over 180. 
-        if (Mathf.Cos(angleRad) < 0)
+        //reflect over x axis if the angle is negative.
+        if (angleDeg < 0)
         {
             hitDirection.x = -hitDirection.x;
-        }
-        if (Mathf.Sin(angleRad) < 0)
-        {
-            hitDirection.y = -hitDirection.y;
         }
 
 
@@ -1559,6 +1557,7 @@ public class Player : MonoBehaviour
             
             rb.velocity = hitDirection * launchSpeed;//new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
             //apply gravity.
+            Debug.DrawRay(transform.position, rb.velocity, Color.red, 1.5f);
             if (!isGrounded)
             rb.velocity = rb.velocity + new Vector2(0f, -Physics2D.gravity.magnitude /** t*/);
             launchParticles.gameObject.transform.rotation = Quaternion.LookRotation(rb.velocity);
