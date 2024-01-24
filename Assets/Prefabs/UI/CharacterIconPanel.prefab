@@ -108,10 +108,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6535784422630047855}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 50}
-  m_SizeDelta: {x: 50, y: 50}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 372, y: 352}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6224535792403938281
 CanvasRenderer:
@@ -143,13 +143,13 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: -1085409220, guid: ee23742ddf5ae6e43ab32b4f31204e80, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
-  m_UseSpriteMesh: 0
+  m_UseSpriteMesh: 1
   m_PixelsPerUnitMultiplier: 1
 --- !u!1 &2423405542603810697
 GameObject:
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.48427665, g: 0.48427665, b: 0.48427665, a: 1}
+  m_Color: {r: 0.48427665, g: 0.48427665, b: 0.48427665, a: 0.7058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -521,6 +521,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1127e5e478fa60546812a8f689539706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterIcon: {fileID: 0}
+  backgroundImage: {fileID: 6869682327241246954}
+  characterImage: {fileID: 2630248639127292842}
+  characterName: {fileID: 4110214052635714571}
   percentText: {fileID: 9150950343589686034}
 --- !u!222 &4898824034943507574
 CanvasRenderer:

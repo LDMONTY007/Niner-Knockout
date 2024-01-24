@@ -11,6 +11,14 @@ using UnityEngine.UI;
 [ExecuteAlways]
 public class CharacterIcon : MonoBehaviour
 {
+    //
+    public Icon characterIcon;
+    public Image backgroundImage;
+    public Image characterImage;
+    public TextMeshProUGUI characterName;
+    //
+
+    Vector2 imageSizeDelta;
 
     private Gradient percentGradient = new Gradient();
 
@@ -40,6 +48,15 @@ public class CharacterIcon : MonoBehaviour
 
 
         percentGradient.SetKeys(colors, alphas);
+
+        backgroundImage.color = characterIcon.backgroundColor;
+        characterImage.sprite = characterIcon.characterSprite;
+        characterName.text = characterIcon.characterName;
+        imageSizeDelta = characterImage.rectTransform.sizeDelta;
+
+        characterImage.GetComponent<RectTransform>().pivot = uiPivot(characterImage.sprite);
+        characterImage.GetComponent<RectTransform>().sizeDelta = imageSizeDelta;
+        characterImage.GetComponent<RectTransform>().sizeDelta *= characterIcon.zoom;
     }
 
     public void SetPercent(float p)
@@ -52,5 +69,12 @@ public class CharacterIcon : MonoBehaviour
     public float GetPercent()
     {
         return percent;
+    }
+
+    public Vector2 uiPivot(Sprite sprite)
+    {
+        Vector2 pixelSize = new Vector2(sprite.texture.width, sprite.texture.height);
+        Vector2 pixelPivot = sprite.pivot;
+        return new Vector2(pixelPivot.x / pixelSize.x, pixelPivot.y / pixelSize.y);
     }
 }

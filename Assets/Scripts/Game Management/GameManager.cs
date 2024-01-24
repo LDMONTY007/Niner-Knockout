@@ -111,18 +111,18 @@ public class GameManager
 
 public struct PlayerInfo
 {
-    public PlayerInfo(InputDevice device, string controlScheme, GameObject prefab)
+    public PlayerInfo(InputDevice device, string controlScheme, Icon characterIcon)
     {
         this.device = device;
         this.controlScheme = controlScheme; 
-        this.prefab = prefab;
+        this.characterIcon = characterIcon;
     }
 
     public InputDevice device;
 
     public string controlScheme;
 
-    public GameObject prefab;
+    public Icon characterIcon;
 }
 
 

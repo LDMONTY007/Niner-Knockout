@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
@@ -11,6 +12,8 @@ public class CharacterManager : MonoBehaviour
     CinemachineTargetGroup targetGroup;
 
     public Transform playerIconPanel;
+
+    public GameObject playerIconPrefab;
 
     public GameObject playerSelectIconPrefab;
 
@@ -90,6 +93,8 @@ public class CharacterManager : MonoBehaviour
             foreach(PlayerInfo playerInfo in GameManager.instance.players)
             {               
                 SpawnPlayer(playerInfo, index);
+
+                
                 index++;
                 //THIS IS WHAT LINKS THE CONTROLLER TO THE SPECIFICALLY SPAWNED PLAYER. 
             }
@@ -115,11 +120,13 @@ public class CharacterManager : MonoBehaviour
     /// Adds a player's icon to the UI.
     /// </summary>
     /// <param name="prefab">The prefab of the player icon</param>
-    public CharacterIcon AddPlayerIcon(GameObject prefab)
+    public CharacterIcon AddPlayerIcon(Icon icon)
     {
-        if (prefab != null)
+        if (playerIconPrefab != null)
         {
-            return Instantiate(prefab, playerIconPanel).GetComponent<CharacterIcon>();
+            CharacterIcon obj = Instantiate(playerIconPrefab, playerIconPanel).GetComponent<CharacterIcon>();
+            obj.characterIcon = icon;
+            return obj;
         }
         return null;
     }
@@ -145,7 +152,7 @@ public class CharacterManager : MonoBehaviour
     {
         PlayerInfo p = GameManager.instance.players[characterIndex];
         //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
-        PlayerInput.Instantiate(p.prefab, -1, p.controlScheme, -1, p.device).GetComponent<Player>().characterIndex = characterIndex;
+        PlayerInput.Instantiate(p.characterIcon.characterPrefab, -1, p.controlScheme, -1, p.device).GetComponent<Player>().characterIndex = characterIndex;
         Debug.Log(("Spawn Player: " + characterIndex).ToString().Color("Green"));
     }
 
@@ -156,7 +163,10 @@ public class CharacterManager : MonoBehaviour
     public void SpawnPlayer(PlayerInfo playerInfo, int characterIndex)
     {
         //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
-        PlayerInput.Instantiate(playerInfo.prefab, -1, playerInfo.controlScheme, -1, playerInfo.device).GetComponent<Player>().characterIndex = characterIndex;
+        PlayerInput p = PlayerInput.Instantiate(playerInfo.characterIcon.characterPrefab, -1, playerInfo.controlScheme, -1, playerInfo.device);
+        p.GetComponent<Player>().characterIndex = characterIndex;
+        p.GetComponent<Player>().characterIcon = AddPlayerIcon(playerInfo.characterIcon);
+
         Debug.Log(("Spawn Player: " + characterIndex).ToString().Color("Green"));
     }
 

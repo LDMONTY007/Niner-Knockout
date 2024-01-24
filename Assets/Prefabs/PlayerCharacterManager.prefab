@@ -107,5 +107,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerIconPanel: {fileID: 0}
-  playerCursorPrefab: {fileID: 0}
+  playerIconPrefab: {fileID: 3979263912656741114, guid: 112ecf1dcc5ce2a4b9038ed4684c23fa, type: 3}
+  playerSelectIconPrefab: {fileID: 4809427410454751555, guid: 9d5e8f3c8faf7e144bc25893645cf7b1, type: 3}
   selectionCanvas: {fileID: 0}
+  characterIcons: {fileID: 0}
+  useSelectableIcons: 0
+  manuallyInitCharacters: 0

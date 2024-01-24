@@ -19,8 +19,9 @@ public class Player : MonoBehaviour
 
     public float damagePercent { get { return _damagePercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _damagePercent = clamped; } }
 
-    public GameObject characterIconPrefab;
-    private CharacterIcon characterIcon;
+    public CharacterIcon characterIcon;
+
+    private Icon icon;
 
     public Hurtbox hurtbox;
 
@@ -203,14 +204,6 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-
-        //Creates the characterIcon
-        //in our UI and gives us a reference to it.
-        if (characterIconPrefab != null)
-        {
-            characterIcon = GameManager.instance.characterManager.AddPlayerIcon(characterIconPrefab);
-        }
 
         rCasting = LayerMask.GetMask("Player", "Ignore Raycast"); //Assign our layer mask to player
         rCasting = ~rCasting; //Invert the layermask value so instead of being just the player it becomes every layer but the mask
