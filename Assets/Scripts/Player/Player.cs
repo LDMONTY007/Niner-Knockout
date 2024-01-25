@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
 {
     private float _damagePercent = 0f;
 
+    //The gravity we return to 
+    //after modifying gravity.
     float baseGravity = 9.81f;
     float gravity = 9.81f;
 
@@ -220,7 +222,7 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
 
         //DISABLE GRAVITY SO WE CAN USE OUR OWN.
-        rb.gravityScale = 0f;
+        rb.gravityScale = 0;
     }
 
     // Update is called once per frame
@@ -342,6 +344,10 @@ public class Player : MonoBehaviour
                 //pause the editor
                 //Debug.Break();
                 jumpCanceled = true;
+
+                //set gravity back to normal
+                gravity = baseGravity;
+
                 //jumpDist = Vector2.Distance(transform.position, ogJump); //Not needed, just calculates distance from where we started jumping to our highest point in the jump.
                 jumpDist = transform.position.y - ogJump.y;
             }
@@ -587,14 +593,16 @@ public class Player : MonoBehaviour
         {
             animator.SetBool("falling", true);
             //we don't multiply by mass because forceMode2D.Force includes that in it's calculation.
-            Vector2 jumpVec = -transform.up * (fallMultiplier - 1);
+            Vector2 jumpVec = -transform.up * (fallMultiplier - 1) * 100f;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
         else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
         {
+            Debug.Log("Low Jump".Color("cyan"));
             animator.SetBool("falling", true);
-            Vector2 jumpVec = -transform.up * (lowJumpMultiplier - 1);
+            Vector2 jumpVec = -transform.up * (lowJumpMultiplier - 1) * 100f;
             rb.AddForce(jumpVec, ForceMode2D.Force);
+            Debug.Log(rb.velocity);
         }
 
 /*        if (localVel.y > 0 && jumpTime >= buttonTime)
@@ -958,6 +966,8 @@ public class Player : MonoBehaviour
         //Apply gravity, because gravity is not affected by mass and 
         //we can't use ForceMode.acceleration with 2D just multiply
         //by mass at the end. It's basically the same.
+        //In unity it factors in mass for this calculation so 
+        //multiplying by mass cancels out mass entirely.
         rb.AddForce(-transform.up * gravity * rb.mass);
     }
 
@@ -1552,7 +1562,7 @@ public class Player : MonoBehaviour
             //apply gravity.
             Debug.DrawRay(transform.position, rb.velocity, Color.red, 1.5f);
             if (!isGrounded)
-            rb.velocity = rb.velocity + new Vector2(0f, -Physics2D.gravity.magnitude /** t*/);
+            rb.velocity = rb.velocity + new Vector2(0f, -baseGravity /** t*/);
             launchParticles.gameObject.transform.rotation = Quaternion.LookRotation(rb.velocity);
             launchSpeed -= 0.51f;
             hitStunFrames--;

@@ -150,10 +150,11 @@ public class CharacterManager : MonoBehaviour
     /// <param name="characterIndex">The index of the PlayerInfo in the GameManager PlayerInfo list</param>
     public void SpawnPlayer(int characterIndex)
     {
-        PlayerInfo p = GameManager.instance.players[characterIndex];
+        PlayerInfo playerInfo = GameManager.instance.players[characterIndex];
         //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
-        PlayerInput.Instantiate(p.characterIcon.characterPrefab, -1, p.controlScheme, -1, p.device).GetComponent<Player>().characterIndex = characterIndex;
-        Debug.Log(("Spawn Player: " + characterIndex).ToString().Color("Green"));
+        PlayerInput p = PlayerInput.Instantiate(playerInfo.characterIcon.characterPrefab, -1, playerInfo.controlScheme, -1, playerInfo.device);
+        p.GetComponent<Player>().characterIndex = characterIndex;
+        p.GetComponent<Player>().characterIcon = AddPlayerIcon(playerInfo.characterIcon);
     }
 
     /// <summary>
