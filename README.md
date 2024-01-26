@@ -1,4 +1,4 @@
-# Untitled Fighting Game
+# Niner Knockout
 
 Use Unity version 2022.3.16f1 to open this project.
 
