@@ -1363,7 +1363,7 @@ public class Player : MonoBehaviour
     #endregion
 
 
-    public void Launch(float angleDeg, Vector2 attackerDirection, float damageDelt, float baseKnockback, float knockbackScale)
+    public void Launch(float angleDeg, Vector2 attackerDirection, float damageDelt, float baseKnockback, float knockbackScale, int hitLag)
     {
         state = PlayerState.launched;
         //rb.AddForce(direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale), ForceMode2D.Impulse);
@@ -1378,7 +1378,7 @@ public class Player : MonoBehaviour
         //Debug.Log(totalKB);
         //rb.velocity = angleDeg == 361f ? RadiansToVector(Mathf.Deg2Rad * SakuraiAngle(totalKB, false)) : RadiansToVector(Mathf.Deg2Rad * angleDeg) * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f * 10f;
         //rb.AddForce(direction * Mathf.Sqrt(2 * 9.81f * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale)), ForceMode2D.Impulse);
-        StartCoroutine(LaunchCoroutine(angleDeg, attackerDirection, damageDelt, damagePercent, baseKnockback, knockbackScale));
+        StartCoroutine(LaunchCoroutine(angleDeg, attackerDirection, damageDelt, damagePercent, baseKnockback, knockbackScale, hitLag));
         //Debug.Log(rb.velocity + " " + direction * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale));
         //rb.mass = 1f;
         //rb.AddForce(direction.normalized * SmashKnockback(damageDelt, damagePercent, baseKnockback, knockbackScale) * 0.03f * 10f, ForceMode2D.Impulse);
@@ -1449,7 +1449,7 @@ public class Player : MonoBehaviour
         //What does it mean distance? the magnitude of the vector?
     }
 
-    public IEnumerator LaunchCoroutine(float angleDeg, Vector2 hitDirection, float damageDelt, float currentDamage, float baseKnockback, float knockbackScale)
+    public IEnumerator LaunchCoroutine(float angleDeg, Vector2 hitDirection, float damageDelt, float currentDamage, float baseKnockback, float knockbackScale, int hitLag)
     {
         //I need to make this coroutine exit when we start a new LaunchCoroutine.
 
@@ -1613,7 +1613,7 @@ public class Player : MonoBehaviour
             damagePercent += (h.attackInfo.attackDamage * 1.26f);
 
             //launch the player based off of the attack damage.
-            Launch(h.attackInfo.launchAngle, RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle)), h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale);
+            Launch(h.attackInfo.launchAngle, RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle)), h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale, h.attackInfo.hitLag);
         }
         //the player entered the kill trigger. (kill bounds).
         else if (collision.gameObject.CompareTag("Kill"))
@@ -1677,7 +1677,7 @@ public class Player : MonoBehaviour
                 //flip angle over x axis.
                 float angle = -attackInfo.launchAngle;
 
-                AttackInfo invertedX = new AttackInfo(angle, attackInfo.attackDamage, attackInfo.baseKnockback, attackInfo.knockbackScale);
+                AttackInfo invertedX = new AttackInfo(angle, attackInfo.attackDamage, attackInfo.baseKnockback, attackInfo.knockbackScale, attackInfo.hitLag);
                 
                 hurtbox.attackInfo = invertedX;
             }
@@ -1702,23 +1702,31 @@ public class Player : MonoBehaviour
 [Serializable]
 public struct AttackInfo
 {
-    public AttackInfo(float launchAngle, float attackDamage, float baseKnockback, float knockbackScale)
+    public AttackInfo(float launchAngle, float attackDamage, float baseKnockback, float knockbackScale, int hitLag)
     {
         this.launchAngle = launchAngle;
         this.attackDamage = attackDamage;
         this.baseKnockback = baseKnockback;
         this.knockbackScale = knockbackScale;
+        this.hitLag = hitLag;
     }
-
-    /// <summary>
-    /// The direction the enemy is sent in if this attack lands. In Degrees.
-    /// </summary>
-    public float launchAngle;
 
     /// <summary>
     /// The percentage of damage added to the player's damage meter upon a successful hit.
     /// </summary>
     public float attackDamage;
+
+    /// <summary>
+    /// The amount of additional hitlag 
+    /// Applied by this attack when 
+    /// launching.
+    /// </summary>
+    public int hitLag;
+
+    /// <summary>
+    /// The direction the enemy is sent in if this attack lands. In Degrees.
+    /// </summary>
+    public float launchAngle;
 
     /// <summary>
     /// The base knockback of this attack, regardless of the player's percentage.
@@ -1729,5 +1737,6 @@ public struct AttackInfo
     /// Describes how much knockback and percent scale.
     /// </summary>
     public float knockbackScale;
+
 
 }
