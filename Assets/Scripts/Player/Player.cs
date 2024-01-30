@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     //after modifying gravity.
     float baseGravity = 9.81f;
     float gravity = 9.81f;
-
+    float fallGravity = 9.81f;
 
     public float damagePercent { get { return _damagePercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _damagePercent = clamped; } }
 
@@ -151,6 +151,7 @@ public class Player : MonoBehaviour
     //time to reach the apex of the jump.
     //0.01f looks just like smash ultimate jumping.
     public float timeToApex = 0.01f;
+    public float timeToFall = 0.5f;
     public float heightScaleConstant = 120f;
     private float buttonTime;
     private float jumpTime;
@@ -315,6 +316,8 @@ public class Player : MonoBehaviour
             {
                 jumpCount = jumpTotal; //Reset jump count when we land.
                 jumpCanceled = false;
+                //set gravity back to base.
+                gravity = baseGravity;
                 //animator.SetTrigger("landing");
             }
         }
@@ -344,8 +347,10 @@ public class Player : MonoBehaviour
                 //Debug.Break();
                 jumpCanceled = true;
 
-                //set gravity back to normal
-                gravity = baseGravity;
+                //set gravity back to fall gravity
+                gravity = fallGravity;
+                //gravity = baseGravity;
+
 
                 //jumpDist = Vector2.Distance(transform.position, ogJump); //Not needed, just calculates distance from where we started jumping to our highest point in the jump.
                 jumpDist = transform.position.y - ogJump.y;
@@ -518,7 +523,17 @@ public class Player : MonoBehaviour
         //only when we are falling do we turn this var on.
         animator.SetBool("falling", localVel.y < 0);
 
-        animator.SetFloat("speed", moveInput.magnitude > 0.7 ? 1f : moveInput.magnitude < 0.1f ? 0f : 0.5f);
+        //only set speed based off of horizontal movement.
+
+        //for some reason inputting up then trying to move
+        //left or right only plays the animation and doesn't
+        //let you move left or right. This is only after 
+        //inputting up and attack to perform a smash attack.
+        
+        //we need to check if the up attack/smash/special input
+        //is occuring then set speed to zero so pushing left 
+        //or right doesn't influence the animation.
+        animator.SetFloat("speed", Mathf.Abs(moveInput.x) > 0.7 ? 1f : Mathf.Abs(moveInput.x) < 0.1f ? 0f : 0.5f);
 
         animator.SetBool("holdAttack", shouldAttackContinuous);
     }
@@ -575,7 +590,10 @@ public class Player : MonoBehaviour
 
             //OR set jump height to 1
             //and take the jump height reached by the jump
-            //and do 
+            //and do Desired Height / jump height reached for desired height of 1
+            //and that gives you the properly scaled value.
+            //timeToApex affects this so for a timeToApex
+            //of 0.01 the jumpHeight scale modifier is 1.2f.
             
             //float modifier = 1.2f;//timeToApex / 0.00833333333f;
             float modifiedJumpHeight = (float)jumpHeight * 1.2f; //* modifier;
@@ -591,6 +609,7 @@ public class Player : MonoBehaviour
 
             //I did the work out and 2 * h / t = gravity so I'm going to do that.
             gravity = 2 * modifiedJumpHeight / timeToApex;
+            fallGravity = 2 * modifiedJumpHeight / timeToFall;
 
             float projectedHeight = timeToApex * gravity / 2f;
             Debug.Log(timeToApex + " " + projectedHeight + " " + gravity);
@@ -634,17 +653,21 @@ public class Player : MonoBehaviour
         {
             //animator.SetBool("falling", true);
             //we don't multiply by mass because forceMode2D.Force includes that in it's calculation.
+            //set gravity to be fallGravity.
+            gravity = fallGravity;
             Vector2 jumpVec = -transform.up * (fallMultiplier - 1)/* * 100f * Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
-        else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
+/*        else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
         {
             Debug.Log("Low Jump".Color("cyan"));
             //animator.SetBool("falling", true);
-            Vector2 jumpVec = -transform.up * (lowJumpMultiplier - 1) /* * 100f * Time.deltaTime*/;
+            //change to falling gravity
+            gravity = fallGravity;
+            Vector2 jumpVec = -transform.up * (lowJumpMultiplier - 1) *//* * 100f * Time.deltaTime*//*;
             rb.AddForce(jumpVec, ForceMode2D.Force);
             Debug.Log(rb.velocity);
-        }
+        }*/
 
 /*        if (localVel.y > 0 && jumpTime >= buttonTime)
         {
