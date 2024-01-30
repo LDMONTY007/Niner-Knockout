@@ -1,10 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SocialPlatforms;
@@ -152,10 +147,14 @@ public class Player : MonoBehaviour
     public int jumpTotal = 1; //Total jumps, so for instance if you wanted 3 jumps set this to 3.
     [SerializeField] private bool jumpCanceled;
     [SerializeField] private bool jumping;
-    public float jumpHeight = 5f; //Our jump height, set this to a specific value and our player will reach that height with a maximum deviation of 0.1
+    public double jumpHeight = 5f; //Our jump height, set this to a specific value and our player will reach that height with a maximum deviation of 0.1
+    //time to reach the apex of the jump.
+    //0.01f looks just like smash ultimate jumping.
+    public float timeToApex = 0.01f;
+    public float heightScaleConstant = 120f;
     private float buttonTime;
     private float jumpTime;
-    public float jumpDist; //used to see the measured distance of the jump.
+    public double jumpDist; //used to see the measured distance of the jump.
     public Vector2 ogJump; //Not included just like what I said above.
     public float fallMultiplier = 9f; //When you reach the peak of the expected arc this is the force applied to make falling more fluid.
     public float lowJumpMultiplier = 15f; //When you stop holding jump to do a low jump this is the force applied to make the jump stop short.
@@ -222,7 +221,7 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
 
         //DISABLE GRAVITY SO WE CAN USE OUR OWN.
-        rb.gravityScale = 0;
+        //rb.gravityScale = 0;
     }
 
     // Update is called once per frame
@@ -438,7 +437,7 @@ public class Player : MonoBehaviour
             else
             {
                 //if we are air jumping then we don't need a windup frame.
-                HandleJump();
+                //HandleJump();
 
                 /*if (doJump)
                     StartCoroutine(JumpCoroutine(10, jumpHeight));*/
@@ -457,7 +456,7 @@ public class Player : MonoBehaviour
         //update because we set the rigidbody
         //to interpolate. Normally, this 
         //wouldn't work.
-        ApplyFinalMovements();
+        //ApplyFinalMovements();
 
         HandlePassiveAnimation();
 
@@ -472,6 +471,12 @@ public class Player : MonoBehaviour
         //Also I don't have a good explanation
         //for it.
         HandleState();
+    }
+
+    private void FixedUpdate()
+    {
+        HandleJump();
+        ApplyFinalMovements();
     }
 
     private void HandleState()
@@ -545,22 +550,58 @@ public class Player : MonoBehaviour
 
         if (doJump)
         {
+            //this constant (1.2) was discovered
+            //by dividing the desired jump height by
+            //the height actually reached.
+            //this was the value I got regardless of the 
+            //jump time. I also think that the timeToApex
+            //probably affects this value, for this constant
+            //the timeToApex was set to 0.01f.
+            //I will look more into this at some other point.
+
+            //I ACTUALLY GOT TO A HEIGHT OF 5 WHEN I MULTIPLIED 
+            //BY THIS CONSTANT. 
+
+            //I am genuinely impressed how accurate this formula
+            //now is.
+
+
+            //make the jump height 1/60 
+            //then take the actual value reached by the jump
+            //then do 1/60 / actual value
+            //then do Desired height / actual value
+            //and that gives you the most accurate
+            //value to input as height for the jump.
+
+            //OR set jump height to 1
+            //and take the jump height reached by the jump
+            //and do 
+            
+            //float modifier = 1.2f;//timeToApex / 0.00833333333f;
+            float modifiedJumpHeight = (float)jumpHeight * 1.2f; //* modifier;
+
+
             //play crouch animation.
             animator.ResetTrigger("jump");
             doJump = false;
             jumpCount--;
             ogJump = transform.position;
-            float timeToApex = 0.3f;
             float jumpForce;
 
+
             //I did the work out and 2 * h / t = gravity so I'm going to do that.
-            gravity = 2 * jumpHeight / timeToApex;
+            gravity = 2 * modifiedJumpHeight / timeToApex;
+
+            float projectedHeight = timeToApex * gravity / 2f;
+            Debug.Log(timeToApex + " " + projectedHeight + " " + gravity);
+            Debug.Log(("Projected Height " + projectedHeight).ToString().Color("Cyan"));
+
 
             //set gravity so that we jump in the amount of time we want
             //Gravity = 2 * height / time^2
             //gravity = 2 * jumpHeight / timeToApex * timeToApex;
 
-            jumpForce = Mathf.Sqrt(2f * gravity * jumpHeight) * rb.mass; //multiply by mass at the
+            jumpForce = Mathf.Sqrt(2f * gravity * modifiedJumpHeight) * rb.mass; //multiply by mass at the
             
             //end so that it reaches the height regardless of weight.
             buttonTime = (jumpForce / (rb.mass * gravity)); //initial velocity divided by player accel for gravity gives us the amount of time it will take to reach the apex.
@@ -591,16 +632,16 @@ public class Player : MonoBehaviour
 
         if (localVel.y < 0 && inAir) //If we are in the air and at the top of the arc then apply our fall speed to make falling more game-like
         {
-            animator.SetBool("falling", true);
+            //animator.SetBool("falling", true);
             //we don't multiply by mass because forceMode2D.Force includes that in it's calculation.
-            Vector2 jumpVec = -transform.up * (fallMultiplier - 1) * 100f;
+            Vector2 jumpVec = -transform.up * (fallMultiplier - 1)/* * 100f * Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
         else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
         {
             Debug.Log("Low Jump".Color("cyan"));
-            animator.SetBool("falling", true);
-            Vector2 jumpVec = -transform.up * (lowJumpMultiplier - 1) * 100f;
+            //animator.SetBool("falling", true);
+            Vector2 jumpVec = -transform.up * (lowJumpMultiplier - 1) /* * 100f * Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
             Debug.Log(rb.velocity);
         }

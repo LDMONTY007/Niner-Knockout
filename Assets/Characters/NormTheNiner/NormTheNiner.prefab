@@ -757,10 +757,12 @@ MonoBehaviour:
   jumpCanceled: 0
   jumping: 0
   jumpHeight: 5
+  timeToApex: 0.01
+  heightScaleConstant: 120
   jumpDist: 0
   ogJump: {x: 0, y: 0}
   fallMultiplier: 9
-  lowJumpMultiplier: 25
+  lowJumpMultiplier: 15
 --- !u!212 &4148365952073877280
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -881,7 +883,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -1059,8 +1061,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackInfo:
-    launchAngle: 0
     attackDamage: 0
+    hitLag: 0
+    launchAngle: 0
     baseKnockback: 0
     knockbackScale: 0
 --- !u!1 &7222870934182046517

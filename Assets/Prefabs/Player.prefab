@@ -50,9 +50,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b133a05953fb697459c1a0de972c2e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterIconPrefab: {fileID: 0}
+  characterIcon: {fileID: 0}
   hurtbox: {fileID: 0}
   launchParticles: {fileID: 6092125203736242544}
+  characterIndex: 0
+  moveset: {fileID: 0}
   state: 0
   playerSprite: {fileID: 8702045412430236807}
   groundCheckDist: 0.1
@@ -70,6 +72,8 @@ MonoBehaviour:
   jumpCanceled: 0
   jumping: 0
   jumpHeight: 5
+  timeToApex: 0.01
+  heightScaleConstant: 120
   jumpDist: 0
   ogJump: {x: 0, y: 0}
   fallMultiplier: 9
