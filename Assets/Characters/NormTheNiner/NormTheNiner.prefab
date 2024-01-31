@@ -930,6 +930,8 @@ GameObject:
   - component: {fileID: 77052810505040672}
   - component: {fileID: 1165428579706423714}
   - component: {fileID: 6967482904829382750}
+  - component: {fileID: 4651359161966813799}
+  - component: {fileID: 6016669920224081321}
   m_Layer: 3
   m_Name: Hurtbox
   m_TagString: Hurtbox
@@ -945,13 +947,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6909062698888694511}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.008653191, y: -0.008653191, z: -0.70705384, w: 0.70705384}
   m_LocalPosition: {x: 0.56, y: -0.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3345658069687515671}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -18.25, y: 0, z: 0}
 --- !u!212 &77052810505040672
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1067,6 +1069,53 @@ MonoBehaviour:
     launchAngle: 0
     baseKnockback: 0
     knockbackScale: 0
+--- !u!1818360609 &4651359161966813799
+RotationConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6909062698888694511}
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Weight: 1
+  m_RotationAtRest: {x: -18.24952, y: 0, z: -90}
+  m_RotationOffset: {x: 0, y: 0, z: 0}
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_Active: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 5278898602609864671}
+    weight: 1
+--- !u!1773428102 &6016669920224081321
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6909062698888694511}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationAtRest: {x: -18.573639, y: 0, z: -90}
+  m_TranslationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_RotationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 0
+  m_AffectTranslationY: 0
+  m_AffectTranslationZ: 1
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_Active: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 5278898602609864671}
+    weight: 1
 --- !u!1 &7222870934182046517
 GameObject:
   m_ObjectHideFlags: 0
