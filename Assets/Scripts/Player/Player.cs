@@ -1542,14 +1542,17 @@ public class Player : MonoBehaviour
         Debug.Log(knockback.ToString().Color("red"));
         Debug.Log(angleDeg);
         float angleRad = Mathf.Deg2Rad * angleDeg;
-        Debug.Log(angleRad + ":" + angleRad * Mathf.Rad2Deg);
+        Debug.Log(angleRad + ":" + angleDeg);
+
+        Vector2 newDirection = hitDirection;
+
         //Sakurai angle check
         if (Mathf.Abs(angleDeg) == 361f)
         {
             //for now, we don't know if the other player did this as an aerial so input false.
             angleRad = Mathf.Deg2Rad * SakuraiAngle(knockback, false);
             Debug.Log(angleRad + ":" + angleRad * Mathf.Rad2Deg);
-            hitDirection = RadiansToVector(angleRad);
+            newDirection = RadiansToVector(angleRad);
             //if the angle is negative flip it over the x axis.
 /*            if (angleDeg < 0)
             {
@@ -1559,14 +1562,15 @@ public class Player : MonoBehaviour
         else
         {
             Debug.Log("Shouldn't be here!");
-            hitDirection = RadiansToVector(angleDeg);
+            newDirection = RadiansToVector(angleRad);
         }
         Debug.DrawRay(transform.position, hitDirection * 5f, Color.blue, 1.5f);
 
-        //reflect over x axis if the angle is negative.
-        if (angleDeg < 0)
+        //reflect over x axis if the direction goes
+        //to the left.
+        if (hitDirection.x < 0)
         {
-            hitDirection.x = -hitDirection.x;
+            newDirection.x = -newDirection.x;
         }
 
 
@@ -1622,7 +1626,7 @@ public class Player : MonoBehaviour
             //Debug.Log(new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed).ToString().Color("cyan"));
             //rb.velocity = new Vector2(hitDirection.x * Mathf.Clamp(horizontalLaunchSpeed, 0f, Mathf.Infinity), hitDirection.y * verticalLaunchSpeed);
             
-            rb.velocity = hitDirection * launchSpeed;//new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
+            rb.velocity = newDirection * launchSpeed;//new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
             //apply gravity.
             Debug.DrawRay(transform.position, rb.velocity, Color.red, 1.5f);
             if (!isGrounded)
@@ -1676,8 +1680,22 @@ public class Player : MonoBehaviour
             //multiplied by this value.
             damagePercent += (h.attackInfo.attackDamage * 1.26f);
 
+            //get the vector that the player should be sent in relative 
+            //to the hurtbox 
+            Vector3 dir = h.transform.position - this.transform.position;
+            dir.z = 0;
+            Debug.DrawRay(transform.position, dir.normalized, Color.yellow, 1f);
+            Debug.DrawRay(transform.position, -dir.normalized, Color.cyan, 1f);
+            Debug.DrawRay(transform.position, new Vector3(-dir.normalized.x, 0f, 0f), Color.magenta, 1f);
+            Vector3 wishDir = RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle));
+            //wishDir.x = -dir.x;
+            Debug.DrawRay(transform.position, wishDir.normalized * 5f, Color.green, 1f);
+
             //launch the player based off of the attack damage.
-            Launch(h.attackInfo.launchAngle, RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle)), h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale, h.attackInfo.hitLag);
+            //old
+            //Launch(h.attackInfo.launchAngle, RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle)), h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale, h.attackInfo.hitLag);
+            //new
+            Launch(h.attackInfo.launchAngle, -dir.normalized, h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale, h.attackInfo.hitLag);
         }
         //the player entered the kill trigger. (kill bounds).
         else if (collision.gameObject.CompareTag("Kill"))
