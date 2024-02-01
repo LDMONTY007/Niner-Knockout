@@ -42,8 +42,49 @@ Navigate to Assets/Characters and create a new folder using the name of your cha
 
 Now, add your character folder to your "favorites" in the [Project window](https://docs.unity3d.com/Manual/ProjectView.html) so it's easier to access.
 
-### Next Steps
+### Create Character Files
 
-## License
+> [!NOTE]
+  > All files created should be placed within your Character Folder. 
+
+1. Create a "Moveset", by selecting Create -> Character -> Moveset
+    - Moveset naming convention "MovesetCharacterName" (PascalCase).
+    - The Moveset stores parameters for every attack.
+    - You can find the list of attacks in the [Required Moves](#required-moves) table.
+
+2. Create a "Icon", by selecting Create -> Character -> Icon
+    - Icon naming convention "IconCharacterName" (PascalCase).
+    - Contains a reference to your player prefab (we'll set that up later)
+    - Contains settings for how to display your character in the "selection" menu.
+    - Contains a reference for the image shown in the "selection" menu. 
+
+![image](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/b15fddfb-8f16-40ff-8a0d-b0b74553823a)
+
+### Create Character Script
+
+  1. Create a new file in your Character Folder called "CharacterName.cs"
+    -Select Create -> C# Script 
+    -Put an image here LD-
+     
+  3. Open the script in your preferred IDE (Visual Studios is reccomended) either by double clicking or right clicking and selecting "open" 
+
+  4. Change the class decleration so that it inherits from "Player" instead of "Monobehavior"
+      -Put an image here LD-
+  5. LD write the rest of this after you are done with your HW. This is where you left off.
+
+## Art
+
+### Required Moves
+  
+  > [!NOTE]
+  > Move methods are automatically called within Player.cs,
+  > All you have to do is override the method.
+  > for more info see [Create Character Script](#create-character-script)
+  
+  | Move | Required Input | 
+  |     :---:      |     :---:      |
+  | git diff       | git diff       |
+
+## License 
 
 [MIT](https://choosealicense.com/licenses/mit/)
