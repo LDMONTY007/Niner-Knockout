@@ -6,6 +6,15 @@ using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
+    public enum Direction
+    {
+        None,
+        Up,
+        Down,
+        Left,
+        Right
+    }
+
     private float _damagePercent = 0f;
 
     //The gravity we return to 
@@ -62,7 +71,7 @@ public class Player : MonoBehaviour
 
     [Header("Movement Parameters")] //Explain that this will show a header in the inspector to categorize variables
     [Range(1, 10)] public float walkSpeed = 5f;
-    [Range(1, 20)] public float runSpeed = 12f; 
+    [Range(1, 20)] public float runSpeed = 12f;
     [Range(1, 20)] public float maxSpeed = 14f;
     [Range(1, 10)] public float maxDecelSpeed = 5f; //When you let go of the controls clamp speed to this value. Probs step 2
 
@@ -73,6 +82,8 @@ public class Player : MonoBehaviour
     private float lastXinput;
     private Vector2 moveInput;
     private Vector2 moveDirection;
+
+    private Direction curDirection;
 
     #region movement bools
     //we walk if the x input is less than or equal to 0.5f
@@ -180,10 +191,10 @@ public class Player : MonoBehaviour
         rightSmashAction = playerInput.actions["RightSmash"];
         leftSmashAction = playerInput.actions["LeftSmash"];
 
-/*        upSmashAction.performed += UpSmash;
-        downSmashAction.performed += DownSmash;
-        rightSmashAction.performed += RightSmash;
-        leftSmashAction.performed += LeftSmash;*/
+        /*        upSmashAction.performed += UpSmash;
+                downSmashAction.performed += DownSmash;
+                rightSmashAction.performed += RightSmash;
+                leftSmashAction.performed += LeftSmash;*/
     }
 
     private void OnEnable()
@@ -219,10 +230,10 @@ public class Player : MonoBehaviour
 
         //get animator if it isn't manually assigned.
         if (animator == null)
-        animator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
 
         //DISABLE GRAVITY SO WE CAN USE OUR OWN.
-        //rb.gravityScale = 0;
+        rb.gravityScale = 0;
     }
 
     // Update is called once per frame
@@ -244,6 +255,11 @@ public class Player : MonoBehaviour
         //this deterimines if the player tapped an input direction this frame.
         Vector2 curDir = dirAction.ReadValue<Vector2>();
 
+        //set the curDirection.
+        curDirection = GetDirection(curDir);
+
+        //Debug.Log(curDirection.ToString().Color("cyan"));
+
         //Detect if the player tapped.
         //the first 2 parts of teh conditional
         //insure that we aren't detecting the joystick 
@@ -258,7 +274,7 @@ public class Player : MonoBehaviour
             //Debug.Log("TAP! ".Color("red") + ((curDir - lastDirectionInput).magnitude / Time.deltaTime));
         }
 
-        
+
         //window until we stop telling 
         //the code that we tapped. 
         if (didTap /*&& !startedTapInput*/)
@@ -269,10 +285,15 @@ public class Player : MonoBehaviour
                 didTap = false;
             }
             else
-            tapStopTime += Time.deltaTime;
+                tapStopTime += Time.deltaTime;
         }
 
-        if (shouldAttack || shouldWaitToAttack)
+        //we should never to this delaying
+        //of an attack while in the air.
+        //I should probably change the code around
+        //so that we just check if the player does an input
+        //before starting a jump 
+        if (shouldAttack && !inAir || shouldWaitToAttack && !inAir)
         {
             //remove the !shouldWaitToAttack later if need be,
             //but it makes it so that we attack after the delay
@@ -284,7 +305,7 @@ public class Player : MonoBehaviour
                 attackStopTime = 0f;
                 Debug.Log("Attack hit before tapping".Color("red"));
             }
-           
+
             if (attackStopTime >= attackStopWindow)
             {
                 //attackStopTime = 0f;
@@ -364,6 +385,8 @@ public class Player : MonoBehaviour
 
         #endregion
 
+        #region moveInput
+
         moveInput = moveAction.ReadValue<Vector2>();
         moveDirection = ((moveInput.normalized.x * camTransform.right.normalized) + (moveInput.normalized.y * camTransform.up.normalized)) * moveSpeed;
 
@@ -403,7 +426,11 @@ public class Player : MonoBehaviour
         {
             yAxis = 0;
         }
-        
+
+
+        #endregion
+
+
         if (isGrounded)
         {
             //only rotate when grounded,
@@ -421,31 +448,6 @@ public class Player : MonoBehaviour
             {
                 HandleAerial();
                 HandleSpecial();
-            }
-        }
-
-        //currently
-        //you can jump while doing an attack,
-        //I think this is how smash works.
-        
-        if (!isHitStunned)
-        {
-            if (doJump && isGrounded)
-            {
-                //play the jump sequence
-                animator.SetTrigger("jump");
-                //wait 1 frame then call HandleJump().
-                StartCoroutine(LDUtil.WaitFrames(HandleJump, 1));
-                /*            if (doJump)
-                StartCoroutine(JumpCoroutine(10, jumpHeight));*/
-            }
-            else
-            {
-                //if we are air jumping then we don't need a windup frame.
-                //HandleJump();
-
-                /*if (doJump)
-                    StartCoroutine(JumpCoroutine(10, jumpHeight));*/
             }
         }
 
@@ -480,7 +482,36 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        HandleJump();
+        //currently
+        //you can jump while doing an attack,
+        //I think this is how smash works.
+
+        #region jumping
+
+        if (!isHitStunned)
+        {
+            if (doJump && isGrounded)
+            {
+                //play the jump sequence
+                animator.SetTrigger("jump");
+                //wait 1 frame then call HandleJump().
+                StartCoroutine(LDUtil.WaitFrames(HandleJump, 1));
+                /*            if (doJump)
+                StartCoroutine(JumpCoroutine(10, jumpHeight));*/
+            }
+            else
+            {
+                //if we are air jumping then we don't need a windup frame.
+                HandleJump();
+
+                /*if (doJump)
+                    StartCoroutine(JumpCoroutine(10, jumpHeight));*/
+            }
+        }
+
+        #endregion
+
+
         ApplyFinalMovements();
     }
 
@@ -507,7 +538,7 @@ public class Player : MonoBehaviour
         if (characterIcon)
         {
             if (characterIcon.GetPercent() != damagePercent)
-            characterIcon.SetPercent(damagePercent);
+                characterIcon.SetPercent(damagePercent);
         }
         else
         {
@@ -529,7 +560,7 @@ public class Player : MonoBehaviour
         //left or right only plays the animation and doesn't
         //let you move left or right. This is only after 
         //inputting up and attack to perform a smash attack.
-        
+
         //we need to check if the up attack/smash/special input
         //is occuring then set speed to zero so pushing left 
         //or right doesn't influence the animation.
@@ -550,7 +581,7 @@ public class Player : MonoBehaviour
             playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
             isFacingLeft = xAxis < 0 ? true : false;
         }
-        
+
         //if user is inputting via keyboard
         if (playerInput.currentControlScheme.Equals("Keyboard&Mouse") && Mathf.Abs(moveInput.x) > 0)
         {
@@ -594,7 +625,7 @@ public class Player : MonoBehaviour
             //and that gives you the properly scaled value.
             //timeToApex affects this so for a timeToApex
             //of 0.01 the jumpHeight scale modifier is 1.2f.
-            
+
             //float modifier = 1.2f;//timeToApex / 0.00833333333f;
             float modifiedJumpHeight = (float)jumpHeight * 1.2f; //* modifier;
 
@@ -621,7 +652,7 @@ public class Player : MonoBehaviour
             //gravity = 2 * jumpHeight / timeToApex * timeToApex;
 
             jumpForce = Mathf.Sqrt(2f * gravity * modifiedJumpHeight) * rb.mass; //multiply by mass at the
-            
+
             //end so that it reaches the height regardless of weight.
             buttonTime = (jumpForce / (rb.mass * gravity)); //initial velocity divided by player accel for gravity gives us the amount of time it will take to reach the apex.
 
@@ -636,7 +667,7 @@ public class Player : MonoBehaviour
             Debug.Log(("Force: " + jumpForce + " " + "Time: " + buttonTime).ToString().Color("orange"));
 
             rb.velocity = new Vector2(rb.velocity.x, 0f); //Reset y velocity before we jump so it is always reaching desired height.
-            
+
             rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse); //don't normalize transform.up cus it makes jumping more inconsistent.
 
 
@@ -658,22 +689,22 @@ public class Player : MonoBehaviour
             Vector2 jumpVec = -transform.up * (fallMultiplier - 1)/* * 100f * Time.deltaTime*/;
             rb.AddForce(jumpVec, ForceMode2D.Force);
         }
-/*        else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
-        {
-            Debug.Log("Low Jump".Color("cyan"));
-            //animator.SetBool("falling", true);
-            //change to falling gravity
-            gravity = fallGravity;
-            Vector2 jumpVec = -transform.up * (lowJumpMultiplier - 1) *//* * 100f * Time.deltaTime*//*;
-            rb.AddForce(jumpVec, ForceMode2D.Force);
-            Debug.Log(rb.velocity);
-        }*/
+        /*        else if (localVel.y > 0 && !jumpAction.IsPressed() && inAir) //If we stop before reaching the top of our arc then apply enough downward velocity to stop moving, then proceed falling down to give us a variable jump.
+                {
+                    Debug.Log("Low Jump".Color("cyan"));
+                    //animator.SetBool("falling", true);
+                    //change to falling gravity
+                    gravity = fallGravity;
+                    Vector2 jumpVec = -transform.up * (lowJumpMultiplier - 1) *//* * 100f * Time.deltaTime*//*;
+                    rb.AddForce(jumpVec, ForceMode2D.Force);
+                    Debug.Log(rb.velocity);
+                }*/
 
-/*        if (localVel.y > 0 && jumpTime >= buttonTime)
-        {
-            //rb.AddForce(-transform.up * Mathf.Sqrt(2f * Physics2D.gravity.magnitude * jumpHeight) * rb.mass);
-            rb.AddForce(-transform.up * Physics2D.gravity.magnitude);
-        }*/
+        /*        if (localVel.y > 0 && jumpTime >= buttonTime)
+                {
+                    //rb.AddForce(-transform.up * Mathf.Sqrt(2f * Physics2D.gravity.magnitude * jumpHeight) * rb.mass);
+                    rb.AddForce(-transform.up * Physics2D.gravity.magnitude);
+                }*/
 
     }
 
@@ -727,92 +758,9 @@ public class Player : MonoBehaviour
             //turn off the didtap var.
             didTap = false;
 
-            Vector2 directionInput = new Vector2(xAxis, yAxis);
-            Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));
-            if (dotVector.x != 0 && dotVector.x == dotVector.y)
+            if (curDirection == Direction.Left || curDirection == Direction.Right)
             {
-                //These are only reached if the user is inputting
-                //the same value for both xAxis and yAxis.
-                //we should just assume that if the user 
-                //is inputting up, it's with intent
-                //and if they are inputting down,
-                //it's probably not on purpose.
-
-                //if we are grounded and aiming down
-                //then assume we are doing a side attack.
-                if (isGrounded && yAxis < 0)
-                {
-                    if (shouldSmash)
-                    {
-                        ForwardSmash();
-                    }
-                    else
-                    {
-                        ForwardTilt();
-                    }
-                }
-
-                //if grounded and aiming up
-                //then assume we are trying to do an
-                //up attack while moving in a direction.
-                if (isGrounded && yAxis > 0)
-                {
-                    if (shouldSmash)
-                    {
-                        UpSmash();
-                    }
-                    else
-                    {
-                        UpTilt();
-                    }
-                }
-              
-            }
-            //if we have a mixed input, let's see which is greater.
-            else if (dotVector.x != 0 && dotVector.y != 0)
-            {
-                //Choose horizontal attack
-                if (Mathf.Abs(dotVector.x) > Mathf.Abs(dotVector.y))
-                {
-                    if (shouldSmash)
-                    {
-                        ForwardSmash();
-                    }
-                    else
-                    {
-                        ForwardTilt();
-                    }
-                }//choose vertical attack.
-                else
-                {
-                    //Up Tilt
-                    if (dotVector.y > 0)
-                    {
-                        if (shouldSmash)
-                        {
-                            UpSmash();
-                        }
-                        else
-                        {
-                            UpTilt();
-                        }
-                    }//Down Tilt
-                    else
-                    {
-                        if (shouldSmash)
-                        {
-                            DownSmash();
-                        }
-                        else
-                        {
-                            DownTilt();
-                        }
-                    }
-                }
-            }
-            //Horizontal attacking (Left & Right Tilt)
-            else if (xAxis != 0 && yAxis == 0)
-            {
+                //Forward/Side attack
                 if (shouldSmash)
                 {
                     ForwardSmash();
@@ -822,36 +770,33 @@ public class Player : MonoBehaviour
                     ForwardTilt();
                 }
             }
-            //Vertical attacking (Up & Down Tilt)
-            else if (xAxis == 0 && yAxis != 0)
+            else if (curDirection == Direction.Up)
             {
-                //Up Tilt
-                if (dotVector.y > 0)
+                //Up attack
+                if (shouldSmash)
                 {
-                    if (shouldSmash)
-                    {
-                        UpSmash();
-                    }
-                    else
-                    {
-                        UpTilt();
-                    }
-                }//Down Tilt
+                    UpSmash();
+                }
                 else
                 {
-                    if (shouldSmash)
-                    {
-                        DownSmash();
-                    }
-                    else
-                    {
-                        DownTilt();
-                    }
+                    UpTilt();
                 }
             }
-            //Neutral attacking
+            else if (curDirection == Direction.Down)
+            {
+                //Down attack
+                if (shouldSmash)
+                {
+                    DownSmash();
+                }
+                else
+                {
+                    DownTilt();
+                }
+            }
             else
             {
+                //neutral
                 Neutral();
             }
         }
@@ -865,52 +810,22 @@ public class Player : MonoBehaviour
         if (shouldAttack)
         {
             Vector2 directionInput = new Vector2(xAxis, yAxis);
-            Vector2 dotVector = new Vector2(Vector2.Dot(Vector2.right, directionInput), Vector2.Dot(Vector2.up, directionInput));
 
-            if (dotVector.x != 0 && dotVector.x == dotVector.y)
+
+            if (curDirection == Direction.Up)
             {
-                //I think if they're the same I'm just going to 
-                //make it do up/down attacks depending on if y is positive or negative.
-                Debug.LogWarning("The user input equal weight on both the x and y axes when attacking. Please figure out how to avoid this happening.");
+                //Up air
+                UpAerial();
             }
-            //if we have a mixed input, let's see which is greater.
-            else if (dotVector.x != 0 && dotVector.y != 0)
+            else if (curDirection == Direction.Down)
             {
-                //Choose horizontal attack
-                if (Mathf.Abs(dotVector.x) > Mathf.Abs(dotVector.y))
-                {
-                    //Forward Aerial
-                    //only if our sprite is 
-                    //facing the same direction of 
-                    //our current input.
-                    if (Vector2.Dot(playerSprite.transform.right, directionInput) > 0)
-                    {
-                        ForwardAerial();
-                    }
-                    //We are inputting the opposite of 
-                    //our facing direction. 
-                    else
-                    {
-                        BackAerial();
-                    }
-                }
-                //choose vertical Aerial.
-                else
-                {
-                    //Up Aerial
-                    if (dotVector.y > 0)
-                    {
-                        UpAerial();
-                    }//Down Aerial
-                    else
-                    {
-                        DownAerial();
-                    }
-                }
+                //Down air
+                DownAerial();
             }
-            //Horizontal attacking (Forward & Back Aerial)
-            else if (xAxis != 0 && yAxis == 0)
+            else if (curDirection == Direction.Right || curDirection == Direction.Left)
             {
+                //Forward/Back air
+
                 //Forward Aerial
                 //only if our sprite is 
                 //facing the same direction of 
@@ -926,24 +841,12 @@ public class Player : MonoBehaviour
                     BackAerial();
                 }
             }
-            //Vertical attacking (Up & Down Aerial)
-            else if (xAxis == 0 && yAxis != 0)
-            {
-                //Up Aerial
-                if (dotVector.y > 0)
-                {
-                    UpAerial();
-                }//Down Aerial
-                else
-                {
-                    DownAerial();
-                }
-            }
-            //Neutral Aerial
             else
             {
+                //neutral
                 NeutralAerial();
             }
+
         }
     }
 
@@ -1313,7 +1216,7 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("Player 1: UpSpecial ".Color("orange"));
-        
+
         //TODO: Actually code this attack.
 
         //lastly set the playerState back to none.
@@ -1554,10 +1457,10 @@ public class Player : MonoBehaviour
             Debug.Log(angleRad + ":" + angleRad * Mathf.Rad2Deg);
             newDirection = RadiansToVector(angleRad);
             //if the angle is negative flip it over the x axis.
-/*            if (angleDeg < 0)
-            {
-                hitDirection = new Vector2(-hitDirection.x, hitDirection.y);
-            }*/
+            /*            if (angleDeg < 0)
+                        {
+                            hitDirection = new Vector2(-hitDirection.x, hitDirection.y);
+                        }*/
         }
         else
         {
@@ -1585,7 +1488,7 @@ public class Player : MonoBehaviour
         float launchSpeed = knockback * 0.2f;
         float mass = rb.mass;
         //rb.mass = 1f;
-        
+
         //used for adding gravity.
         float t = 0f;
 
@@ -1625,12 +1528,12 @@ public class Player : MonoBehaviour
 
             //Debug.Log(new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed).ToString().Color("cyan"));
             //rb.velocity = new Vector2(hitDirection.x * Mathf.Clamp(horizontalLaunchSpeed, 0f, Mathf.Infinity), hitDirection.y * verticalLaunchSpeed);
-            
+
             rb.velocity = newDirection * launchSpeed;//new Vector2(horizontalLaunchSpeed, verticalLaunchSpeed);
             //apply gravity.
             Debug.DrawRay(transform.position, rb.velocity, Color.red, 1.5f);
             if (!isGrounded)
-            rb.velocity = rb.velocity + new Vector2(0f, -baseGravity /** t*/);
+                rb.velocity = rb.velocity + new Vector2(0f, -baseGravity /** t*/);
             launchParticles.gameObject.transform.rotation = Quaternion.LookRotation(rb.velocity);
             launchSpeed -= 0.51f;
             hitStunFrames--;
@@ -1760,7 +1663,7 @@ public class Player : MonoBehaviour
                 float angle = -attackInfo.launchAngle;
 
                 AttackInfo invertedX = new AttackInfo(angle, attackInfo.attackDamage, attackInfo.baseKnockback, attackInfo.knockbackScale, attackInfo.hitLag);
-                
+
                 hurtbox.attackInfo = invertedX;
             }
             else
@@ -1776,6 +1679,33 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.characterManager.PlayerDied(characterIndex);
         }
+    }
+
+    /// <summary>
+    /// Gives a direction based off of a vector.
+    /// </summary>
+    /// <param name="inputVector"></param>
+    /// <returns></returns>
+    public Direction GetDirection(Vector2 inputVector)
+    {
+        if (Math.Abs(inputVector.x) > Math.Abs(inputVector.y))
+        {
+            // More horizontal movement
+            if (inputVector.x > 0)
+                return Direction.Right;
+            else if (inputVector.x < 0)
+                return Direction.Left;
+        }
+        else
+        {
+            // More vertical movement
+            if (inputVector.y > 0)
+                return Direction.Up;
+            else if (inputVector.y < 0)
+                return Direction.Down;
+        }
+
+        return Direction.None;
     }
 }
 

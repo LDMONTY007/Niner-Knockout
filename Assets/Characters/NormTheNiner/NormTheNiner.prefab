@@ -758,7 +758,7 @@ MonoBehaviour:
   jumping: 0
   jumpHeight: 2.5
   timeToApex: 0.01
-  timeToFall: 0.5
+  timeToFall: 0.45
   heightScaleConstant: 120
   jumpDist: 0
   ogJump: {x: 0, y: 0}
