@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c175cbf2faf0294183c5f56c10a6aeb, type: 3}
-  m_Name: NormTheNinerIcon
+  m_Name: IconNormTheNiner
   m_EditorClassIdentifier: 
   characterSprite: {fileID: 21300000, guid: cfd2a407da12cfa4f8295a87145dae09, type: 3}
   characterName: Norm The Niner
