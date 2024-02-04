@@ -70,12 +70,33 @@ Now, add your character folder to your "favorites" in the [Project window](https
 
      ![CreateCharacterScript](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/0620e8c2-b996-4418-bcbf-eaaacd1835f6)
      
-  3. Open the script in your preferred IDE (Visual Studios is recommended) either by double-clicking or right-clicking and selecting "open" 
+  2. Open the script in your preferred IDE (Visual Studios is recommended) either by double-clicking or right-clicking and selecting "open" 
 
-  4. Change the class declaration so that it inherits from "Player" instead of "MonoBehavior"
+  3. Change the class declaration so that it inherits from "Player" instead of "MonoBehavior"
      ![ChangeParent](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/8273ee47-eda9-4e3a-b171-5253e7074bad)
 
-  5. LD write the rest of this after you are done with your HW. This is where you left off.
+  > [!WARNING]
+  > If you do not have your animations set up yet, then pause here. 
+  > Follow the [Art](#art) section [LD REPLACE THIS WITH A DIRECT LINK TO SETTING UP THEIR CHARACTER PREFABS/ANIMATIONS.
+
+  4. <details>
+
+     <summary>Override base methods.</summary>
+
+     ### Override base methods
+     > This section is only for **attack** animations.
+     > You shouldn't be manually calling any movement animations,
+     > those are automatically called in [Player.cs](https://github.com/LDMONTY007/Niner-Knockout/blob/4c597641987918cf219d85183b895e2a4fd8c756/Assets/Scripts/Player/Player.cs).
+     
+     You can override the base methods for all the attacks to call your animations.
+     For Example:
+     https://github.com/LDMONTY007/Niner-Knockout/blob/4c597641987918cf219d85183b895e2a4fd8c756/Assets/Characters/NormTheNiner/NormTheNiner.cs#L15-L19
+
+     Always call the base attack method, as shown above, there is internal code that must be invoked for expected functionality.
+     
+     Try to follow how Norm's animations are called and copy his animator controller for your character.
+        
+     </details>
 
 ## Art
 
