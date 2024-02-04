@@ -2,6 +2,9 @@
 
 # Niner Knockout
 
+![LaunchGif(1)](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/b222de20-8f07-4893-992a-716f557f78b7)
+
+
 Use Unity version 2022.3.16f1 to open this project.
 
 Fighting game base similar to Smash bros. 
@@ -38,7 +41,7 @@ Now that you've forked this repo you can begin making your character.
 
 Navigate to Assets/Characters and create a new folder using the name of your character.
 
--Insert images and how to create a character folder here-
+![CreateCharacterFolder](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/92d44a4f-c7f2-4c37-9760-46b1c9d70e19)
 
 Now, add your character folder to your "favorites" in the [Project window](https://docs.unity3d.com/Manual/ProjectView.html) so it's easier to access.
 
@@ -58,18 +61,20 @@ Now, add your character folder to your "favorites" in the [Project window](https
     - Contains settings for how to display your character in the "selection" menu.
     - Contains a reference for the image shown in the "selection" menu. 
 
-![image](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/b15fddfb-8f16-40ff-8a0d-b0b74553823a)
+![CreateScriptableObjects](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/5ead37cd-e369-4ec9-b8c5-86b70e46338b)
 
 ### Create Character Script
 
-  1. Create a new file in your Character Folder called "CharacterName.cs"
-    -Select Create -> C# Script 
-    -Put an image here LD-
-     
-  3. Open the script in your preferred IDE (Visual Studios is reccomended) either by double clicking or right clicking and selecting "open" 
+  1. Create a new file in your Character Folder called "CharacterName.cs" (replace CharacterName with your character's name).
+    -Select Create -> C# Script
 
-  4. Change the class decleration so that it inherits from "Player" instead of "Monobehavior"
-      -Put an image here LD-
+     ![CreateCharacterScript](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/0620e8c2-b996-4418-bcbf-eaaacd1835f6)
+     
+  3. Open the script in your preferred IDE (Visual Studios is recommended) either by double-clicking or right-clicking and selecting "open" 
+
+  4. Change the class declaration so that it inherits from "Player" instead of "MonoBehavior"
+     ![ChangeParent](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/8273ee47-eda9-4e3a-b171-5253e7074bad)
+
   5. LD write the rest of this after you are done with your HW. This is where you left off.
 
 ## Art
