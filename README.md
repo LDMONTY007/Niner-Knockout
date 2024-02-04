@@ -59,6 +59,7 @@ Now, add your character folder to your "favorites" in the [Project window](https
     - Moveset naming convention "MovesetCharacterName" (PascalCase).
     - The Moveset stores parameters for every attack.
     - You can find the list of attacks in the [Required Moves](#required-moves) table.
+    - When selecting values for your moveset try to reference the values of attacks as shown in the [Smash Ultimate Calculator](https://rubendal.github.io/SSBU-Calculator/)
 
 2. Create a "Icon", by selecting Create -> Character -> Icon
     - Icon naming convention "IconCharacterName" (PascalCase).
@@ -153,6 +154,10 @@ Place your sprites/2D art into the sprites folder and add your animations to the
     - This creates a new child object which will be the object
     - you animate.
     - If you cannot see your sprite set the position to be (0, 0, 0).
+    - Also, add an empty GameObject as a child of your sprite
+      - Add a "BoxCollider2D" Component to it and set "isTrigger" to true.
+      - Add the "HurtBox.cs" component to it.
+      - I should rearrange this so that you add it later but this works as well. 
    
    ![CreateSpriteInPrefab](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/b6fd92b6-5e7c-4b4f-9efd-af7597dbe2c8)
 
