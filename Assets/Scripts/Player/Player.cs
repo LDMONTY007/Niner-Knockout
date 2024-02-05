@@ -158,6 +158,8 @@ public class Player : MonoBehaviour
     public int jumpTotal = 1; //Total jumps, so for instance if you wanted 3 jumps set this to 3.
     [SerializeField] private bool jumpCanceled;
     [SerializeField] private bool jumping;
+    //private bool falling => inAir && transform.InverseTransformDirection(rb.velocity).y < 0;
+    private bool falling;
     public double jumpHeight = 5f; //Our jump height, set this to a specific value and our player will reach that height with a maximum deviation of 0.1
     //time to reach the apex of the jump.
     //0.01f looks just like smash ultimate jumping.
@@ -552,8 +554,9 @@ public class Player : MonoBehaviour
 
         animator.SetBool("inAir", inAir);
         //only when we are falling do we turn this var on.
-        animator.SetBool("falling", localVel.y < 0);
-
+        falling = localVel.y < 0;
+        animator.SetBool("falling", falling);
+       
         //only set speed based off of horizontal movement.
 
         //for some reason inputting up then trying to move
