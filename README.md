@@ -1,5 +1,20 @@
 # This readme is unfinished. Do not follow instructions yet.
 
+  > [!NOTE]
+  > I'm planning on changing most of the code so that it's coroutine-based.
+  > By this I mean for things like dashing I would run a coroutine for X
+  > Number of frames so that devs can specify the frame ranges for dash cancels,
+  > pivots, or foxtrots. This would make it much easier to check for input changes
+  > and cancel the action. It would also allow me to modify the moveset scriptable object
+  > to have extra parameters that affect how other parts of the character are handled.
+  > The only issue would be that for jumping, I don't know how I'd convert it to a coroutine
+  > but it doesn't need one.
+  > 
+  > This would also allow me to just take in a "Coroutine" parameter for moves so that the
+  > designers can instead design their custom move within a coroutine then pass that instead.
+  > I'll have to think about this more but it seems like a better idea than all the spaghetti
+  > code I currently have.
+
 # Niner Knockout
 
 ![LaunchGif(1)](https://github.com/LDMONTY007/Niner-Knockout/assets/69697953/b222de20-8f07-4893-992a-716f557f78b7)
