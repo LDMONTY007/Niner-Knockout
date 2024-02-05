@@ -56,6 +56,7 @@ public class Player : MonoBehaviour
     {
         None,       //Base state, no additional effects are applied.
         attacking,  //Induced when attacking. Just allows us to make sure we don't start another attack when already attacking. Might need to delete this.
+        dashing, //Used when the player is dashing, do not set X velocity after dashing.
         launched,   //Induced when launched. This just lets us know to stop the old launch coroutine and start a new one. Disables some physics.
         helpless,   //Induced after running out of jumps while in the air. Sometimes called "Freefall" https://www.ssbwiki.com/Helpless
         intangible, //Induced by dodging. Cannot be hit or pushed by other players. https://www.ssbwiki.com/Intangibility
@@ -73,7 +74,10 @@ public class Player : MonoBehaviour
     [Range(1, 10)] public float walkSpeed = 5f;
     [Range(1, 20)] public float runSpeed = 12f;
     [Range(1, 20)] public float maxSpeed = 14f;
-    [Range(1, 10)] public float maxDecelSpeed = 5f; //When you let go of the controls clamp speed to this value. Probs step 2
+
+    [Header("Dashing")]
+    [Range(1, 30)] public float dashSpeed = 25f;
+    public int dashFrames = 10;
 
     public float xAxis;
     public float yAxis;
@@ -84,12 +88,15 @@ public class Player : MonoBehaviour
     private Vector2 moveDirection;
 
     private Direction curDirection;
+    private Direction lastDirection;
 
     #region movement bools
     //we walk if the x input is less than or equal to 0.5f
     private bool isWalking => Mathf.Abs(xAxis) <= 0.5f ? true : false;
     //set movespeed based on if we are walking.
     private float moveSpeed => isWalking ? walkSpeed : runSpeed;
+
+    private bool shouldDash;
     #endregion
 
     private Transform camTransform;
@@ -290,6 +297,26 @@ public class Player : MonoBehaviour
                 tapStopTime += Time.deltaTime;
         }
 
+
+        //Check if we should dash. 
+        if (didTap && (curDirection == Direction.Right || curDirection == Direction.Left) && state != PlayerState.dashing)
+        {
+            
+            //set should dash to true so we dash on the next fixedUpdate.
+            //Even if we dash, we are still going to be able to input 
+            //a smash attack.
+
+            //We should only start dashing if shouldAttack is false
+            //this frame, otherwise we do a smash attack and don't start dashing.
+
+            //we should enter "Dashing" and only then should we do a "Dash Attack"
+
+
+
+            shouldDash = true;
+        }
+
+
         //we should never to this delaying
         //of an attack while in the air.
         //I should probably change the code around
@@ -320,6 +347,7 @@ public class Player : MonoBehaviour
                 shouldWaitToAttack = true;
             }
         }
+
 
 
         #endregion
@@ -457,7 +485,7 @@ public class Player : MonoBehaviour
         lastXinput = moveInput.x;
 
         lastDirectionInput = dirAction.ReadValue<Vector2>();
-
+        lastDirection = curDirection;
 
 
         //We are able to 
@@ -487,6 +515,17 @@ public class Player : MonoBehaviour
         //currently
         //you can jump while doing an attack,
         //I think this is how smash works.
+
+        #region dashing
+        if (shouldDash && isGrounded)
+        {
+            StartCoroutine(Dash());
+        }
+        else
+        {
+            shouldDash = false;
+        }
+        #endregion
 
         #region jumping
 
@@ -535,6 +574,47 @@ public class Player : MonoBehaviour
 
     }
 
+    private IEnumerator Dash()
+    {
+        shouldDash = false;
+        float dashValue = dashSpeed;
+        int frames = dashFrames;
+        state = PlayerState.dashing;
+        Debug.Log("Dash!".Color("cyan"));
+        
+        while (frames > 0)
+        {
+            if (!isHitStunned)
+            {
+                if (frames == dashFrames)
+                {
+                    //play launch particles for a moment.
+                    launchParticles.Play();
+                }
+                else if (frames <= dashFrames / 2)
+                {
+                    //stop playing launch particles.
+                    launchParticles.Stop();
+                }
+                //make sure to rotate before we dash.
+                HandleRotation();
+                Debug.DrawRay(transform.position, playerSprite.transform.right * dashSpeed, Color.red);
+                rb.velocity = playerSprite.transform.right * dashSpeed;
+
+                //decrement.
+                dashValue -= 0.51f;
+                frames--;
+                yield return null;
+                
+            }
+        }
+        Debug.Log("Done!");
+        //go back to base state.
+        state = PlayerState.None;
+        
+    }
+
+
     private void HandleUI()
     {
         if (characterIcon)
@@ -574,20 +654,25 @@ public class Player : MonoBehaviour
 
     private void HandleRotation()
     {
+
         //We do all rotations after
         //input so that the back 
         //aerial can be registered.
         //if the player is moving the stick in the same direction for more than one frame,
         //set the direction the player is facing.
-        if (playerInput.currentControlScheme.Equals("Gamepad") && (moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && moveInput.x - lastXinput > 0)
+        if (playerInput.currentControlScheme.Equals("Gamepad") && (moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && Mathf.Abs(moveInput.x) - Mathf.Abs(lastXinput) > 0)
         {
+            Debug.Log("Will Rotate".Color("green"));
             playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
             isFacingLeft = xAxis < 0 ? true : false;
         }
 
+
+
         //if user is inputting via keyboard
         if (playerInput.currentControlScheme.Equals("Keyboard&Mouse") && Mathf.Abs(moveInput.x) > 0)
         {
+            Debug.Log("Will Rotate".Color("green"));
             playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
             isFacingLeft = xAxis < 0 ? true : false;
         }
@@ -930,8 +1015,14 @@ public class Player : MonoBehaviour
         //we need to check if we are helpless here and only apply Directional Influence (DI) 
         //instead of the normal movement input.
 
-        //set velocity directly, don't override y velocity.
-        rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
+
+        //if we are dashing we shouldn't set 
+        //the x velocity.
+        if (state != PlayerState.dashing)
+        {
+            //set velocity directly, don't override y velocity.
+            rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
+        }
 
         //Apply gravity, because gravity is not affected by mass and 
         //we can't use ForceMode.acceleration with 2D just multiply
@@ -1691,6 +1782,14 @@ public class Player : MonoBehaviour
     /// <returns></returns>
     public Direction GetDirection(Vector2 inputVector)
     {
+
+        float deadZone = 0.3f;
+        // Check if input vector magnitude is within the dead zone
+        if (inputVector.magnitude < deadZone)
+        {
+            return Direction.None; // Input is within the dead zone
+        }
+
         if (Math.Abs(inputVector.x) > Math.Abs(inputVector.y))
         {
             // More horizontal movement
