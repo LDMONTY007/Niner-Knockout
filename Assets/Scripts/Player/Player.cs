@@ -601,58 +601,89 @@ public class Player : MonoBehaviour
         Debug.Log("Dash!".Color("cyan"));
 
         //const float delta = 1f / 60f;
-        //float timeToDash = frames / 60f;
-        float timeToDash = frames * Time.deltaTime;
+        float timeToDash = frames / 60f;
+        //float timeToDash = frames * Time.deltaTime;
 
         float modDashDist = dashDist * dashModifier;
 
-        float acceleration = 2 * modDashDist / timeToDash;
+        //This helped me solve it: https://www.quora.com/Given-time-and-distance-how-do-you-calculate-acceleration
+        //distance -> d
+        //average velocity = d/t
+        //final velocity = 2*d/t
+        //acceleration = final velocity / t
+        //therefore acceleration - 2*d/t^2
+        float acceleration = 2f * modDashDist / Mathf.Pow(timeToDash, 2f);
 
         float dashForce = Mathf.Sqrt(2f * acceleration * modDashDist) * rb.mass;
 
         float initVel = Mathf.Sqrt(2f * acceleration * modDashDist);
+
+        //Time at max distance = v0 / acceleration
+        Debug.Log((initVel / acceleration).ToString().Color("lime"));
+
         Debug.Log("Dash Force: " + dashForce);
         //velocity = force / mass * time
         //float dashVelocity = dashForce / rb.mass * timeToDash;
 
-        //rb.AddForce(playerSprite.transform.right * dashForce, ForceMode2D.Impulse);
+        rb.AddForce(playerSprite.transform.right.normalized * dashForce, ForceMode2D.Impulse);
+        rb.AddForce(-playerSprite.transform.right.normalized * acceleration * rb.mass);
+        //frames--;
+        Debug.Log(("RBVel: " + rb.velocity).ToString().Color("purple"));
+        //calling add force here and then again in the while loop is fine
+        //accept when it's the first iteration of the loop and it hasn't
+        //returned to execution. 
+
+        //When 2 addforce calls are made during the same frame only one seems
+        //to be applied.
+        yield return new WaitForFixedUpdate();
 
         float currentTime = timeToDash;
 
         //Debug.Break();
         launchParticles.Play();
-        while (currentTime > 0/*frames > 0*/)
+        while (/*currentTime > 0*/frames > 0)
         {
             if (!isHitStunned)
             {
                 //make sure to rotate before we dash.
                 //HandleRotation();
                 Debug.DrawRay(transform.position, rb.velocity, Color.red);
-                rb.velocity = playerSprite.transform.right.normalized * initVel;
+                Debug.Log("InitVel: " + initVel + " Acceleration: " + acceleration);
+                Debug.Log("CurrentTime: " + currentTime + " FrameCount: " + frames);
+                //rb.velocity = playerSprite.transform.right.normalized * initVel;
                 //rb.velocity = playerSprite.transform.right * dashVelocity;
 
                 //decelerate to reach distance.
-               /* if (Mathf.Abs(rb.velocity.x) > 0)
-                    rb.AddForce(-transform.right * acceleration * rb.mass);*/
+                /* if (Mathf.Abs(rb.velocity.x) > 0)
+                     rb.AddForce(-transform.right * acceleration * rb.mass);*/
 
+                
+                rb.AddForce(-playerSprite.transform.right.normalized * acceleration * rb.mass);
+                Debug.Log(("RBVel: " + rb.velocity).ToString().Color("cyan"));
 
 
 
                 //decrement.
                 frames--;
                 currentTime -= Time.deltaTime;
-                yield return null;
+                if (currentTime < 0.0001)
+                {
+                    currentTime = 0;
+                }
+                yield return new WaitForFixedUpdate();
                 
             }
         }
+
+        rb.velocity = new Vector2(0f, rb.velocity.y);
         Debug.Log("Done!");
-        Debug.Log("Dist: " + dashDist + "\nDist Reached: " + transform.position.x + "\nScale to reach desired: " + dashDist / transform.position.x + "\nTimeToDash: " + timeToDash);
+        Debug.Log("Dist: " + dashDist + "\nDist Reached: " + transform.position.x + "\nScale to reach desired: " + dashDist / transform.position.x + "\nTimeToDash: " + timeToDash + "\ncurrentTime: " + currentTime);
         
         //Debug.Break();
 
         launchParticles.Stop();
         //go back to base state.
-        yield return new WaitForEndOfFrame();
+        //yield return new WaitForEndOfFrame();
         state = PlayerState.None;
         //set dashCoroutine back to null after finishing
         //so we don't think we are still running.
