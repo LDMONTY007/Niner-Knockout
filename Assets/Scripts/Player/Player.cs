@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.SocialPlatforms;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -79,7 +80,7 @@ public class Player : MonoBehaviour
     [Header("Dashing Parameters")]
     [Range(1, 30)] public float dashDist = 5f;
     public int dashFrames = 10;
-    public float dashModifier = 1.422224f;
+    public float dashModifier = 1f;
     //This var stores the current dashCoroutine 
     //and allows us to check if the dashCoroutine 
     //is running. It is null otherwise.
@@ -156,7 +157,7 @@ public class Player : MonoBehaviour
 
     #region Jumping
 
-    public bool isGrounded => Physics2D.BoxCast(transform.position, this.GetComponent<BoxCollider2D>().size, 0f, -transform.up, groundCheckDist, rCasting);
+    public bool isGrounded => Physics2D.BoxCast(transform.position, this.GetComponent<BoxCollider2D>().bounds.extents, 0f, -transform.up, this.GetComponent<BoxCollider2D>().bounds.extents.y + groundCheckDist, rCasting);
     public bool inAir => !jumping && !isGrounded;
     public bool doJump;
 
@@ -600,7 +601,8 @@ public class Player : MonoBehaviour
         Debug.Log("Dash!".Color("cyan"));
 
         //const float delta = 1f / 60f;
-        float timeToDash = frames / 60f;
+        //float timeToDash = frames / 60f;
+        float timeToDash = frames * Time.deltaTime;
 
         float modDashDist = dashDist * dashModifier;
 
@@ -608,42 +610,45 @@ public class Player : MonoBehaviour
 
         float dashForce = Mathf.Sqrt(2f * acceleration * modDashDist) * rb.mass;
 
-        rb.AddForce(playerSprite.transform.right * dashForce, ForceMode2D.Impulse);
+        float initVel = Mathf.Sqrt(2f * acceleration * modDashDist);
+        Debug.Log("Dash Force: " + dashForce);
+        //velocity = force / mass * time
+        //float dashVelocity = dashForce / rb.mass * timeToDash;
 
+        //rb.AddForce(playerSprite.transform.right * dashForce, ForceMode2D.Impulse);
+
+        float currentTime = timeToDash;
+
+        //Debug.Break();
         launchParticles.Play();
-        while (frames > 0)
+        while (currentTime > 0/*frames > 0*/)
         {
             if (!isHitStunned)
             {
-
-/*                if (frames == dashFrames)
-                {
-                    //play launch particles for a moment.
-                    launchParticles.Play();
-                }
-                else if (frames <= dashFrames / 2)
-                {
-                    //stop playing launch particles.
-                    launchParticles.Stop();
-                }*/
                 //make sure to rotate before we dash.
-                HandleRotation();
+                //HandleRotation();
                 Debug.DrawRay(transform.position, rb.velocity, Color.red);
-                //rb.velocity = playerSprite.transform.right * dashSpeed;
+                rb.velocity = playerSprite.transform.right.normalized * initVel;
+                //rb.velocity = playerSprite.transform.right * dashVelocity;
 
                 //decelerate to reach distance.
-                if (Mathf.Abs(rb.velocity.x) > 0)
-                rb.AddForce(-transform.right * acceleration * rb.mass);
+               /* if (Mathf.Abs(rb.velocity.x) > 0)
+                    rb.AddForce(-transform.right * acceleration * rb.mass);*/
+
+
+
 
                 //decrement.
                 frames--;
+                currentTime -= Time.deltaTime;
                 yield return null;
                 
             }
         }
         Debug.Log("Done!");
-        Debug.Log(dashDist / transform.position.x);
-        Debug.Break();
+        Debug.Log("Dist: " + dashDist + "\nDist Reached: " + transform.position.x + "\nScale to reach desired: " + dashDist / transform.position.x + "\nTimeToDash: " + timeToDash);
+        
+        //Debug.Break();
 
         launchParticles.Stop();
         //go back to base state.
@@ -1070,7 +1075,7 @@ public class Player : MonoBehaviour
         //by mass at the end. It's basically the same.
         //In unity it factors in mass for this calculation so 
         //multiplying by mass cancels out mass entirely.
-        rb.AddForce(-transform.up * gravity * rb.mass);
+            rb.AddForce(-transform.up * gravity * rb.mass);
     }
 
     #region Attack Methods

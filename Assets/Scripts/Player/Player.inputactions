@@ -242,17 +242,6 @@
                 },
                 {
                     "name": "",
-                    "id": "3294cf6b-d34d-443c-a236-ed1e2ce87c5f",
-                    "path": "<Gamepad>/leftStick/up",
-                    "interactions": "Press(pressPoint=0.7)",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "ddeea84e-e227-4dc3-a846-68a8983e56ab",
                     "path": "<Keyboard>/o",
                     "interactions": "Press(behavior=2)",

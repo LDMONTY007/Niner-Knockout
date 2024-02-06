@@ -197,7 +197,9 @@ MonoBehaviour:
   walkSpeed: 6
   runSpeed: 12
   maxSpeed: 14
-  maxDecelSpeed: 5
+  dashDist: 5
+  dashFrames: 10
+  dashModifier: 1
   xAxis: 0
   yAxis: 0
   animator: {fileID: 0}
@@ -328,7 +330,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 43590ac33fdc8e3439104fc21ddcf58a, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
