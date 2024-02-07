@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
     [Range(1, 20)] public float runSpeed = 12f;
     [Range(1, 20)] public float maxSpeed = 14f;
 
-    [Header("Dashing Parameters")]
+    [Header("Dash Parameters")]
     [Range(1, 30)] public float dashDist = 5f;
     public int dashFrames = 10;
     public float dashModifier = 1f;
@@ -85,6 +85,9 @@ public class Player : MonoBehaviour
     //and allows us to check if the dashCoroutine 
     //is running. It is null otherwise.
     private Coroutine dashCoroutine;
+
+    [Header("Dodge Parameters")]
+    public int dodgeFrames = 14;
 
     public float xAxis;
     public float yAxis;
@@ -131,6 +134,12 @@ public class Player : MonoBehaviour
     private InputAction rightSmashAction;
     private InputAction leftSmashAction;
 
+    //Shield input
+    private InputAction shieldAction;
+
+    //Grab input
+    private InputAction grabAction;
+
     #region input bools
 
     bool shouldAttack;
@@ -151,6 +160,8 @@ public class Player : MonoBehaviour
     float attackStopTime;
     bool shouldWaitToAttack;
     bool doDelayedAttack;
+
+    bool shouldDodge;
     #endregion
 
 
@@ -211,6 +222,9 @@ public class Player : MonoBehaviour
                 downSmashAction.performed += DownSmash;
                 rightSmashAction.performed += RightSmash;
                 leftSmashAction.performed += LeftSmash;*/
+
+        shieldAction = playerInput.actions["Shield"];
+        grabAction = playerInput.actions["Grab"];
     }
 
     private void OnEnable()
@@ -485,6 +499,13 @@ public class Player : MonoBehaviour
             {
                 HandleAerial();
                 HandleSpecial();
+                
+                if (grabAction.WasPressedThisFrame() && inAir || shieldAction.WasPressedThisFrame() && inAir)
+                {
+                    //set "shouldDodge" to true.
+                    //actually just call the dodge coroutine.
+                    StartCoroutine(DodgeCoroutine());
+                }
             }
         }
 
@@ -625,6 +646,9 @@ public class Player : MonoBehaviour
         //velocity = force / mass * time
         //float dashVelocity = dashForce / rb.mass * timeToDash;
 
+        //make sure to rotate before we dash.
+        HandleRotation();
+
         rb.AddForce(playerSprite.transform.right.normalized * dashForce, ForceMode2D.Impulse);
         rb.AddForce(-playerSprite.transform.right.normalized * acceleration * rb.mass);
         //frames--;
@@ -645,8 +669,7 @@ public class Player : MonoBehaviour
         {
             if (!isHitStunned)
             {
-                //make sure to rotate before we dash.
-                //HandleRotation();
+                
                 Debug.DrawRay(transform.position, rb.velocity, Color.red);
                 Debug.Log("InitVel: " + initVel + " Acceleration: " + acceleration);
                 Debug.Log("CurrentTime: " + currentTime + " FrameCount: " + frames);
@@ -691,6 +714,33 @@ public class Player : MonoBehaviour
         
     }
 
+    private IEnumerator DodgeCoroutine()
+    {
+        //this is only executed when the 
+        //coroutine starts, for the rest
+        //of coroutine execution it will
+        //be inside the while loop then 
+        //exit it.
+        if (state == PlayerState.None)
+        {
+            int frames = dodgeFrames;
+            state = PlayerState.intangible;
+            while (frames > 0)
+            {
+                //we wait for fixed update because we need to be in there to mess with physics.
+                yield return new WaitForFixedUpdate();
+
+                //do the physics for dodging.
+                //TODO:
+                //code spot dodging https://www.ssbwiki.com/Spot_dodge.
+                frames--;
+            }
+            //go into freefall after dodging.
+            //also set jump count to zero.
+            jumpCount = 0;
+            state = PlayerState.helpless;
+        }
+    }
 
     private void HandleUI()
     {
@@ -1744,32 +1794,37 @@ public class Player : MonoBehaviour
         //if we are hit by a hurtbox that isn't a child of us then calculate damage and launch.
         if (collision.CompareTag("Hurtbox") && !collision.transform.IsChildOf(this.transform))
         {
-            Debug.Log("We were Hit!".Color("red"));
-            //get hurtbox
-            Hurtbox h = collision.gameObject.GetComponent<Hurtbox>();
-            //add damage delt to the total percent
-            //https://rubendal.github.io/SSBU-Calculator/
-            //Set the damage of a custom attack to 1 and you'll get the constant
-            //1.26 and it doesn't scale with percent, the attach damage is always
-            //multiplied by this value.
-            damagePercent += (h.attackInfo.attackDamage * 1.26f);
+            //when intangible we ignore attacks.
+            if (state != PlayerState.intangible)
+            {
 
-            //get the vector that the player should be sent in relative 
-            //to the hurtbox 
-            Vector3 dir = h.transform.position - this.transform.position;
-            dir.z = 0;
-            Debug.DrawRay(transform.position, dir.normalized, Color.yellow, 1f);
-            Debug.DrawRay(transform.position, -dir.normalized, Color.cyan, 1f);
-            Debug.DrawRay(transform.position, new Vector3(-dir.normalized.x, 0f, 0f), Color.magenta, 1f);
-            Vector3 wishDir = RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle));
-            //wishDir.x = -dir.x;
-            Debug.DrawRay(transform.position, wishDir.normalized * 5f, Color.green, 1f);
+                Debug.Log("We were Hit!".Color("red"));
+                //get hurtbox
+                Hurtbox h = collision.gameObject.GetComponent<Hurtbox>();
+                //add damage delt to the total percent
+                //https://rubendal.github.io/SSBU-Calculator/
+                //Set the damage of a custom attack to 1 and you'll get the constant
+                //1.26 and it doesn't scale with percent, the attach damage is always
+                //multiplied by this value.
+                damagePercent += (h.attackInfo.attackDamage * 1.26f);
 
-            //launch the player based off of the attack damage.
-            //old
-            //Launch(h.attackInfo.launchAngle, RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle)), h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale, h.attackInfo.hitLag);
-            //new
-            Launch(h.attackInfo.launchAngle, -dir.normalized, h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale, h.attackInfo.hitLag);
+                //get the vector that the player should be sent in relative 
+                //to the hurtbox 
+                Vector3 dir = h.transform.position - this.transform.position;
+                dir.z = 0;
+                Debug.DrawRay(transform.position, dir.normalized, Color.yellow, 1f);
+                Debug.DrawRay(transform.position, -dir.normalized, Color.cyan, 1f);
+                Debug.DrawRay(transform.position, new Vector3(-dir.normalized.x, 0f, 0f), Color.magenta, 1f);
+                Vector3 wishDir = RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle));
+                //wishDir.x = -dir.x;
+                Debug.DrawRay(transform.position, wishDir.normalized * 5f, Color.green, 1f);
+
+                //launch the player based off of the attack damage.
+                //old
+                //Launch(h.attackInfo.launchAngle, RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle)), h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale, h.attackInfo.hitLag);
+                //new
+                Launch(h.attackInfo.launchAngle, -dir.normalized, h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale, h.attackInfo.hitLag);
+            }
         }
         //the player entered the kill trigger. (kill bounds).
         else if (collision.gameObject.CompareTag("Kill"))

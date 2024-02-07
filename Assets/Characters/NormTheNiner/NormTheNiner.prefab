@@ -749,6 +749,7 @@ MonoBehaviour:
   dashDist: 5
   dashFrames: 10
   dashModifier: 1
+  dodgeFrames: 14
   xAxis: 0
   yAxis: 0
   animator: {fileID: 552453139261342999}
