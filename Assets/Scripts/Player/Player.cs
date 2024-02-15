@@ -715,6 +715,10 @@ public class Player : MonoBehaviour
             }
         }
 
+        //say we are no longer tapping
+        didTap = false;
+        
+
         rb.velocity = new Vector2(0f, rb.velocity.y);
         Debug.Log("Done!");
         Debug.Log("Dist: " + dashDist + "\nDist Reached: " + transform.position.x + "\nScale to reach desired: " + dashDist / transform.position.x + "\nTimeToDash: " + timeToDash + "\ncurrentTime: " + currentTime);
