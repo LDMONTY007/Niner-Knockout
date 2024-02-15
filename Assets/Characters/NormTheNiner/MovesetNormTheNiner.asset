@@ -12,99 +12,105 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba52a5829f717c7438029a03e5f3db9a, type: 3}
   m_Name: MovesetNormTheNiner
   m_EditorClassIdentifier: 
-  Neutral:
-    attackDamage: 0
-    hitLag: 0
-    launchAngle: 0
-    baseKnockback: 0
-    knockbackScale: 0
-  ForwardTilt:
+  neutral:
+    attackDamage: 2.2
+    hitLag: 2
+    launchAngle: 361
+    baseKnockback: 20
+    knockbackScale: 30
+  forwardTilt:
     attackDamage: 7
     hitLag: 1
     launchAngle: 361
     baseKnockback: 55
     knockbackScale: 70
-  UpTilt:
+  upTilt:
     attackDamage: 5.5
     hitLag: 1
     launchAngle: 96
     baseKnockback: 28
     knockbackScale: 130
-  DownTilt:
+  downTilt:
     attackDamage: 7
     hitLag: 1
     launchAngle: 80
     baseKnockback: 35
     knockbackScale: 80
-  NeutralAerial:
+  neutralAerial:
     attackDamage: 8
     hitLag: 1
     launchAngle: 361
-    baseKnockback: 20
+    baseKnockback: 0
     knockbackScale: 100
-  ForwardAerial:
+  forwardAerial:
     attackDamage: 12
     hitLag: 1
     launchAngle: 361
     baseKnockback: 30
     knockbackScale: 80
-  BackAerial:
+  backAerial:
     attackDamage: 10.5
     hitLag: 1
     launchAngle: 361
     baseKnockback: 12
     knockbackScale: 106
-  UpAerial:
+  upAerial:
     attackDamage: 7
     hitLag: 1
     launchAngle: 75
     baseKnockback: 10
     knockbackScale: 135
-  DownAerial:
+  downAerial:
     attackDamage: 1.4
     hitLag: 1
     launchAngle: 94
     baseKnockback: 50
     knockbackScale: 15
-  NeutralSpecial:
+  neutralSpecial:
     attackDamage: 0
     hitLag: 0
     launchAngle: 0
     baseKnockback: 0
     knockbackScale: 0
-  ForwardSpecial:
+  forwardSpecial:
     attackDamage: 0
     hitLag: 0
     launchAngle: 0
     baseKnockback: 0
     knockbackScale: 0
-  UpSpecial:
+  upSpecial:
     attackDamage: 0
     hitLag: 0
     launchAngle: 0
     baseKnockback: 0
     knockbackScale: 0
-  DownSpecial:
+  downSpecial:
     attackDamage: 0
     hitLag: 0
     launchAngle: 0
     baseKnockback: 0
     knockbackScale: 0
-  ForwardSmash:
+  forwardSmash:
     attackDamage: 14.7
     hitLag: 1
     launchAngle: 361
     baseKnockback: 25
     knockbackScale: 105
-  UpSmash:
+  upSmash:
     attackDamage: 14
     hitLag: 1
     launchAngle: 83
     baseKnockback: 32
     knockbackScale: 94
-  DownSmash:
+  downSmash:
     attackDamage: 10
     hitLag: 1
     launchAngle: 32
     baseKnockback: 30
     knockbackScale: 100
+  dashAttack:
+    attackDamage: 8
+    hitLag: 1
+    launchAngle: 50
+    baseKnockback: 100
+    knockbackScale: 43

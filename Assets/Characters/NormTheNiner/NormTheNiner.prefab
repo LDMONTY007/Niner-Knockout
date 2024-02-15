@@ -746,7 +746,7 @@ MonoBehaviour:
   walkSpeed: 6
   runSpeed: 12
   maxSpeed: 14
-  dashDist: 5
+  dashDist: 1.5
   dashFrames: 10
   dashModifier: 1
   dodgeFrames: 14

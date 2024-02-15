@@ -10,24 +10,37 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Moveset", menuName = "Character/Moveset", order = 1)]
 public class Moveset : ScriptableObject
 {
+    //TODO:
+    //Replace each attack with an array of parameters
+    //So that the user can specify which frames
+    //Of the attack it each value applies to. 
+    //That way there are effectively multiple "hitboxes"
+    //like in smash.
+    //Also figure out how to implement multiple hitboxes for certain attacks.
+    //By that I mean multiple in one singular frame.
+    
+
     [Header("Tilt Attacks")]
-    public AttackInfo Neutral = new AttackInfo();
-    public AttackInfo ForwardTilt = new AttackInfo();
-    public AttackInfo UpTilt = new AttackInfo();
-    public AttackInfo DownTilt = new AttackInfo();
+    public AttackInfo neutral = new AttackInfo();
+    public AttackInfo forwardTilt = new AttackInfo();
+    public AttackInfo upTilt = new AttackInfo();
+    public AttackInfo downTilt = new AttackInfo();
     [Header("Aerials")]
-    public AttackInfo NeutralAerial = new AttackInfo();
-    public AttackInfo ForwardAerial = new AttackInfo();
-    public AttackInfo BackAerial = new AttackInfo();
-    public AttackInfo UpAerial = new AttackInfo();
-    public AttackInfo DownAerial = new AttackInfo();
+    public AttackInfo neutralAerial = new AttackInfo();
+    public AttackInfo forwardAerial = new AttackInfo();
+    public AttackInfo backAerial = new AttackInfo();
+    public AttackInfo upAerial = new AttackInfo();
+    public AttackInfo downAerial = new AttackInfo();
     [Header("Specials")]
-    public AttackInfo NeutralSpecial = new AttackInfo();
-    public AttackInfo ForwardSpecial = new AttackInfo();
-    public AttackInfo UpSpecial = new AttackInfo();
-    public AttackInfo DownSpecial = new AttackInfo();
+    public AttackInfo neutralSpecial = new AttackInfo();
+    public AttackInfo forwardSpecial = new AttackInfo();
+    public AttackInfo upSpecial = new AttackInfo();
+    public AttackInfo downSpecial = new AttackInfo();
     [Header("Smash Attacks")]
-    public AttackInfo ForwardSmash = new AttackInfo();
-    public AttackInfo UpSmash = new AttackInfo();
-    public AttackInfo DownSmash = new AttackInfo();
+    public AttackInfo forwardSmash = new AttackInfo();
+    public AttackInfo upSmash = new AttackInfo();
+    public AttackInfo downSmash = new AttackInfo();
+
+    [Header("Misc Attacks")]
+    public AttackInfo dashAttack = new AttackInfo();
 }

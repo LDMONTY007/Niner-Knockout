@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -168,7 +169,10 @@ public class Player : MonoBehaviour
 
     #region Jumping
 
-    public bool isGrounded => Physics2D.BoxCast(transform.position, this.GetComponent<BoxCollider2D>().bounds.extents, 0f, -transform.up, this.GetComponent<BoxCollider2D>().bounds.extents.y + groundCheckDist, rCasting);
+    //Changing isGrounded is what caused a logic error
+    //with the launching code. 
+    //public bool isGrounded => Physics2D.BoxCast(transform.position, this.GetComponent<BoxCollider2D>().bounds.extents, 0f, -transform.up, this.GetComponent<BoxCollider2D>().bounds.extents.y + groundCheckDist, rCasting);
+    public bool isGrounded => Physics2D.BoxCast(transform.position, this.GetComponent<BoxCollider2D>().size, 0f, -transform.up, groundCheckDist, rCasting);
     public bool inAir => !jumping && !isGrounded;
     public bool doJump;
 
@@ -486,11 +490,15 @@ public class Player : MonoBehaviour
         {
             //only rotate when grounded,
             //or doing back aerial.
-            if (!isHitStunned && state != PlayerState.helpless)
+            if (!isHitStunned && state != PlayerState.helpless && state != PlayerState.dashing)
             {
                 HandleRotation();
                 HandleAttack();
                 HandleSpecial();
+            }
+            else if (!isHitStunned && state == PlayerState.dashing)
+            {
+                HandleDashAttack();
             }
         }
         else if (inAir)
@@ -536,6 +544,15 @@ public class Player : MonoBehaviour
         //Also I don't have a good explanation
         //for it.
         HandleState();
+    }
+
+    private void HandleDashAttack()
+    {
+        //if we should do a dash attack, call it.
+        if (shouldAttack && state == PlayerState.dashing)
+        {
+            DashAttack();
+        }
     }
 
     private void FixedUpdate()
@@ -1176,11 +1193,39 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: Neutral ".Color("yellow"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.Neutral);
+        SetHurtboxAttackInfo(moveset.neutral);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
 
+    }
+
+    public virtual void DashAttack()
+    {
+        /*if (state == PlayerState.attacking)
+        {
+            //cannot attack because we are already attacking.
+            return;
+        }
+        else
+        {
+            state = PlayerState.attacking;
+        }*/
+
+        Debug.Log("Player 1: Dash Attack ".Color("lime"));
+
+        //handle rotation
+        //we don't do that here because they should 
+        //only attack in the direction they were dashing.
+        //HandleRotation();
+
+        //TODO: Actually code this attack.
+        SetHurtboxAttackInfo(moveset.dashAttack);
+
+        //lastly set the playerState back to none.
+        //After they do a dash attack they should stop dashing.
+
+        state = PlayerState.None;
     }
 
     public virtual void ForwardTilt()
@@ -1202,7 +1247,7 @@ public class Player : MonoBehaviour
         HandleRotation();
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.ForwardTilt);
+        SetHurtboxAttackInfo(moveset.forwardTilt);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1223,7 +1268,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: UpTilt ".Color("yellow"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.UpTilt);
+        SetHurtboxAttackInfo(moveset.upTilt);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1245,7 +1290,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: DownTilt ".Color("yellow"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.DownTilt);
+        SetHurtboxAttackInfo(moveset.downTilt);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1271,7 +1316,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: NeutralAerial ".Color("white"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.NeutralAerial);
+        SetHurtboxAttackInfo(moveset.neutralAerial);
 
 
         //lastly set the playerState back to none.
@@ -1294,7 +1339,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: ForwardAerial ".Color("white"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.ForwardAerial);
+        SetHurtboxAttackInfo(moveset.forwardAerial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1322,7 +1367,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: BackAerial ".Color("white"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.BackAerial);
+        SetHurtboxAttackInfo(moveset.backAerial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1344,7 +1389,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: UpAerial ".Color("white"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.UpAerial);
+        SetHurtboxAttackInfo(moveset.upAerial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1366,7 +1411,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: DownAerial ".Color("white"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.DownAerial);
+        SetHurtboxAttackInfo(moveset.downAerial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1392,7 +1437,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: NeutralSpecial ".Color("orange"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.NeutralSpecial);
+        SetHurtboxAttackInfo(moveset.neutralSpecial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1417,7 +1462,7 @@ public class Player : MonoBehaviour
         HandleRotation();
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.ForwardSpecial);
+        SetHurtboxAttackInfo(moveset.forwardSpecial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1460,7 +1505,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: DownSpecial ".Color("orange"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.DownSpecial);
+        SetHurtboxAttackInfo(moveset.downSpecial);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1496,7 +1541,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: ForwardSmash ".Color("purple"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.ForwardSmash);
+        SetHurtboxAttackInfo(moveset.forwardSmash);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1523,7 +1568,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: UpSmash ".Color("purple"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.UpSmash);
+        SetHurtboxAttackInfo(moveset.upSmash);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1541,7 +1586,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: DownSmash ".Color("purple"));
 
         //TODO: Actually code this attack.
-        SetHurtboxAttackInfo(moveset.DownSmash);
+        SetHurtboxAttackInfo(moveset.downSmash);
 
         //lastly set the playerState back to none.
         state = PlayerState.None;
@@ -1668,7 +1713,7 @@ public class Player : MonoBehaviour
         float angleRad = Mathf.Deg2Rad * angleDeg;
         Debug.Log(angleRad + ":" + angleDeg);
 
-        Vector2 newDirection = hitDirection;
+        Vector2 newDirection;
 
         //Sakurai angle check
         if (Mathf.Abs(angleDeg) == 361f)
@@ -1694,6 +1739,7 @@ public class Player : MonoBehaviour
         //to the left.
         if (hitDirection.x < 0)
         {
+            Debug.Log("SWITCH");
             newDirection.x = -newDirection.x;
         }
 
@@ -1818,6 +1864,15 @@ public class Player : MonoBehaviour
                 Vector3 wishDir = RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle));
                 //wishDir.x = -dir.x;
                 Debug.DrawRay(transform.position, wishDir.normalized * 5f, Color.green, 1f);
+
+                if (Vector2.Dot(collision.transform.position - transform.position, playerSprite.transform.right) < 0)
+                {
+                    Debug.Log("The other player is hitting me left!".Color("lime"));
+                }
+                else if (Vector2.Dot(collision.transform.position - transform.position, playerSprite.transform.right) > 0)
+                {
+                    Debug.Log("The other player is hitting me right!".Color("cyan"));
+                }
 
                 //launch the player based off of the attack damage.
                 //old

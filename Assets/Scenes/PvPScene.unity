@@ -1739,8 +1739,8 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!19719996 &1162986706
-TilemapCollider2D:
+--- !u!60 &1162986706
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1772,8 +1772,23 @@ TilemapCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_MaximumTileChangeCount: 1000
-  m_ExtrusionFactor: 0
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 4.6875, y: -3.75}
+      - {x: -3.5625, y: -3.8125}
+      - {x: -3.6875, y: -3.75}
+      - {x: -3.75, y: -3.6875}
+      - {x: -6.5625, y: -0.1875}
+      - {x: 7.5625, y: -0.1875}
   m_UseDelaunayMesh: 0
 --- !u!1 &1609927263
 GameObject:
@@ -1852,7 +1867,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
