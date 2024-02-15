@@ -9,6 +9,15 @@ public class NormTheNiner : Player
         ForwardTilt();
     }
 
+    #region Dash Attack
+
+    public override void DashAttack()
+    {
+        base.DashAttack();
+        animator.SetTrigger("dashAttack");
+    }
+    #endregion
+
     #region Tilt Attacks
     public override void UpTilt()
     {

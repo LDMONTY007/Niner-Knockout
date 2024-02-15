@@ -551,6 +551,7 @@ public class Player : MonoBehaviour
         //if we should do a dash attack, call it.
         if (shouldAttack && state == PlayerState.dashing)
         {
+            shouldWaitToAttack = false;
             DashAttack();
         }
     }
