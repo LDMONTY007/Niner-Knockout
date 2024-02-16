@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
 
     public Hurtbox hurtbox;
 
+    public Transform shieldTransform;
+
     public ParticleSystem launchParticles;
 
     private bool isFacingLeft;
@@ -90,6 +92,10 @@ public class Player : MonoBehaviour
     [Header("Dodge Parameters")]
     public int dodgeFrames = 14;
 
+    [Header("Sheild Parameters")]
+    public float totalShield = 100f;
+    private float shieldHealth = 0f;
+    
     public float xAxis;
     public float yAxis;
 
@@ -278,6 +284,8 @@ public class Player : MonoBehaviour
 
         //only true during the frame the button is pressed.
         shouldAttack = attackAction.WasPressedThisFrame();
+        
+
         //While button is held down this is true.
         shouldAttackContinuous = attackAction.IsPressed();
 
@@ -486,6 +494,50 @@ public class Player : MonoBehaviour
         #endregion
 
 
+        #region Shield Input
+        //if the user inputs shield
+        //during this frame reset their shield's
+        //health
+        if (shieldAction.WasPressedThisFrame())
+        {
+            Debug.Log("Should Shield".Color("red"));
+            shieldHealth = totalShield;
+
+            //TODO:
+            //start the shield shrinking timer here.
+        }
+        else if (shieldAction.IsPressed())
+        {
+            //for now, if it's greater than zero we ignore damage.
+            if (shieldHealth > 0)
+            {
+                if (isGrounded && state != PlayerState.helpless && state != PlayerState.launched && state != PlayerState.dashing)
+                {
+
+                    //TODO:
+                    //implement code for enabling/disabling the shield of the character
+                    //relative to the health.
+
+                    //TODO:
+                    //implement Shielding state so that you can't move while shielding. 
+                    
+                    //if not shielding, turn on the shield.
+                    if (!shieldTransform.gameObject.activeSelf)
+                    {
+                        shieldTransform.gameObject.SetActive(true);
+                    }
+                }
+            }
+        }
+        else
+        {   //if shielding, turn off the shield.
+            if (shieldTransform.gameObject.activeSelf)
+            {
+                shieldTransform.gameObject.SetActive(false);
+            }
+        }
+        #endregion
+
         if (isGrounded)
         {
             //only rotate when grounded,
@@ -551,7 +603,6 @@ public class Player : MonoBehaviour
         //if we should do a dash attack, call it.
         if (shouldAttack && state == PlayerState.dashing)
         {
-            shouldWaitToAttack = false;
             DashAttack();
         }
     }
@@ -633,6 +684,19 @@ public class Player : MonoBehaviour
 
     private IEnumerator DashCoroutine()
     {
+        //this is what causes the smash attack charge to occur so
+        //we need to turn it off when we start dashing.
+        shouldAttackContinuous = false;
+        //We also don't want them to wait to do an attack
+        shouldWaitToAttack = false;
+
+        //Same reasons as before, we shouldn't be doing any attacks 
+        //that were input during dodging unless we are doing a dash attack.
+        shouldSmash = false;
+        //because dashing should cancel that check for a smash attack
+        //if we are already dashing.
+        shouldSmashContinuous = false;
+
         shouldDash = false;
         
         int frames = dashFrames;
