@@ -1166,8 +1166,21 @@ public class Player : MonoBehaviour
         if (playerInput.currentControlScheme.Equals("Gamepad") && (moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && Mathf.Abs(moveInput.x) - Mathf.Abs(lastXinput) > 0)
         {
             Debug.Log("Will Rotate".Color("green"));
-            playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
-            isFacingLeft = xAxis < 0 ? true : false;
+            //isFacingLeft = xAxis < 0 ? true : false;
+            //this needs a deadzone because otherwise
+            //up/down directional attacks
+            //will switch directions for no 'intended' reason.
+            float deadzone = 0.1f;
+            if (xAxis > deadzone)
+            {
+                isFacingLeft = false;
+            }
+            else if (xAxis < -deadzone)
+            {
+                Debug.Log("Here: ");
+                isFacingLeft = true;
+            }
+            playerSprite.transform.rotation = Quaternion.Euler(1, isFacingLeft ? 180 : 0, 1);
         }
 
 
@@ -1586,7 +1599,7 @@ public class Player : MonoBehaviour
 
         //handle rotation
 
-        HandleRotation();
+        //HandleRotation();
 
         //TODO: Actually code this attack.
         SetHurtboxAttackInfo(moveset.forwardTilt);
@@ -1801,7 +1814,7 @@ public class Player : MonoBehaviour
         Debug.Log("Player 1: ForwardSpecial ".Color("orange"));
 
         //Handle switching facing directions
-        HandleRotation();
+        //HandleRotation();
 
         //TODO: Actually code this attack.
         SetHurtboxAttackInfo(moveset.forwardSpecial);
