@@ -540,8 +540,11 @@ public class Player : MonoBehaviour
             }
         }
         else
-        {   //if shielding, turn off the shield.
-            state = PlayerState.None;
+        {   //if we stop shielding, turn off the shield.
+            if (state == PlayerState.shielding)
+            {
+                state = PlayerState.None;
+            }
             if (shieldTransform.gameObject.activeSelf)
             {
                 
@@ -838,7 +841,7 @@ public class Player : MonoBehaviour
         didTap = false;
         
 
-        rb.velocity = new Vector2(0f, rb.velocity.y);
+        //rb.velocity = new Vector2(0f, rb.velocity.y);
         Debug.Log("Done!");
         Debug.Log("Dist: " + dashDist + "\nDist Reached: " + transform.position.x + "\nScale to reach desired: " + dashDist / transform.position.x + "\nTimeToDash: " + timeToDash + "\ncurrentTime: " + currentTime);
         
