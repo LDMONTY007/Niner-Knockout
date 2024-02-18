@@ -832,7 +832,7 @@ MonoBehaviour:
   maxSpeed: 14
   dashDist: 1.5
   dashFrames: 10
-  dashModifier: 1
+  dashModifier: 0.9092292
   dodgeFrames: 14
   totalShield: 50
   shieldTransform: {fileID: 7734160898523838125}

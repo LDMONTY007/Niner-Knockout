@@ -739,7 +739,7 @@ public class Player : MonoBehaviour
         shieldHealth = 37.5f;
     }
 
-    private IEnumerator DashCoroutine()
+    /*private IEnumerator DashCoroutine()
     {
         //this is what causes the smash attack charge to occur so
         //we need to turn it off when we start dashing.
@@ -804,7 +804,7 @@ public class Player : MonoBehaviour
 
         //Debug.Break();
         launchParticles.Play();
-        while (/*currentTime > 0*/frames > 0)
+        while (*//*currentTime > 0*//*frames > 0)
         {
             if (!isHitStunned)
             {
@@ -816,10 +816,12 @@ public class Player : MonoBehaviour
                 //rb.velocity = playerSprite.transform.right * dashVelocity;
 
                 //decelerate to reach distance.
-                /* if (Mathf.Abs(rb.velocity.x) > 0)
-                     rb.AddForce(-transform.right * acceleration * rb.mass);*/
+                *//* if (Mathf.Abs(rb.velocity.x) > 0)
+                     rb.AddForce(-transform.right * acceleration * rb.mass);*//*
 
                 
+                //Decelerate so we reach desired distance.
+                //This makes the player stop for a moment before continuing running though.
                 rb.AddForce(-playerSprite.transform.right.normalized * acceleration * rb.mass);
                 Debug.Log(("RBVel: " + rb.velocity).ToString().Color("cyan"));
 
@@ -855,6 +857,142 @@ public class Player : MonoBehaviour
         //so we don't think we are still running.
         dashCoroutine = null;
         
+    }*/
+
+    private IEnumerator DashCoroutine()
+    {
+        //this is what causes the smash attack charge to occur so
+        //we need to turn it off when we start dashing.
+        shouldAttackContinuous = false;
+        //We also don't want them to wait to do an attack
+        shouldWaitToAttack = false;
+
+        //Same reasons as before, we shouldn't be doing any attacks 
+        //that were input during dodging unless we are doing a dash attack.
+        shouldSmash = false;
+        //because dashing should cancel that check for a smash attack
+        //if we are already dashing.
+        shouldSmashContinuous = false;
+
+        shouldDash = false;
+
+        int frames = dashFrames;
+        state = PlayerState.dashing;
+        Debug.Log("Dash!".Color("cyan"));
+
+        //const float delta = 1f / 60f;
+        float timeToDash = frames / 60f;
+        //float timeToDash = frames * Time.deltaTime;
+
+        //dash modifier = dash dist / actual distance reached prior to dash modifier application.
+        float modDashDist = dashDist * dashModifier;
+
+        //This helped me solve it: https://www.quora.com/Given-time-and-distance-how-do-you-calculate-acceleration
+        //distance -> d
+        //average velocity = d/t
+        //final velocity = 2*d/t
+        //acceleration = final velocity / t
+        //therefore acceleration - 2*d/t^2
+        float acceleration = 2f * modDashDist / Mathf.Pow(timeToDash, 2f);
+
+        float dashForce = Mathf.Sqrt(2f * acceleration * modDashDist) * rb.mass;
+
+        float initVel = Mathf.Sqrt(2f * acceleration * dashDist);
+
+        float curVel = initVel;
+
+        //Time at max distance = v0 / acceleration
+        Debug.Log((initVel / acceleration).ToString().Color("lime"));
+
+        Debug.Log("Dash Force: " + dashForce);
+        //velocity = force / mass * time
+        //float dashVelocity = dashForce / rb.mass * timeToDash;
+
+        //make sure to rotate before we dash.
+        HandleRotation();
+
+
+        //rb.AddForce(playerSprite.transform.right.normalized * dashForce, ForceMode2D.Impulse);
+        //rb.AddForce(-playerSprite.transform.right.normalized * acceleration * rb.mass);
+        //frames--;
+        Debug.Log(("RBVel: " + rb.velocity).ToString().Color("purple"));
+        //calling add force here and then again in the while loop is fine
+        //accept when it's the first iteration of the loop and it hasn't
+        //returned to execution. 
+
+        //When 2 addforce calls are made during the same frame only one seems
+        //to be applied.
+        yield return new WaitForFixedUpdate();
+
+        float currentTime = timeToDash;
+
+        //Debug.Break();
+        launchParticles.Play();
+        while (/*currentTime > 0*/frames > 0)
+        {
+            if (!isHitStunned)
+            {
+
+                Debug.DrawRay(transform.position, rb.velocity, Color.red);
+                Debug.Log("InitVel: " + initVel + " Acceleration: " + acceleration);
+                Debug.Log("CurrentTime: " + currentTime + " FrameCount: " + frames);
+                //rb.velocity = playerSprite.transform.right.normalized * initVel;
+                //rb.velocity = playerSprite.transform.right * dashVelocity;
+
+                //decelerate to reach distance.
+                /* if (Mathf.Abs(rb.velocity.x) > 0)
+                     rb.AddForce(-transform.right * acceleration * rb.mass);*/
+
+
+                //Decelerate so we reach desired distance.
+                //This makes the player stop for a moment before continuing running though.
+                //rb.AddForce(-playerSprite.transform.right.normalized * acceleration * rb.mass);
+
+                //function to get displacement
+                //
+
+                //current velocity = playerSprite.transform.right.normalized * (initVel * currentTime + 1/2 * -acceleration * currentTime * currentTime)
+                //V = u + a * t :https://www.ncl.ac.uk/webtemplate/ask-assets/external/maths-resources/mechanics/kinematics/equations-of-motion.html#:~:text=at2.-,v%20%3D%20u%20%2B%20a%20t%20%2C%20s%20%3D%20(%20u%20%2B,represents%20the%20direction%20of%20motion.
+                //V is current velocity
+                //u is initial velocity
+                //a is acceleration
+                //t is time.
+                rb.velocity = playerSprite.transform.right.normalized * (initVel - acceleration * (timeToDash - currentTime)) /** (timeToDash - currentTime)*/;
+                Debug.Log(("RBVel: " + rb.velocity).ToString().Color("cyan"));
+
+                //decrease by acceleration
+                //curVel = initVel + acceleration * (timeToDash - currentTime);
+
+                //decrement.
+                frames--;
+                currentTime -= Time.deltaTime;
+                if (currentTime < 0.0001)
+                {
+                    currentTime = 0;
+                }
+                yield return new WaitForFixedUpdate();
+
+            }
+        }
+
+        //say we are no longer tapping
+        didTap = false;
+
+
+        //rb.velocity = new Vector2(0f, rb.velocity.y);
+        Debug.Log("Done!");
+        Debug.Log("Dist: " + dashDist + "\nDist Reached: " + transform.position.x + "\nScale to reach desired: " + dashDist / transform.position.x + "\nTimeToDash: " + timeToDash + "\ncurrentTime: " + currentTime);
+
+        //Debug.Break();
+
+        launchParticles.Stop();
+        //go back to base state.
+        //yield return new WaitForEndOfFrame();
+        state = PlayerState.None;
+        //set dashCoroutine back to null after finishing
+        //so we don't think we are still running.
+        dashCoroutine = null;
+
     }
 
     private IEnumerator DodgeCoroutine()
