@@ -34,8 +34,6 @@ public class Player : MonoBehaviour
 
     public Hurtbox hurtbox;
 
-    public Transform shieldTransform;
-
     public ParticleSystem launchParticles;
 
     private bool isFacingLeft;
@@ -47,7 +45,6 @@ public class Player : MonoBehaviour
     /// Used to set the angle, damage, and knockback of attacks.
     /// </summary>
     public Moveset moveset;
-
 
     //Hitstun should probably be a part of the playerstate
     //or some sort of substate so that these are 2 layers 
@@ -65,6 +62,7 @@ public class Player : MonoBehaviour
         launched,   //Induced when launched. This just lets us know to stop the old launch coroutine and start a new one. Disables some physics.
         helpless,   //Induced after running out of jumps while in the air. Sometimes called "Freefall" https://www.ssbwiki.com/Helpless
         intangible, //Induced by dodging. Cannot be hit or pushed by other players. https://www.ssbwiki.com/Intangibility
+        shielding, //Induced by shielding, Cannot be damaged but doing any other action will exit this state.
     }
 
 
@@ -92,9 +90,12 @@ public class Player : MonoBehaviour
     [Header("Dodge Parameters")]
     public int dodgeFrames = 14;
 
-    [Header("Sheild Parameters")]
-    public float totalShield = 100f;
+    [Header("Shield Parameters")]
+    public float totalShield = 50f;
     private float shieldHealth = 0f;
+    public Transform shieldTransform;
+    public Collider2D shieldCollider;
+    private Vector3 ogShieldScale = Vector3.one;
     
     public float xAxis;
     public float yAxis;
@@ -257,6 +258,10 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //set the shield health.
+        shieldHealth = totalShield;
+        //set the OG scale of this shield for use later.
+        ogShieldScale = shieldTransform.localScale;
 
         rCasting = LayerMask.GetMask("Player", "Ignore Raycast"); //Assign our layer mask to player
         rCasting = ~rCasting; //Invert the layermask value so instead of being just the player it becomes every layer but the mask
@@ -501,7 +506,7 @@ public class Player : MonoBehaviour
         if (shieldAction.WasPressedThisFrame())
         {
             Debug.Log("Should Shield".Color("red"));
-            shieldHealth = totalShield;
+            
 
             //TODO:
             //start the shield shrinking timer here.
@@ -520,10 +525,12 @@ public class Player : MonoBehaviour
 
                     //TODO:
                     //implement Shielding state so that you can't move while shielding. 
-                    
+
+                    state = PlayerState.shielding;
                     //if not shielding, turn on the shield.
                     if (!shieldTransform.gameObject.activeSelf)
                     {
+                        
                         shieldTransform.gameObject.SetActive(true);
                     }
                 }
@@ -531,8 +538,10 @@ public class Player : MonoBehaviour
         }
         else
         {   //if shielding, turn off the shield.
+            state = PlayerState.None;
             if (shieldTransform.gameObject.activeSelf)
             {
+                
                 shieldTransform.gameObject.SetActive(false);
             }
         }
@@ -679,7 +688,35 @@ public class Player : MonoBehaviour
         }
         #endregion
 
-
+        #region Shielding
+        if (state == PlayerState.shielding)
+        {
+            //In Ultimate you lose 0.15 per frame.
+            //Source: https://www.ssbwiki.com/Shield#Shield_statistics
+            if (shieldHealth > 0)
+            {
+                shieldHealth -= 0.15f;
+                shieldHealth = Mathf.Clamp(shieldHealth, 0f, totalShield);
+                //Formula comes from here: https://www.ssbwiki.com/Shield#Shield_statistics
+                //Assuming the total shield health is 50. 
+                shieldTransform.localScale = ogShieldScale * ((shieldHealth / totalShield) * 0.85f + 0.15f);
+            }
+            
+        }
+        
+        if (state != PlayerState.shielding)
+        {
+            //In Ultimate you regen 0.08 per frame.
+            //Source: https://www.ssbwiki.com/Shield#Shield_statistics
+            if (shieldHealth < totalShield)
+            {
+                Debug.Log("ADDING SHIELD");
+                shieldHealth += 0.08f;
+                shieldHealth = Mathf.Clamp(shieldHealth, 0f, totalShield);
+                shieldTransform.localScale = ogShieldScale * ((shieldHealth / totalShield) * 0.85f + 0.15f);
+            }
+        }
+        #endregion
     }
 
     private IEnumerator DashCoroutine()
@@ -1910,7 +1947,8 @@ public class Player : MonoBehaviour
         if (collision.CompareTag("Hurtbox") && !collision.transform.IsChildOf(this.transform))
         {
             //when intangible we ignore attacks.
-            if (state != PlayerState.intangible)
+            //if we can't be damaged don't calculate this.
+            if (state != PlayerState.intangible && state != PlayerState.shielding)
             {
 
                 Debug.Log("We were Hit!".Color("red"));
@@ -1948,6 +1986,15 @@ public class Player : MonoBehaviour
                 //Launch(h.attackInfo.launchAngle, RadiansToVector(Mathf.Deg2Rad * (h.attackInfo.launchAngle)), h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale, h.attackInfo.hitLag);
                 //new
                 Launch(h.attackInfo.launchAngle, -dir.normalized, h.attackInfo.attackDamage, h.attackInfo.baseKnockback, h.attackInfo.knockbackScale, h.attackInfo.hitLag);
+            }
+            else if (state == PlayerState.shielding)
+            {
+                Debug.Log((this.name + " Can't be damaged, they are shielding!").Color("red"));
+                //TODO: 
+                //Decrement the player's shield health by however much damage this attack does.
+                //Push the player back a small amount even though they are shielding.
+
+                //also do a check where if the player's shield is broken by this attack we launch them here.
             }
         }
         //the player entered the kill trigger. (kill bounds).

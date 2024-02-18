@@ -821,7 +821,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterIcon: {fileID: 0}
   hurtbox: {fileID: 6967482904829382750}
-  shieldTransform: {fileID: 7734160898523838125}
   launchParticles: {fileID: 4373395401437295738}
   characterIndex: 0
   moveset: {fileID: 11400000, guid: 3a3205b7e2788a145bbe5708977a1de1, type: 2}
@@ -835,7 +834,9 @@ MonoBehaviour:
   dashFrames: 10
   dashModifier: 1
   dodgeFrames: 14
-  totalShield: 100
+  totalShield: 50
+  shieldTransform: {fileID: 7734160898523838125}
+  shieldCollider: {fileID: 0}
   xAxis: 0
   yAxis: 0
   animator: {fileID: 552453139261342999}
