@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel.Design;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -86,6 +87,8 @@ public class Player : MonoBehaviour
     //and allows us to check if the dashCoroutine 
     //is running. It is null otherwise.
     private Coroutine dashCoroutine;
+
+    private Coroutine jumpCoroutine;
 
     [Header("Dodge Parameters")]
     public int dodgeFrames = 14;
@@ -700,6 +703,12 @@ public class Player : MonoBehaviour
                 //Formula comes from here: https://www.ssbwiki.com/Shield#Shield_statistics
                 //Assuming the total shield health is 50. 
                 shieldTransform.localScale = ogShieldScale * ((shieldHealth / totalShield) * 0.85f + 0.15f);
+                
+                //Shield break.
+                if (shieldHealth == 0f)
+                {
+                    ShieldBreak();
+                }
             }
             
         }
@@ -717,6 +726,14 @@ public class Player : MonoBehaviour
             }
         }
         #endregion
+    }
+
+    private void ShieldBreak()
+    {
+        state = PlayerState.launched;
+        jumpCoroutine = StartCoroutine(JumpCoroutine(40, 5));
+        //after your shield breaks it goes back to 37.5f health.
+        shieldHealth = 37.5f;
     }
 
     private IEnumerator DashCoroutine()
@@ -863,6 +880,101 @@ public class Player : MonoBehaviour
             jumpCount = 0;
             state = PlayerState.helpless;
         }
+    }
+
+    private IEnumerator JumpCoroutine(int framesTotal, float height)
+    {
+        //Debug.Break();
+        int frames = framesTotal;
+        state = PlayerState.helpless;
+
+        //const float delta = 1f / 60f;
+        float timeToJump = frames / 60f;
+        //float timeToDash = frames * Time.deltaTime;
+
+        float modJumpHeight = height * dashModifier;
+
+        //This helped me solve it: https://www.quora.com/Given-time-and-distance-how-do-you-calculate-acceleration
+        //distance -> d
+        //average velocity = d/t
+        //final velocity = 2*d/t
+        //acceleration = final velocity / t
+        //therefore acceleration - 2*d/t^2
+        float acceleration = 2f * modJumpHeight / Mathf.Pow(timeToJump, 2f);
+
+        float jumpForce = Mathf.Sqrt(2f * acceleration * modJumpHeight) * rb.mass;
+
+        float initVel = Mathf.Sqrt(2f * acceleration * modJumpHeight);
+
+        //Time at max distance = v0 / acceleration
+        Debug.Log((initVel / acceleration).ToString().Color("lime"));
+
+        Debug.Log("Jump Force: " + jumpForce);
+        //velocity = force / mass * time
+        //float dashVelocity = dashForce / rb.mass * timeToDash;
+
+        rb.AddForce(playerSprite.transform.up.normalized * jumpForce, ForceMode2D.Impulse);
+        rb.AddForce(-playerSprite.transform.up.normalized * acceleration * rb.mass);
+        //frames--;
+        Debug.Log(("RBVel: " + rb.velocity).ToString().Color("purple"));
+        //calling add force here and then again in the while loop is fine
+        //accept when it's the first iteration of the loop and it hasn't
+        //returned to execution. 
+
+        //When 2 addforce calls are made during the same frame only one seems
+        //to be applied.
+        yield return new WaitForFixedUpdate();
+
+        float currentTime = timeToJump;
+
+        //Debug.Break();
+        launchParticles.Play();
+        while (/*currentTime > 0*/frames > 0)
+        {
+            if (!isHitStunned)
+            {
+
+                Debug.DrawRay(transform.position, rb.velocity, Color.red);
+                Debug.Log("InitVel: " + initVel + " Acceleration: " + acceleration);
+                Debug.Log("CurrentTime: " + currentTime + " FrameCount: " + frames);
+                //rb.velocity = playerSprite.transform.right.normalized * initVel;
+                //rb.velocity = playerSprite.transform.right * dashVelocity;
+
+                //decelerate to reach distance.
+                /* if (Mathf.Abs(rb.velocity.x) > 0)
+                     rb.AddForce(-transform.right * acceleration * rb.mass);*/
+
+
+                rb.AddForce(-playerSprite.transform.up.normalized * acceleration * rb.mass);
+                Debug.Log(("RBVel: " + rb.velocity).ToString().Color("cyan"));
+
+
+
+                //decrement.
+                frames--;
+                currentTime -= Time.deltaTime;
+                if (currentTime < 0.0001)
+                {
+                    currentTime = 0;
+                }
+                yield return new WaitForFixedUpdate();
+
+            }
+        }
+
+        Debug.Log("Done!");
+        Debug.Log("Dist: " + dashDist + "\nDist Reached: " + transform.position.x + "\nScale to reach desired: " + dashDist / transform.position.x + "\nTimeToDash: " + timeToJump + "\ncurrentTime: " + currentTime);
+
+        //Debug.Break();
+
+        launchParticles.Stop();
+        //go back to base state.
+        //yield return new WaitForEndOfFrame();
+        state = PlayerState.None;
+        //set dashCoroutine back to null after finishing
+        //so we don't think we are still running.
+        jumpCoroutine = null;
+
     }
 
     private void HandleUI()
@@ -1044,23 +1156,6 @@ public class Player : MonoBehaviour
                     rb.AddForce(-transform.up * Physics2D.gravity.magnitude);
                 }*/
 
-    }
-
-    private IEnumerator JumpCoroutine(int framesTotal, float height)
-    {
-        int frames = framesTotal;
-        float jumpForce = Mathf.Sqrt(2f * Physics2D.gravity.magnitude * height) * rb.mass;
-
-        while (frames > 0)
-        {
-            /*if (frames / framesTotal > 2f/3f)
-            {
-                rb.AddForce(transform.up * jumpForce / framesTotal, ForceMode2D.Force);
-            }*/
-            rb.AddForce(transform.up * jumpForce / framesTotal, ForceMode2D.Force);
-            frames--;
-            yield return null;
-        }
     }
 
     private void HandleAttack()
