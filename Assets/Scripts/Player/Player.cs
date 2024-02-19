@@ -897,7 +897,7 @@ public class Player : MonoBehaviour
 
         float dashForce = Mathf.Sqrt(2f * acceleration * modDashDist) * rb.mass;
 
-        float initVel = Mathf.Sqrt(2f * acceleration * dashDist);
+        float initVel = Mathf.Sqrt(2f * acceleration * modDashDist);
 
         float curVel = initVel;
 
@@ -922,7 +922,9 @@ public class Player : MonoBehaviour
 
         //When 2 addforce calls are made during the same frame only one seems
         //to be applied.
-        yield return new WaitForFixedUpdate();
+        //calling this/not calling this here had no affect on the distance
+        //reached, only the number of frames it took to reach the distance.
+        //yield return new WaitForFixedUpdate();
 
         float currentTime = timeToDash;
 
@@ -957,7 +959,8 @@ public class Player : MonoBehaviour
                 //u is initial velocity
                 //a is acceleration
                 //t is time.
-                rb.velocity = playerSprite.transform.right.normalized * (initVel - acceleration * (timeToDash - currentTime)) /** (timeToDash - currentTime)*/;
+                rb.velocity = playerSprite.transform.right.normalized * (initVel - acceleration * (timeToDash - currentTime));
+                //rb.velocity = playerSprite.transform.right.normalized * (initVel - acceleration * (frames / 60f));
                 Debug.Log(("RBVel: " + rb.velocity).ToString().Color("cyan"));
 
                 //decrease by acceleration
