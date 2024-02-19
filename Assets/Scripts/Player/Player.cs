@@ -87,6 +87,9 @@ public class Player : MonoBehaviour
     //and allows us to check if the dashCoroutine 
     //is running. It is null otherwise.
     private Coroutine dashCoroutine;
+    //This tells us the direction the player input in order
+    //to begin dashing
+    private Direction dashDirection = Direction.None;
 
     private Coroutine jumpCoroutine;
 
@@ -211,6 +214,7 @@ public class Player : MonoBehaviour
     public Vector2 ogJump; //Not included just like what I said above.
     public float fallMultiplier = 9f; //When you reach the peak of the expected arc this is the force applied to make falling more fluid.
     public float lowJumpMultiplier = 15f; //When you stop holding jump to do a low jump this is the force applied to make the jump stop short.
+    private Coroutine rotateCoroutine;
 
     #endregion
 
@@ -342,7 +346,7 @@ public class Player : MonoBehaviour
         //Check if we should dash. 
         if (didTap && (curDirection == Direction.Right || curDirection == Direction.Left) && state != PlayerState.dashing)
         {
-            
+
             //set should dash to true so we dash on the next fixedUpdate.
             //Even if we dash, we are still going to be able to input 
             //a smash attack.
@@ -353,7 +357,8 @@ public class Player : MonoBehaviour
             //we should enter "Dashing" and only then should we do a "Dash Attack"
 
 
-
+            //set dashDirection so the coroutine knows which way we dashed.
+            dashDirection = curDirection;
             shouldDash = true;
         }
 
@@ -959,7 +964,21 @@ public class Player : MonoBehaviour
                 //u is initial velocity
                 //a is acceleration
                 //t is time.
-                rb.velocity = playerSprite.transform.right.normalized * (initVel - acceleration * (timeToDash - currentTime));
+
+                //Checking if we are in the inital dash.
+                //Here: https://www.ssbwiki.com/Dash#Initial_dash
+                //Essentially there is no deceleration during the initial dash
+                //and there is only deceleration after the first six frames
+                //if the user is still holding the same direction then we
+                //should break out of the method and let the user begin running.
+                //otherwise the user should decelerate to a stop.
+                if (frames < dashFrames - 6 && curDirection == dashDirection)
+                {
+                    break;
+                }
+                else
+                    curVel = initVel - acceleration * (timeToDash - currentTime);
+                rb.velocity = playerSprite.transform.right.normalized * curVel;
                 //rb.velocity = playerSprite.transform.right.normalized * (initVel - acceleration * (frames / 60f));
                 Debug.Log(("RBVel: " + rb.velocity).ToString().Color("cyan"));
 
@@ -977,6 +996,11 @@ public class Player : MonoBehaviour
 
             }
         }
+
+        //reset dash Direction
+        dashDirection = Direction.None;
+        //coroutine over, we should set the x velocity to be whatever the player's current x input is. 
+        //rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
 
         //say we are no longer tapping
         didTap = false;
@@ -996,6 +1020,25 @@ public class Player : MonoBehaviour
         //so we don't think we are still running.
         dashCoroutine = null;
 
+    }
+
+    private IEnumerator RotateCoroutine(float start, float end, int totalFrames)
+    {
+        int frames = 0;
+        float current = start;
+        while (frames < totalFrames)
+        {
+            current = Mathf.Lerp(start, end, (float)frames / totalFrames);
+            Debug.Log((current).ToString().Color("brown"));
+            playerSprite.transform.rotation = Quaternion.Euler(0f, current, 0f);
+            frames++;
+            yield return null;
+        }
+        //set the rotation to be the end value.
+        playerSprite.transform.rotation = Quaternion.Euler(0f, end, 0f);
+
+        //set rotate coroutine to be null
+        rotateCoroutine = null;
     }
 
     private IEnumerator DodgeCoroutine()
@@ -1168,25 +1211,47 @@ public class Player : MonoBehaviour
         //set the direction the player is facing.
         if (playerInput.currentControlScheme.Equals("Gamepad") && (moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && Mathf.Abs(moveInput.x) - Mathf.Abs(lastXinput) > 0)
         {
+            if (rotateCoroutine != null)
+            {
+                return;
+            }
             Debug.Log("Will Rotate".Color("green"));
             //isFacingLeft = xAxis < 0 ? true : false;
             //this needs a deadzone because otherwise
             //up/down directional attacks
             //will switch directions for no 'intended' reason.
             float deadzone = 0.1f;
-            if (xAxis > deadzone)
+            bool prevFacing = isFacingLeft;
+            if (xAxis > 0)
             {
                 isFacingLeft = false;
             }
-            else if (xAxis < -deadzone)
+            else if (xAxis < 0)
             {
                 Debug.Log("Here: ");
                 isFacingLeft = true;
             }
-            playerSprite.transform.rotation = Quaternion.Euler(1, isFacingLeft ? 180 : 0, 1);
+            if (prevFacing != isFacingLeft)
+                rotateCoroutine = StartCoroutine(RotateCoroutine(isFacingLeft ? 0 : 180, isFacingLeft ? 180 : 0, 10));
+            //playerSprite.transform.rotation = Quaternion.Euler(1, isFacingLeft ? 180 : 0, 1);
         }
 
+        /*        if (lastDirection != Direction.None && playerInput.currentControlScheme.Equals("Gamepad") && lastDirection != curDirection)
+                {
 
+                    float deadzone = 0.1f;
+                    if (xAxis > 0)
+                    {
+                        isFacingLeft = false;
+                    }
+                    else if (xAxis < 0)
+                    {
+                        Debug.Log("Here: ");
+                        isFacingLeft = true;
+                    }
+                    if (lastDirection != curDirection)
+                        rotateCoroutine = StartCoroutine(RotateCoroutine(isFacingLeft ? 0 : 180, isFacingLeft ? 180 : 0, 10));
+                }*/
 
         //if user is inputting via keyboard
         if (playerInput.currentControlScheme.Equals("Keyboard&Mouse") && Mathf.Abs(moveInput.x) > 0)
