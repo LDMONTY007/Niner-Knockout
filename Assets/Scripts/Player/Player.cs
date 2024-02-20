@@ -75,6 +75,7 @@ public class Player : MonoBehaviour
     public float groundCheckDist = 0.1f;
 
     [Header("Movement Parameters")] //Explain that this will show a header in the inspector to categorize variables
+    [Range(1, 5)] public float helplessSpeed = 1.5f;
     [Range(1, 10)] public float walkSpeed = 5f;
     [Range(1, 20)] public float runSpeed = 12f;
     [Range(1, 20)] public float maxSpeed = 14f;
@@ -95,7 +96,7 @@ public class Player : MonoBehaviour
 
     private bool dodging;
     [Header("Dodge Parameters")]
-    public int dodgeFrames = 87;
+    public int dodgeFrames = 14;
     public int intangibilityFrames = 21;
     [Range(1, 30)] public float dodgeDist = 5f;
     public float dodgeModifier = 1f;
@@ -113,6 +114,7 @@ public class Player : MonoBehaviour
     private Vector2 lastDirectionInput;
     private float lastXinput;
     private Vector2 moveInput;
+    private Vector2 camRelInput; 
     private Vector2 moveDirection;
 
     private Direction curDirection;
@@ -121,8 +123,8 @@ public class Player : MonoBehaviour
     #region movement bools
     //we walk if the x input is less than or equal to 0.5f
     private bool isWalking => Mathf.Abs(xAxis) <= 0.5f ? true : false;
-    //set movespeed based on if we are walking.
-    private float moveSpeed => isWalking ? walkSpeed : runSpeed;
+    //set movespeed based on if we are walking or helpless.
+    private float moveSpeed => state == PlayerState.helpless ? helplessSpeed : isWalking ? walkSpeed : runSpeed;
 
     private bool shouldDash;
     #endregion
@@ -469,6 +471,8 @@ public class Player : MonoBehaviour
 
         moveInput = moveAction.ReadValue<Vector2>();
         moveDirection = ((moveInput.normalized.x * camTransform.right.normalized) + (moveInput.normalized.y * camTransform.up.normalized)) * moveSpeed;
+
+        camRelInput = ((moveInput.normalized.x * camTransform.right.normalized) + (moveInput.normalized.y * camTransform.up.normalized));
 
         //xAxis = moveInput.x != 0 ? moveInput.x > 0 ? 1 : -1 : 0;
         //A or D is pressed return -1 or 1, relative to which
@@ -1070,7 +1074,7 @@ public class Player : MonoBehaviour
         //be inside the while loop then 
         //exit it.
         if (state == PlayerState.None)
-        {
+        {   
             dodging = true;
             Debug.Log("Should Dodge".Color("Purple"));
 
@@ -1103,6 +1107,10 @@ public class Player : MonoBehaviour
             float currentTime = timeToDodge;
             #endregion
 
+            //TODO:
+            //Replace this with different FX later.
+            launchParticles.Play();
+            
             while (frames > 0)
             {
                 //we wait for fixed update because we need to be in there to mess with physics.
@@ -1120,12 +1128,18 @@ public class Player : MonoBehaviour
                 curVel = initVel - acceleration * (timeToDodge - currentTime);
                 //rb.velocity = playerSprite.transform.right.normalized * curVel;
                 //this dodges in the direction of movement
-                rb.velocity = moveDirection.normalized * curVel;
+                rb.velocity = camRelInput.normalized * curVel;
                 //do the physics for dodging.
                 //TODO:
                 //code spot dodging https://www.ssbwiki.com/Spot_dodge.
                 frames--;
             }
+            
+            //TODO:
+            //Replace this with different FX later.
+            launchParticles.Stop();
+            rb.velocity = Vector2.zero;
+
             //go into freefall after dodging.
             //also set jump count to zero.
             dodging = false;
@@ -1748,6 +1762,7 @@ public class Player : MonoBehaviour
         //We should not be able to move while shielding.
         if (state != PlayerState.dashing && state != PlayerState.shielding && rotateCoroutine == null && !dodging)
         {
+            Debug.Log("Applying X".Color("Lime"));
             //set velocity directly, don't override y velocity.
             rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
         }

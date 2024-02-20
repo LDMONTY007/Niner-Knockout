@@ -827,16 +827,17 @@ MonoBehaviour:
   state: 0
   playerSprite: {fileID: 1290544984572531759}
   groundCheckDist: 0.1
+  helplessSpeed: 1.5
   walkSpeed: 6
   runSpeed: 12
   maxSpeed: 14
   dashDist: 1.5
   dashFrames: 10
   dashModifier: 0.9092292
-  dodgeFrames: 14
-  intangibilityFrames: 21
-  dodgeDist: 1.5
-  dodgeModifier: 1
+  dodgeFrames: 7
+  intangibilityFrames: 6
+  dodgeDist: 1
+  dodgeModifier: 0.8750001
   totalShield: 50
   shieldTransform: {fileID: 7734160898523838125}
   shieldCollider: {fileID: 0}
