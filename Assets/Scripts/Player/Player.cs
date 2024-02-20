@@ -558,13 +558,20 @@ public class Player : MonoBehaviour
         }
         #endregion
 
-        if (isGrounded)
+        if (isGrounded && state != PlayerState.shielding)
         {
             //only rotate when grounded,
             //or doing back aerial.
             if (!isHitStunned && state != PlayerState.helpless && state != PlayerState.dashing)
             {
-                HandleRotation();
+                if (didTap)
+                {
+                    HandleInstantaneousRotation();
+                }
+                else
+                {
+                    HandleRotation();
+                }
                 HandleAttack();
                 HandleSpecial();
             }
@@ -573,7 +580,7 @@ public class Player : MonoBehaviour
                 HandleDashAttack();
             }
         }
-        else if (inAir)
+        else if (inAir && state != PlayerState.shielding)
         {
             if (!isHitStunned && state != PlayerState.helpless)
             {
@@ -634,16 +641,15 @@ public class Player : MonoBehaviour
         //I think this is how smash works.
 
         #region dashing
-        if (shouldDash && isGrounded)
+        if (shouldDash && isGrounded && state != PlayerState.shielding)
         {
             if (dashCoroutine == null)
             {
                 dashCoroutine = StartCoroutine(DashCoroutine());
-                Debug.Log(dashCoroutine != null);
             }
             else
             {
-                Debug.Log("Stopping old dash Coroutine".Color("orange"));
+                //Debug.Log("Stopping old dash Coroutine".Color("orange"));
                 StopCoroutine(dashCoroutine);
                 dashCoroutine = null;
                 dashCoroutine = StartCoroutine(DashCoroutine());
@@ -727,7 +733,7 @@ public class Player : MonoBehaviour
             //Source: https://www.ssbwiki.com/Shield#Shield_statistics
             if (shieldHealth < totalShield)
             {
-                Debug.Log("ADDING SHIELD");
+                //Debug.Log("ADDING SHIELD");
                 shieldHealth += 0.08f;
                 shieldHealth = Mathf.Clamp(shieldHealth, 0f, totalShield);
                 shieldTransform.localScale = ogShieldScale * ((shieldHealth / totalShield) * 0.85f + 0.15f);
@@ -883,7 +889,7 @@ public class Player : MonoBehaviour
 
         int frames = dashFrames;
         state = PlayerState.dashing;
-        Debug.Log("Dash!".Color("cyan"));
+        Debug.Log(("Dash! " + (isFacingLeft ? "Left" : "Right")).Color("cyan"));
 
         //const float delta = 1f / 60f;
         float timeToDash = frames / 60f;
@@ -914,8 +920,8 @@ public class Player : MonoBehaviour
         //float dashVelocity = dashForce / rb.mass * timeToDash;
 
         //make sure to rotate before we dash.
-        HandleRotation();
-
+        //HandleRotation();
+        HandleInstantaneousRotation();
 
         //rb.AddForce(playerSprite.transform.right.normalized * dashForce, ForceMode2D.Impulse);
         //rb.AddForce(-playerSprite.transform.right.normalized * acceleration * rb.mass);
@@ -939,10 +945,17 @@ public class Player : MonoBehaviour
         {
             if (!isHitStunned)
             {
+                //if we are rotating,
+                //wait until after to 
+                //start dashing.
+                /*                while (rotateCoroutine != null)
+                                {
+                                    yield return new WaitForFixedUpdate();
+                                }*/
 
-                Debug.DrawRay(transform.position, rb.velocity, Color.red);
-                Debug.Log("InitVel: " + initVel + " Acceleration: " + acceleration);
-                Debug.Log("CurrentTime: " + currentTime + " FrameCount: " + frames);
+                //Debug.DrawRay(transform.position, rb.velocity, Color.red);
+                //Debug.Log("InitVel: " + initVel + " Acceleration: " + acceleration);
+                //Debug.Log("CurrentTime: " + currentTime + " FrameCount: " + frames);
                 //rb.velocity = playerSprite.transform.right.normalized * initVel;
                 //rb.velocity = playerSprite.transform.right * dashVelocity;
 
@@ -965,6 +978,9 @@ public class Player : MonoBehaviour
                 //a is acceleration
                 //t is time.
 
+                //handle Rotation
+                HandleInstantaneousRotation();
+
                 //Checking if we are in the inital dash.
                 //Here: https://www.ssbwiki.com/Dash#Initial_dash
                 //Essentially there is no deceleration during the initial dash
@@ -980,7 +996,7 @@ public class Player : MonoBehaviour
                     curVel = initVel - acceleration * (timeToDash - currentTime);
                 rb.velocity = playerSprite.transform.right.normalized * curVel;
                 //rb.velocity = playerSprite.transform.right.normalized * (initVel - acceleration * (frames / 60f));
-                Debug.Log(("RBVel: " + rb.velocity).ToString().Color("cyan"));
+                //Debug.Log(("RBVel: " + rb.velocity).ToString().Color("cyan"));
 
                 //decrease by acceleration
                 //curVel = initVel + acceleration * (timeToDash - currentTime);
@@ -1069,11 +1085,13 @@ public class Player : MonoBehaviour
         }
     }
 
+    //this coroutine is currently used to launch the player when their shield breaks.
     private IEnumerator JumpCoroutine(int framesTotal, float height)
     {
         //Debug.Break();
         int frames = framesTotal;
-        state = PlayerState.helpless;
+        //this coroutine is currently used to launch the player when their shield breaks.
+        state = PlayerState.launched;
 
         //const float delta = 1f / 60f;
         float timeToJump = frames / 60f;
@@ -1211,10 +1229,10 @@ public class Player : MonoBehaviour
         //set the direction the player is facing.
         if (playerInput.currentControlScheme.Equals("Gamepad") && (moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && Mathf.Abs(moveInput.x) - Mathf.Abs(lastXinput) > 0)
         {
-            if (rotateCoroutine != null)
+/*            if (rotateCoroutine != null)
             {
                 return;
-            }
+            }*/
             Debug.Log("Will Rotate".Color("green"));
             //isFacingLeft = xAxis < 0 ? true : false;
             //this needs a deadzone because otherwise
@@ -1232,7 +1250,19 @@ public class Player : MonoBehaviour
                 isFacingLeft = true;
             }
             if (prevFacing != isFacingLeft)
+            {
+                Debug.Log("Current Direction: " + curDirection + " : " + isFacingLeft);
+                if (rotateCoroutine != null)
+                {
+                    StopCoroutine(rotateCoroutine);
+                    rotateCoroutine = null;
+                }
+                /*                if (dashCoroutine != null)
+                                    StopCoroutine(dashCoroutine);
+                                dashCoroutine = null;*/
+                Debug.Log("Starting Rotation Coroutine");
                 rotateCoroutine = StartCoroutine(RotateCoroutine(isFacingLeft ? 0 : 180, isFacingLeft ? 180 : 0, 10));
+            }
             //playerSprite.transform.rotation = Quaternion.Euler(1, isFacingLeft ? 180 : 0, 1);
         }
 
@@ -1258,6 +1288,86 @@ public class Player : MonoBehaviour
         {
             Debug.Log("Will Rotate".Color("green"));
             playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
+            isFacingLeft = xAxis < 0 ? true : false;
+        }
+    }
+
+    private void HandleInstantaneousRotation()
+    {
+
+        //We do all rotations after
+        //input so that the back 
+        //aerial can be registered.
+        //if the player is moving the stick in the same direction for more than one frame,
+        //set the direction the player is facing.
+        if (playerInput.currentControlScheme.Equals("Gamepad") && (moveInput.x > 0 && lastXinput > 0 || moveInput.x < 0 && lastXinput < 0) && Mathf.Abs(moveInput.x)/* - Mathf.Abs(lastXinput) */> 0)
+        {
+            /*            if (rotateCoroutine != null)
+                        {
+                            return;
+                        }*/
+            Debug.Log("Will Rotate".Color("green"));
+            //isFacingLeft = xAxis < 0 ? true : false;
+            //this needs a deadzone because otherwise
+            //up/down directional attacks
+            //will switch directions for no 'intended' reason.
+            float deadzone = 0.1f;
+            bool prevFacing = isFacingLeft;
+            if (xAxis > 0)
+            {
+                isFacingLeft = false;
+            }
+            else if (xAxis < 0)
+            {
+                
+                isFacingLeft = true;
+            }
+            /*if (prevFacing != isFacingLeft)
+            {
+                Debug.Log("Current Direction: " + curDirection + " : " + isFacingLeft);
+                if (rotateCoroutine != null)
+                    StopCoroutine(rotateCoroutine);
+                *//*if (dashCoroutine != null)
+                    StopCoroutine(dashCoroutine);
+                dashCoroutine = StartCoroutine(DashCoroutine());*//*
+                playerSprite.transform.rotation = Quaternion.Euler(0, isFacingLeft ? 180 : 0, 0);
+            }*/
+            Debug.Log("Current Direction: " + curDirection + " : " + isFacingLeft);
+            if (rotateCoroutine != null)
+            {
+                StopCoroutine(rotateCoroutine);
+                rotateCoroutine = null;
+            }
+
+            /*if (dashCoroutine != null)
+                StopCoroutine(dashCoroutine);
+            dashCoroutine = StartCoroutine(DashCoroutine());*/
+            playerSprite.transform.rotation = Quaternion.Euler(0, isFacingLeft ? 180 : 0, 0);
+            //playerSprite.transform.rotation = Quaternion.Euler(1, isFacingLeft ? 180 : 0, 1);
+        }
+
+        /*        if (lastDirection != Direction.None && playerInput.currentControlScheme.Equals("Gamepad") && lastDirection != curDirection)
+                {
+
+                    float deadzone = 0.1f;
+                    if (xAxis > 0)
+                    {
+                        isFacingLeft = false;
+                    }
+                    else if (xAxis < 0)
+                    {
+                        Debug.Log("Here: ");
+                        isFacingLeft = true;
+                    }
+                    if (lastDirection != curDirection)
+                        rotateCoroutine = StartCoroutine(RotateCoroutine(isFacingLeft ? 0 : 180, isFacingLeft ? 180 : 0, 10));
+                }*/
+
+        //if user is inputting via keyboard
+        if (playerInput.currentControlScheme.Equals("Keyboard&Mouse") && Mathf.Abs(moveInput.x) > 0)
+        {
+            Debug.Log("Will Rotate".Color("green"));
+            playerSprite.transform.rotation = Quaternion.Euler(0, xAxis < 0 ? 180 : 0, 0);
             isFacingLeft = xAxis < 0 ? true : false;
         }
     }
@@ -1585,7 +1695,9 @@ public class Player : MonoBehaviour
 
         //if we are dashing we shouldn't set 
         //the x velocity.
-        if (state != PlayerState.dashing)
+        //if we aren't rotating allow player to move.
+        //We should not be able to move while shielding.
+        if (state != PlayerState.dashing && state != PlayerState.shielding && rotateCoroutine == null)
         {
             //set velocity directly, don't override y velocity.
             rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
