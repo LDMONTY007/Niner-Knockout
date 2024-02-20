@@ -834,6 +834,9 @@ MonoBehaviour:
   dashFrames: 10
   dashModifier: 0.9092292
   dodgeFrames: 14
+  intangibilityFrames: 21
+  dodgeDist: 1.5
+  dodgeModifier: 1
   totalShield: 50
   shieldTransform: {fileID: 7734160898523838125}
   shieldCollider: {fileID: 0}

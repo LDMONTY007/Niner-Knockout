@@ -93,8 +93,12 @@ public class Player : MonoBehaviour
 
     private Coroutine jumpCoroutine;
 
+    private bool dodging;
     [Header("Dodge Parameters")]
-    public int dodgeFrames = 14;
+    public int dodgeFrames = 87;
+    public int intangibilityFrames = 21;
+    [Range(1, 30)] public float dodgeDist = 5f;
+    public float dodgeModifier = 1f;
 
     [Header("Shield Parameters")]
     public float totalShield = 50f;
@@ -587,10 +591,11 @@ public class Player : MonoBehaviour
                 HandleAerial();
                 HandleSpecial();
                 
-                if (grabAction.WasPressedThisFrame() && inAir || shieldAction.WasPressedThisFrame() && inAir)
+                if (grabAction.WasPressedThisFrame() || shieldAction.WasPressedThisFrame())
                 {
                     //set "shouldDodge" to true.
                     //actually just call the dodge coroutine.
+                    
                     StartCoroutine(DodgeCoroutine());
                 }
             }
@@ -1066,13 +1071,56 @@ public class Player : MonoBehaviour
         //exit it.
         if (state == PlayerState.None)
         {
+            dodging = true;
+            Debug.Log("Should Dodge".Color("Purple"));
+
+            //The total dodge frames.
             int frames = dodgeFrames;
             state = PlayerState.intangible;
+
+            #region setting up vars
+            //const float delta = 1f / 60f;
+            float timeToDodge = frames / 60f;
+            //float timeToDash = frames * Time.deltaTime;
+
+            //dash modifier = dash dist / actual distance reached prior to dash modifier application.
+            float modDashDodge = dodgeDist * dodgeModifier;
+
+            //This helped me solve it: https://www.quora.com/Given-time-and-distance-how-do-you-calculate-acceleration
+            //distance -> d
+            //average velocity = d/t
+            //final velocity = 2*d/t
+            //acceleration = final velocity / t
+            //therefore acceleration - 2*d/t^2
+            float acceleration = 2f * modDashDodge / Mathf.Pow(timeToDodge, 2f);
+
+            float dodgeForce = Mathf.Sqrt(2f * acceleration * modDashDodge) * rb.mass;
+
+            float initVel = Mathf.Sqrt(2f * acceleration * modDashDodge);
+
+            float curVel = initVel;
+
+            float currentTime = timeToDodge;
+            #endregion
+
             while (frames > 0)
             {
                 //we wait for fixed update because we need to be in there to mess with physics.
                 yield return new WaitForFixedUpdate();
 
+                if (frames < intangibilityFrames)
+                {
+                    state = PlayerState.helpless;
+                }
+                else
+                {
+                    state = PlayerState.intangible;
+                }
+
+                curVel = initVel - acceleration * (timeToDodge - currentTime);
+                //rb.velocity = playerSprite.transform.right.normalized * curVel;
+                //this dodges in the direction of movement
+                rb.velocity = moveDirection.normalized * curVel;
                 //do the physics for dodging.
                 //TODO:
                 //code spot dodging https://www.ssbwiki.com/Spot_dodge.
@@ -1080,6 +1128,7 @@ public class Player : MonoBehaviour
             }
             //go into freefall after dodging.
             //also set jump count to zero.
+            dodging = false;
             jumpCount = 0;
             state = PlayerState.helpless;
         }
@@ -1697,7 +1746,7 @@ public class Player : MonoBehaviour
         //the x velocity.
         //if we aren't rotating allow player to move.
         //We should not be able to move while shielding.
-        if (state != PlayerState.dashing && state != PlayerState.shielding && rotateCoroutine == null)
+        if (state != PlayerState.dashing && state != PlayerState.shielding && rotateCoroutine == null && !dodging)
         {
             //set velocity directly, don't override y velocity.
             rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
