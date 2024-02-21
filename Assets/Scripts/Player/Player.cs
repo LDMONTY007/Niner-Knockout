@@ -29,17 +29,24 @@ public class Player : MonoBehaviour
 
     public float damagePercent { get { return _damagePercent; } set { float clamped = Mathf.Clamp(value, 0f, 999.0f); _damagePercent = clamped; } }
 
+    [HideInInspector]
     public CharacterIcon characterIcon;
 
     private Icon icon;
 
+    [Header("Misc References")]
     public Hurtbox hurtbox;
 
     public ParticleSystem launchParticles;
+    
+    public GameObject spriteParent;
 
+    public Animator animator;
+    
     private bool isFacingLeft;
 
     //the index of this character in the GameManager.
+    [HideInInspector]
     public int characterIndex;
 
     /// <summary>
@@ -67,12 +74,10 @@ public class Player : MonoBehaviour
     }
 
 
-
+    [Header("Player State")]
     public PlayerState state = PlayerState.None;
 
-    public GameObject playerSprite;
 
-    public float groundCheckDist = 0.1f;
 
     [Header("Movement Parameters")] //Explain that this will show a header in the inspector to categorize variables
     [Range(1, 5)] public float helplessSpeed = 1.5f;
@@ -105,10 +110,11 @@ public class Player : MonoBehaviour
     public float totalShield = 50f;
     private float shieldHealth = 0f;
     public Transform shieldTransform;
-    public Collider2D shieldCollider;
     private Vector3 ogShieldScale = Vector3.one;
-    
+
+    [HideInInspector]
     public float xAxis;
+    [HideInInspector]
     public float yAxis;
 
     private Vector2 lastDirectionInput;
@@ -133,7 +139,6 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    public Animator animator;
 
     private PlayerInput playerInput;
 
@@ -193,6 +198,7 @@ public class Player : MonoBehaviour
     //public bool isGrounded => Physics2D.BoxCast(transform.position, this.GetComponent<BoxCollider2D>().bounds.extents, 0f, -transform.up, this.GetComponent<BoxCollider2D>().bounds.extents.y + groundCheckDist, rCasting);
     public bool isGrounded => Physics2D.BoxCast(transform.position, this.GetComponent<BoxCollider2D>().size, 0f, -transform.up, groundCheckDist, rCasting);
     public bool inAir => !jumping && !isGrounded;
+    [HideInInspector]
     public bool doJump;
 
 
@@ -202,10 +208,11 @@ public class Player : MonoBehaviour
     private LayerMask rCasting;
 
     [Header("Jumping Parameters")]
-    [SerializeField] private int jumpCount = 1; //What we modify and check when jumping.
+    public float groundCheckDist = 0.1f;
+    private int jumpCount = 1; //What we modify and check when jumping.
     public int jumpTotal = 1; //Total jumps, so for instance if you wanted 3 jumps set this to 3.
-    [SerializeField] private bool jumpCanceled;
-    [SerializeField] private bool jumping;
+    private bool jumpCanceled;
+    private bool jumping;
     //private bool falling => inAir && transform.InverseTransformDirection(rb.velocity).y < 0;
     private bool falling;
     public double jumpHeight = 5f; //Our jump height, set this to a specific value and our player will reach that height with a maximum deviation of 0.1
@@ -213,9 +220,16 @@ public class Player : MonoBehaviour
     //0.01f looks just like smash ultimate jumping.
     public float timeToApex = 0.01f;
     public float timeToFall = 0.5f;
-    public float heightScaleConstant = 120f;
+    [Tooltip("Desired Height / jump height reached. Do not modify if you have not modified the time values.")]
+    public float jumpHeightModifier = 1.2f;
     private float buttonTime;
     private float jumpTime;
+
+    //LD should encapsulate this
+    //and the other code that calculates
+    //the jump distance
+    //in a #IF UNITY_EDITOR statement bc it would otherwise be included in builds and is
+    //calculated every jump.
     public double jumpDist; //used to see the measured distance of the jump.
     public Vector2 ogJump; //Not included just like what I said above.
     public float fallMultiplier = 9f; //When you reach the peak of the expected arc this is the force applied to make falling more fluid.
@@ -1003,7 +1017,7 @@ public class Player : MonoBehaviour
                 }
                 else
                     curVel = initVel - acceleration * (timeToDash - currentTime);
-                rb.velocity = playerSprite.transform.right.normalized * curVel;
+                rb.velocity = spriteParent.transform.right.normalized * curVel;
                 //rb.velocity = playerSprite.transform.right.normalized * (initVel - acceleration * (frames / 60f));
                 //Debug.Log(("RBVel: " + rb.velocity).ToString().Color("cyan"));
 
@@ -1055,12 +1069,12 @@ public class Player : MonoBehaviour
         {
             current = Mathf.Lerp(start, end, (float)frames / totalFrames);
             Debug.Log((current).ToString().Color("brown"));
-            playerSprite.transform.rotation = Quaternion.Euler(0f, current, 0f);
+            spriteParent.transform.rotation = Quaternion.Euler(0f, current, 0f);
             frames++;
             yield return null;
         }
         //set the rotation to be the end value.
-        playerSprite.transform.rotation = Quaternion.Euler(0f, end, 0f);
+        spriteParent.transform.rotation = Quaternion.Euler(0f, end, 0f);
 
         //set rotate coroutine to be null
         rotateCoroutine = null;
@@ -1181,8 +1195,8 @@ public class Player : MonoBehaviour
         //velocity = force / mass * time
         //float dashVelocity = dashForce / rb.mass * timeToDash;
 
-        rb.AddForce(playerSprite.transform.up.normalized * jumpForce, ForceMode2D.Impulse);
-        rb.AddForce(-playerSprite.transform.up.normalized * acceleration * rb.mass);
+        rb.AddForce(spriteParent.transform.up.normalized * jumpForce, ForceMode2D.Impulse);
+        rb.AddForce(-spriteParent.transform.up.normalized * acceleration * rb.mass);
         //frames--;
         Debug.Log(("RBVel: " + rb.velocity).ToString().Color("purple"));
         //calling add force here and then again in the while loop is fine
@@ -1213,7 +1227,7 @@ public class Player : MonoBehaviour
                      rb.AddForce(-transform.right * acceleration * rb.mass);*/
 
 
-                rb.AddForce(-playerSprite.transform.up.normalized * acceleration * rb.mass);
+                rb.AddForce(-spriteParent.transform.up.normalized * acceleration * rb.mass);
                 Debug.Log(("RBVel: " + rb.velocity).ToString().Color("cyan"));
 
 
@@ -1350,7 +1364,7 @@ public class Player : MonoBehaviour
         if (playerInput.currentControlScheme.Equals("Keyboard&Mouse") && Mathf.Abs(moveInput.x) > 0)
         {
             Debug.Log("Will Rotate".Color("green"));
-            playerSprite.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
+            spriteParent.transform.rotation = Quaternion.Euler(1, xAxis < 0 ? 180 : 0, 1);
             isFacingLeft = xAxis < 0 ? true : false;
         }
     }
@@ -1405,7 +1419,7 @@ public class Player : MonoBehaviour
             /*if (dashCoroutine != null)
                 StopCoroutine(dashCoroutine);
             dashCoroutine = StartCoroutine(DashCoroutine());*/
-            playerSprite.transform.rotation = Quaternion.Euler(0, isFacingLeft ? 180 : 0, 0);
+            spriteParent.transform.rotation = Quaternion.Euler(0, isFacingLeft ? 180 : 0, 0);
             //playerSprite.transform.rotation = Quaternion.Euler(1, isFacingLeft ? 180 : 0, 1);
         }
 
@@ -1430,7 +1444,7 @@ public class Player : MonoBehaviour
         if (playerInput.currentControlScheme.Equals("Keyboard&Mouse") && Mathf.Abs(moveInput.x) > 0)
         {
             Debug.Log("Will Rotate".Color("green"));
-            playerSprite.transform.rotation = Quaternion.Euler(0, xAxis < 0 ? 180 : 0, 0);
+            spriteParent.transform.rotation = Quaternion.Euler(0, xAxis < 0 ? 180 : 0, 0);
             isFacingLeft = xAxis < 0 ? true : false;
         }
     }
@@ -1472,7 +1486,7 @@ public class Player : MonoBehaviour
             //of 0.01 the jumpHeight scale modifier is 1.2f.
 
             //float modifier = 1.2f;//timeToApex / 0.00833333333f;
-            float modifiedJumpHeight = (float)jumpHeight * 1.2f; //* modifier;
+            float modifiedJumpHeight = (float)jumpHeight * jumpHeightModifier; //* modifier;
 
 
             //play crouch animation.
@@ -1658,7 +1672,7 @@ public class Player : MonoBehaviour
                 //only if our sprite is 
                 //facing the same direction of 
                 //our current input.
-                if (Vector2.Dot(playerSprite.transform.right, directionInput) > 0)
+                if (Vector2.Dot(spriteParent.transform.right, directionInput) > 0)
                 {
                     ForwardAerial();
                 }
@@ -1762,7 +1776,6 @@ public class Player : MonoBehaviour
         //We should not be able to move while shielding.
         if (state != PlayerState.dashing && state != PlayerState.shielding && rotateCoroutine == null && !dodging)
         {
-            Debug.Log("Applying X".Color("Lime"));
             //set velocity directly, don't override y velocity.
             rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
         }
@@ -1962,7 +1975,7 @@ public class Player : MonoBehaviour
         //back aerial is always an input opposite of 
         //the direction the player is facing so we always
         //invert rotation on this attack.
-        playerSprite.transform.rotation = Quaternion.Euler(0f, playerSprite.transform.rotation.eulerAngles.y == 0 ? 180f : 0f, 0f);
+        spriteParent.transform.rotation = Quaternion.Euler(0f, spriteParent.transform.rotation.eulerAngles.y == 0 ? 180f : 0f, 0f);
         Debug.Log("Player 1: BackAerial ".Color("white"));
 
         //TODO: Actually code this attack.
@@ -2465,11 +2478,11 @@ public class Player : MonoBehaviour
                 //wishDir.x = -dir.x;
                 Debug.DrawRay(transform.position, wishDir.normalized * 5f, Color.green, 1f);
 
-                if (Vector2.Dot(collision.transform.position - transform.position, playerSprite.transform.right) < 0)
+                if (Vector2.Dot(collision.transform.position - transform.position, spriteParent.transform.right) < 0)
                 {
                     Debug.Log("The other player is hitting me left!".Color("lime"));
                 }
-                else if (Vector2.Dot(collision.transform.position - transform.position, playerSprite.transform.right) > 0)
+                else if (Vector2.Dot(collision.transform.position - transform.position, spriteParent.transform.right) > 0)
                 {
                     Debug.Log("The other player is hitting me right!".Color("cyan"));
                 }
