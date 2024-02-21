@@ -66,11 +66,13 @@ public class Player : MonoBehaviour
     {
         None,       //Base state, no additional effects are applied.
         attacking,  //Induced when attacking. Just allows us to make sure we don't start another attack when already attacking. Might need to delete this.
-        dashing, //Used when the player is dashing, do not set X velocity after dashing.
+        dashing,    //Used when the player is dashing, do not set X velocity after dashing.
         launched,   //Induced when launched. This just lets us know to stop the old launch coroutine and start a new one. Disables some physics.
         helpless,   //Induced after running out of jumps while in the air. Sometimes called "Freefall" https://www.ssbwiki.com/Helpless
         intangible, //Induced by dodging. Cannot be hit or pushed by other players. https://www.ssbwiki.com/Intangibility
-        shielding, //Induced by shielding, Cannot be damaged but doing any other action will exit this state.
+        shielding,  //Induced by shielding, Cannot be damaged but doing any other action will exit this state.
+        grabbing,   //Induced by grabbing another character.
+        grabbed,    //Induced when being grabbed.
     }
 
 
@@ -582,10 +584,15 @@ public class Player : MonoBehaviour
 
         if (isGrounded && state != PlayerState.shielding)
         {
-            //only rotate when grounded,
-            //or doing back aerial.
-            if (!isHitStunned && state != PlayerState.helpless && state != PlayerState.dashing)
+
+            if (grabAction.WasPressedThisFrame())
             {
+                HandleGrab();
+            }    
+            else if (!isHitStunned && state != PlayerState.helpless && state != PlayerState.dashing)
+            {
+                //only rotate fast when tapping
+                //otherwise do rotation coroutine.
                 if (didTap)
                 {
                     HandleInstantaneousRotation();
@@ -646,6 +653,33 @@ public class Player : MonoBehaviour
         //Also I don't have a good explanation
         //for it.
         HandleState();
+    }
+
+    private void HandleGrab()
+    {
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position + new Vector3(0f, this.GetComponent<BoxCollider2D>().bounds.extents.x), this.GetComponent<BoxCollider2D>().size, 0f, -spriteParent.transform.right, groundCheckDist);
+        if (hit)
+        {
+            if (hit.collider.gameObject.CompareTag("Player"))
+            {
+                GameObject enemy = hit.collider.gameObject;
+                if (enemy != null)
+                {
+                    if (enemy.GetComponent<Joint2D>() == null)
+                    {
+                        //TODO:
+                        //tell the other player to set their state to "Grabbed"
+                        //Set our state to "grabbing"
+                        //so that we can't move but they can try to break the joint
+                        //by moving left and right.
+                        //also set the strength of the joint to a lower value.
+                        FixedJoint2D joint = enemy.AddComponent<FixedJoint2D>();
+                        joint.connectedBody = rb;
+                        joint.enableCollision = false;
+                    }
+                }
+            }
+        }
     }
 
     private void HandleDashAttack()
@@ -1760,7 +1794,7 @@ public class Player : MonoBehaviour
     private void ApplyFinalMovements() //Step 1
     {
         //Do not let player use inputs when launched.
-        if (state == PlayerState.launched)
+        if (state == PlayerState.launched || state == PlayerState.grabbed)
         {
             return;
         }

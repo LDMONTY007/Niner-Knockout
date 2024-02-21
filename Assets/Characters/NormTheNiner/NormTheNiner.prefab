@@ -702,7 +702,7 @@ GameObject:
   - component: {fileID: 2621221099918972248}
   m_Layer: 3
   m_Name: NormTheNiner
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -738,11 +738,11 @@ MonoBehaviour:
   characterIcon: {fileID: 0}
   hurtbox: {fileID: 6967482904829382750}
   launchParticles: {fileID: 4373395401437295738}
+  spriteParent: {fileID: 1290544984572531759}
+  animator: {fileID: 552453139261342999}
   characterIndex: 0
   moveset: {fileID: 11400000, guid: 3a3205b7e2788a145bbe5708977a1de1, type: 2}
   state: 0
-  playerSprite: {fileID: 1290544984572531759}
-  groundCheckDist: 0.1
   helplessSpeed: 1.5
   walkSpeed: 6
   runSpeed: 12
@@ -758,17 +758,14 @@ MonoBehaviour:
   shieldTransform: {fileID: 7734160898523838125}
   xAxis: 0
   yAxis: 0
-  animator: {fileID: 552453139261342999}
   attackStopWindow: 0.2
   doJump: 0
-  jumpCount: 2
+  groundCheckDist: 0.1
   jumpTotal: 2
-  jumpCanceled: 0
-  jumping: 0
   jumpHeight: 2.5
   timeToApex: 0.01
   timeToFall: 0.45
-  heightScaleConstant: 120
+  jumpHeightModifier: 1.2
   jumpDist: 0
   ogJump: {x: 0, y: 0}
   fallMultiplier: 9
