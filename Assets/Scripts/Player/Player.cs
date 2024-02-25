@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel.Design;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,6 +11,15 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+
+#if UNITY_EDITOR
+    //if we are in the editor, not in the built game.
+    public bool debugMode = false;
+    private TextMeshPro debugStateText;
+    private GameObject debugTextObj;
+    public Vector3 debugTextPosition = Vector3.zero;
+#endif
+
     public enum Direction
     {
         None,
@@ -653,6 +663,14 @@ public class Player : MonoBehaviour
         //Also I don't have a good explanation
         //for it.
         HandleState();
+
+#if UNITY_EDITOR
+        //preprocessor to check for debug stuff.
+        if (debugMode)
+        {
+            HandleDebug();
+        }
+#endif
     }
 
     private void HandleGrab()
@@ -1487,7 +1505,7 @@ public class Player : MonoBehaviour
     {
 
 
-        if (doJump)
+        if (doJump && state != PlayerState.shielding)
         {
             //this constant (1.2) was discovered
             //by dividing the desired jump height by
@@ -2652,6 +2670,34 @@ public class Player : MonoBehaviour
 
         return Direction.None;
     }
+
+#if UNITY_EDITOR
+    public void HandleDebug()
+    {
+        if (debugTextObj == null)
+        {
+            //Create a new GameObject with a TextMeshPro component
+            debugTextObj = new GameObject("Debug State Text", typeof(TextMeshPro));
+            debugStateText = debugTextObj.GetComponent<TextMeshPro>();
+            //Set the parent of the debug text to be this transform.
+            debugTextObj.transform.SetParent(this.transform, false);
+            //Set the position of the debug text relative to it's parent.
+            debugTextObj.transform.localPosition = debugTextPosition;
+
+            debugStateText.fontSize = 6;
+            debugStateText.alignment = TextAlignmentOptions.Center;
+
+            //Set the debug texts text to be the current state.
+            debugStateText.text = state.ToString();
+        }
+        else if (debugTextObj != null)
+        {
+            //Set the debug texts text to be the current state.
+            debugStateText.text = state.ToString();
+        }
+    }
+#endif
+
 }
 
 //used for storing the data of attacks in 
@@ -2694,6 +2740,8 @@ public struct AttackInfo
     /// Describes how much knockback and percent scale.
     /// </summary>
     public float knockbackScale;
+
+    
 
 
 }

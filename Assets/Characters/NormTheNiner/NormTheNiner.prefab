@@ -735,6 +735,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cc3f5006d8a16f4db6f6b5605310821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugMode: 1
+  debugTextPosition: {x: 0, y: 0, z: 0}
   characterIcon: {fileID: 0}
   hurtbox: {fileID: 6967482904829382750}
   launchParticles: {fileID: 4373395401437295738}
