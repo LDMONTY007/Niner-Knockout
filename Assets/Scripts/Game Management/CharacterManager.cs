@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
+using UnityEngine.SceneManagement;
 
 public class CharacterManager : MonoBehaviour
 {
@@ -113,7 +114,7 @@ public class CharacterManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     /// <summary>
@@ -150,10 +151,20 @@ public class CharacterManager : MonoBehaviour
     /// <param name="characterIndex">The index of the PlayerInfo in the GameManager PlayerInfo list</param>
     public void SpawnPlayer(int characterIndex)
     {
+        //We should not do any checking of win conditions in the characterManager, 
+        //all we should do in here is check if a character has no stocks left then
+        //don't spawn them.
+        if (GameManager.instance.players[characterIndex].stock == 0)
+        {
+            return;
+        }
+
         PlayerInfo playerInfo = GameManager.instance.players[characterIndex];
         //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
         PlayerInput p = PlayerInput.Instantiate(playerInfo.characterIcon.characterPrefab, -1, playerInfo.controlScheme, -1, playerInfo.device);
         p.GetComponent<Player>().characterIndex = characterIndex;
+        //Set the stock of the player.
+        p.GetComponent<Player>().stock = playerInfo.stock;
         p.GetComponent<Player>().characterIcon = AddPlayerIcon(playerInfo.characterIcon);
     }
 
@@ -163,9 +174,23 @@ public class CharacterManager : MonoBehaviour
     /// <param name="playerInfo"></param>
     public void SpawnPlayer(PlayerInfo playerInfo, int characterIndex)
     {
+
+        //We should not do any checking of win conditions in the characterManager, 
+        //all we should do in here is check if a character has no stocks left then
+        //don't spawn them.
+
+        //We may not want to do this check here later, but I am doing it
+        //to make sure we set the stock value correctly.
+        if (GameManager.instance.players[characterIndex].stock == 0)
+        {
+            return;
+        }
+
         //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
         PlayerInput p = PlayerInput.Instantiate(playerInfo.characterIcon.characterPrefab, -1, playerInfo.controlScheme, -1, playerInfo.device);
         p.GetComponent<Player>().characterIndex = characterIndex;
+        //Set the stock of the player.
+        p.GetComponent<Player>().stock = playerInfo.stock;
         p.GetComponent<Player>().characterIcon = AddPlayerIcon(playerInfo.characterIcon);
 
         Debug.Log(("Spawn Player: " + characterIndex).ToString().Color("Green"));
@@ -173,8 +198,18 @@ public class CharacterManager : MonoBehaviour
 
     public void PlayerDied(int characterIndex)
     {
-        //TODO: 
+
         //Decrement character stock count
+        //We need to copy the PlayerInfo
+        //then decrement it
+        //then set change the info stored to the modified info.
+        PlayerInfo modifiedInfo = GameManager.instance.players[characterIndex];
+        modifiedInfo.stock--;
+        if (modifiedInfo.stock == 0)
+        {
+            Debug.Log(modifiedInfo.characterIcon.characterName + " is down for the count!");
+        }
+        GameManager.instance.players[characterIndex] = modifiedInfo;
         //Wait X seconds and then respawn character.
         StartCoroutine(LDUtil.Wait(SpawnPlayer, characterIndex, 3f));
     }

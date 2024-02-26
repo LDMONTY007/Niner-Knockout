@@ -41,6 +41,8 @@ public class GameManager
 
     public int currentIndex = 1;
 
+    public int stockTotal = 3;
+
     //so for each list index 1 will be if it is alive or not and index 2 will be the actual prefab.
     //public List<Robot> robotPrefabs = new List<Robot>();
 
@@ -55,8 +57,6 @@ public class GameManager
     private GameManager()
     {
         //set the target frame rate to be 60, DO NOT GO FASTER.
-        //unity still somehow gets to 70fps. This makes certain attacks not consistent, especially bc
-        //our launch formula sets velocity to launch and multiplying by Time.deltaTime makes it slower. 
         Application.targetFrameRate = 60;
         Debug.Log(Application.targetFrameRate);
         //only call update every 1/60th of a second. 
@@ -111,11 +111,12 @@ public class GameManager
 
 public struct PlayerInfo
 {
-    public PlayerInfo(InputDevice device, string controlScheme, Icon characterIcon)
+    public PlayerInfo(InputDevice device, string controlScheme, Icon characterIcon, int stock)
     {
         this.device = device;
         this.controlScheme = controlScheme; 
         this.characterIcon = characterIcon;
+        this._stock = stock;
     }
 
     public InputDevice device;
@@ -123,6 +124,10 @@ public struct PlayerInfo
     public string controlScheme;
 
     public Icon characterIcon;
+
+    //Property with backing field used so that I can make the stock value minimum be zero
+    private int _stock;
+    public int stock { get { return _stock; } set { _stock = value < 0 ? 0 : value; } }
 }
 
 

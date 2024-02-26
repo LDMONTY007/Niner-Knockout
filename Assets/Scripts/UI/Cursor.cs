@@ -106,7 +106,7 @@ public class Cursor : MonoBehaviour
             {
                 //assign the device controlling this player and the character prefab they selected to the GameManager before we load the 
                 //next scene.
-                PlayerInfo playerInfo = new PlayerInfo(playerInput.GetDevice<InputDevice>(), playerInput.currentControlScheme, selectIcon.characterIcon);
+                PlayerInfo playerInfo = new PlayerInfo(playerInput.GetDevice<InputDevice>(), playerInput.currentControlScheme, selectIcon.characterIcon, GameManager.instance.stockTotal);
                 //if we already placed our coin, 
                 //then when they click again it 
                 //means they are trying to 

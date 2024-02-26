@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     private GameObject debugTextObj;
     public Vector3 debugTextPosition = Vector3.zero;
 #endif
+    [HideInInspector]
+    public int stock = 0;
 
     public enum Direction
     {
@@ -1317,6 +1319,8 @@ public class Player : MonoBehaviour
         {
             if (characterIcon.GetPercent() != damagePercent)
                 characterIcon.SetPercent(damagePercent);
+            //this is what determines how many stocks are displayed in the UI.
+            characterIcon.stockCount = stock;
         }
         else
         {
@@ -2558,7 +2562,7 @@ public class Player : MonoBehaviour
         //the player entered the kill trigger. (kill bounds).
         else if (collision.gameObject.CompareTag("Kill"))
         {
-            Debug.Log(gameObject.name + " was killed!");
+            Debug.Log(gameObject.name + " was Knocked Out!");
             //kill player.
             //we destroy both player and the icon for it
             //because I am too lazy to just make code
