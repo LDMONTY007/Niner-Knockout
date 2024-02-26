@@ -179,6 +179,9 @@ public class Player : MonoBehaviour
     //Grab input
     private InputAction grabAction;
 
+    //Pause input
+    private InputAction pauseAction;
+
     #region input bools
 
     bool shouldAttack;
@@ -277,6 +280,8 @@ public class Player : MonoBehaviour
 
         shieldAction = playerInput.actions["Shield"];
         grabAction = playerInput.actions["Grab"];
+
+        pauseAction = playerInput.actions["Pause"];
     }
 
     private void OnEnable()
@@ -285,6 +290,8 @@ public class Player : MonoBehaviour
         downSmashAction.Enable();
         rightSmashAction.Enable();
         leftSmashAction.Enable();
+        //call the pause method when the pause action is performed.
+        //pauseAction.performed += GameManager.instance.gameMenu.Pause;
     }
 
     private void OnDisable()
@@ -293,6 +300,8 @@ public class Player : MonoBehaviour
         downSmashAction.Disable();
         rightSmashAction.Disable();
         leftSmashAction.Disable();
+        //Remove the subscription when this is disabled.
+        //pauseAction.performed -= GameManager.instance.gameMenu.Pause;
     }
 
 
@@ -320,6 +329,13 @@ public class Player : MonoBehaviour
 
         //DISABLE GRAVITY SO WE CAN USE OUR OWN.
         rb.gravityScale = 0;
+
+        //call the pause method when the pause action is performed.
+        if (GameManager.instance.gameMenu != null)
+        {
+            pauseAction.performed += context => GameManager.instance.gameMenu.Pause(context);
+        }
+        
     }
 
     // Update is called once per frame

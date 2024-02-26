@@ -54,6 +54,9 @@ public class GameManager
 
     public int finalRobotCount = 0;
 
+    //The game menu will set this var from within itself.
+    public GameMenu gameMenu = null;
+
     private GameManager()
     {
         //set the target frame rate to be 60, DO NOT GO FASTER.
@@ -75,6 +78,9 @@ public class GameManager
         }
         if (SceneManager.GetSceneByName(scene) != null)
         {
+            //before we load the scene we should set the
+            //gameMenu to null just in case it was set this scene.
+            gameMenu = null;
             SceneManager.LoadScene(scene);
         }
         else
