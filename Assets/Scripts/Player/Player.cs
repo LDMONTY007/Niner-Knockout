@@ -600,12 +600,6 @@ public class Player : MonoBehaviour
                     //implement Shielding state so that you can't move while shielding. 
 
                     state = PlayerState.shielding;
-                    //if not shielding, turn on the shield.
-                    if (!shieldTransform.gameObject.activeSelf)
-                    {
-                        
-                        shieldTransform.gameObject.SetActive(true);
-                    }
                 }
             }
         }
@@ -777,7 +771,11 @@ public class Player : MonoBehaviour
                 //play the jump sequence
                 animator.SetTrigger("jump");
                 //wait 1 frame then call HandleJump().
-                StartCoroutine(LDUtil.WaitFrames(HandleJump, 1));
+                //StartCoroutine(LDUtil.WaitFrames(HandleJump, 1));
+                //Instead we're just going to call the Handle Jump method because in the future
+                //I'll replace it with a coroutine so we can have frame specific inputs to cancel things
+                //or check for up attacks.
+                HandleJump();
                 /*            if (doJump)
                 StartCoroutine(JumpCoroutine(10, jumpHeight));*/
             }
@@ -815,6 +813,12 @@ public class Player : MonoBehaviour
         #region Shielding
         if (state == PlayerState.shielding)
         {
+            //Make shield visible if it isn't already.
+            if (!shieldTransform.gameObject.activeSelf)
+            {
+                shieldTransform.gameObject.SetActive(true);
+            }
+
             //In Ultimate you lose 0.15 per frame.
             //Source: https://www.ssbwiki.com/Shield#Shield_statistics
             if (shieldHealth > 0)
@@ -832,6 +836,15 @@ public class Player : MonoBehaviour
                 }
             }
             
+        }
+        else
+        {
+            //hide shield if we shouldn't be shielding.
+            if (shieldTransform.gameObject.activeSelf)
+            {
+
+                shieldTransform.gameObject.SetActive(false);
+            }
         }
         
         if (state != PlayerState.shielding)
@@ -1146,6 +1159,33 @@ public class Player : MonoBehaviour
         //so we don't think we are still running.
         dashCoroutine = null;
 
+    }
+
+    private void CancelDashing()
+    {
+        if (dashCoroutine != null)
+        {
+            StopCoroutine(dashCoroutine);
+
+            #region The Code that normally gets called at the end of the dash coroutine.
+            //reset dash Direction
+            dashDirection = Direction.None;
+            //coroutine over, we should set the x velocity to be whatever the player's current x input is. 
+            //rb.velocity = new Vector2(xAxis * moveSpeed, rb.velocity.y);
+
+            //say we are no longer tapping
+            didTap = false;
+
+            //Debug.Break();
+
+            launchParticles.Stop();
+            //go back to base state.
+            state = PlayerState.None;
+            //set dashCoroutine back to null after finishing
+            //so we don't think we are still running.
+            dashCoroutine = null;
+            #endregion
+        }
     }
 
     private IEnumerator RotateCoroutine(float start, float end, int totalFrames)
@@ -1568,6 +1608,12 @@ public class Player : MonoBehaviour
 
         if (doJump && state != PlayerState.shielding)
         {
+            //Cancel out of dash and begin jumping
+            if (state == PlayerState.dashing)
+            {
+                CancelDashing();
+            }
+
             //this constant (1.2) was discovered
             //by dividing the desired jump height by
             //the height actually reached.
