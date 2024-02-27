@@ -109,6 +109,7 @@ MonoBehaviour:
   playerIconPanel: {fileID: 0}
   playerIconPrefab: {fileID: 3979263912656741114, guid: 112ecf1dcc5ce2a4b9038ed4684c23fa, type: 3}
   playerSelectIconPrefab: {fileID: 4809427410454751555, guid: 9d5e8f3c8faf7e144bc25893645cf7b1, type: 3}
+  playerCursorPrefab: {fileID: 4702634011867046646, guid: f7953f050cb0a204a867cf0463cc76eb, type: 3}
   selectionCanvas: {fileID: 0}
   characterIcons: {fileID: 0}
   useSelectableIcons: 0

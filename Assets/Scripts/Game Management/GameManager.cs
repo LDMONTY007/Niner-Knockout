@@ -31,6 +31,8 @@ public class GameManager
 
     public CharacterManager characterManager;
 
+    public GameMode gameMode;
+
     public List<string> scenes = new List<string>()
     {
         "TitleScene",
@@ -83,6 +85,7 @@ public class GameManager
             //before we load the scene we should set the
             //gameMenu to null just in case it was set this scene.
             gameMenu = null;
+            gameMode = null;
             SceneManager.LoadScene(scene);
         }
         else

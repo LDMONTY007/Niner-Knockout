@@ -23,8 +23,24 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class GameMode : MonoBehaviour
 {
-    int totalStocks = 3;
+    //Only make this value editable
+    //in the inspector.
+    [SerializeField]
+    private int totalStocks = 3;
 
+    //The input Device and character prefab the player selected. 
+    //Cleared after each match.
+    //assigned during the selection screen.
+    public List<PlayerInfo> players;
+
+    private void Awake()
+    {
+        //make a copy of the original list of players for use
+        //during this game mode.
+        players = new List<PlayerInfo>(GameManager.instance.players);
+        //Set our reference in the GameManager
+        GameManager.instance.gameMode = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +51,10 @@ public class GameMode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (players.Count == 1)
+        {
+            Debug.Log("IT'S A KNOCKOUT!".Color("Green"));
+            GameManager.instance.setScene("CharacterSelectionScene");
+        }
     }
 }

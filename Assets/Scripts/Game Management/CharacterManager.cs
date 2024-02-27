@@ -18,6 +18,8 @@ public class CharacterManager : MonoBehaviour
 
     public GameObject playerSelectIconPrefab;
 
+    public GameObject playerCursorPrefab;
+
     public Canvas selectionCanvas;
 
     //each index is the player's number.
@@ -91,13 +93,33 @@ public class CharacterManager : MonoBehaviour
         {
             //get the devices and the characters they selected and instantiate them.
             int index = 0;
-            foreach(PlayerInfo playerInfo in GameManager.instance.players)
+            foreach(PlayerInfo playerInfo in GameManager.instance.gameMode.players)
             {               
                 SpawnPlayer(playerInfo, index);
 
                 
                 index++;
                 //THIS IS WHAT LINKS THE CONTROLLER TO THE SPECIFICALLY SPAWNED PLAYER. 
+            }
+        }
+        //if we are on the character select screen and players have already been 
+        //added to the player list we need to spawn the cursor with it's 
+        //corresponding device attatched.
+        else if (!manuallyInitCharacters && GameManager.instance.players.Count > 0)
+        {
+            //This is still a horrible way to handle the management of players.
+            //it should really be changed to be a dictionary instead of a list
+            //so that we can give it the device's name or something and then
+            //use that to check if they already have someone selected.
+            int index = 0;
+            foreach (PlayerInfo pi in GameManager.instance.players)
+            {
+                //instantiate the player input object using the player cursor prefab.
+                PlayerInput p = PlayerInput.Instantiate(playerCursorPrefab, -1, pi.controlScheme, -1, pi.device);
+                //tell the cursor we already selected something.
+                p.GetComponent<Cursor>().didSelect = true;
+                p.GetComponent<Cursor>().characterIndex = index;
+                index++;
             }
         }
     }
@@ -159,7 +181,7 @@ public class CharacterManager : MonoBehaviour
             return;
         }
 
-        PlayerInfo playerInfo = GameManager.instance.players[characterIndex];
+        PlayerInfo playerInfo = GameManager.instance.gameMode.players[characterIndex];
         //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
         PlayerInput p = PlayerInput.Instantiate(playerInfo.characterIcon.characterPrefab, -1, playerInfo.controlScheme, -1, playerInfo.device);
         p.GetComponent<Player>().characterIndex = characterIndex;
@@ -203,27 +225,37 @@ public class CharacterManager : MonoBehaviour
         //We need to copy the PlayerInfo
         //then decrement it
         //then set change the info stored to the modified info.
-        PlayerInfo modifiedInfo = GameManager.instance.players[characterIndex];
+        if (GameManager.instance.gameMode == null)
+        {
+            Debug.LogWarning("LD'S STUPID CODE IS DUMB AND CAUSING ISSUES HERE! LD FIX THIS!");
+            return;
+        }
+        PlayerInfo modifiedInfo = GameManager.instance.gameMode.players[characterIndex];
         modifiedInfo.stock--;
         if (modifiedInfo.stock == 0)
         {
             Debug.Log(modifiedInfo.characterIcon.characterName + " is down for the count!");
+            //remove them from the character list.
+            GameManager.instance.gameMode.players.RemoveAt(characterIndex);
+            //exit this method 
+            //because the player can no longer respawn.
+            return;
         }
-        GameManager.instance.players[characterIndex] = modifiedInfo;
+        GameManager.instance.gameMode.players[characterIndex] = modifiedInfo;
 
 
         //Really bad way to check if there's only one player left.
         //This will be changed later so that it's 
         //handled in the game mode class.
-        int i = 0;
-        foreach (PlayerInfo p in GameManager.instance.players)
+        /*int i = 0;
+        foreach (PlayerInfo p in GameManager.instance.gameMode.players)
         {
             if (p.stock == 0)
             {
                 i++;
             }
         }
-        if (i == GameManager.instance.players.Count - 1)
+        if (i == GameManager.instance.gameMode.players.Count - 1)
         {
             //The final Player has won.
             //In the future this'll just be a list of the players
@@ -231,7 +263,7 @@ public class CharacterManager : MonoBehaviour
             //the list only has 1 player we'll just say that 
             //player won and that "IT'S A KNOCKOUT!".
             Debug.Log("IT'S A KNOCKOUT!".Color("Green"));
-        }
+        }*/
 
         //Wait X seconds and then respawn character.
         StartCoroutine(LDUtil.Wait(SpawnPlayer, characterIndex, 3f));
