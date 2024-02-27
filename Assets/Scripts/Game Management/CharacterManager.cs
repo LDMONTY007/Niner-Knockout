@@ -210,6 +210,29 @@ public class CharacterManager : MonoBehaviour
             Debug.Log(modifiedInfo.characterIcon.characterName + " is down for the count!");
         }
         GameManager.instance.players[characterIndex] = modifiedInfo;
+
+
+        //Really bad way to check if there's only one player left.
+        //This will be changed later so that it's 
+        //handled in the game mode class.
+        int i = 0;
+        foreach (PlayerInfo p in GameManager.instance.players)
+        {
+            if (p.stock == 0)
+            {
+                i++;
+            }
+        }
+        if (i == GameManager.instance.players.Count - 1)
+        {
+            //The final Player has won.
+            //In the future this'll just be a list of the players
+            //that are currently alive in the scene and when 
+            //the list only has 1 player we'll just say that 
+            //player won and that "IT'S A KNOCKOUT!".
+            Debug.Log("IT'S A KNOCKOUT!".Color("Green"));
+        }
+
         //Wait X seconds and then respawn character.
         StartCoroutine(LDUtil.Wait(SpawnPlayer, characterIndex, 3f));
     }
