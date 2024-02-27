@@ -20,4 +20,9 @@ public class TitleScreen : MonoBehaviour
     {
         GameManager.instance.setScene(sceneName);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
