@@ -282,6 +282,8 @@ public class Player : MonoBehaviour
         grabAction = playerInput.actions["Grab"];
 
         pauseAction = playerInput.actions["Pause"];
+
+        
     }
 
     private void OnEnable()
@@ -304,6 +306,8 @@ public class Player : MonoBehaviour
         //pauseAction.performed -= GameManager.instance.gameMenu.Pause;
     }
 
+
+    
 
     // Start is called before the first frame update
     void Start()
@@ -341,6 +345,15 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        //If the game is paused make this function 
+        //stop here until unpaused.
+        if (GameManager.instance.isPaused)
+        {
+            return;
+        }
+
+        //Debug.Log(GameManager.instance.isPaused);
 
         #region input bools
 
@@ -623,6 +636,7 @@ public class Player : MonoBehaviour
                 //otherwise do rotation coroutine.
                 if (didTap)
                 {
+                    Debug.Log("THIS");
                     HandleInstantaneousRotation();
                 }
                 else
@@ -1036,8 +1050,11 @@ public class Player : MonoBehaviour
         launchParticles.Play();
         while (/*currentTime > 0*/frames > 0)
         {
+            
             if (!isHitStunned)
             {
+
+
                 //if we are rotating,
                 //wait until after to 
                 //start dashing.
@@ -1137,6 +1154,13 @@ public class Player : MonoBehaviour
         float current = start;
         while (frames < totalFrames)
         {
+            //If the game is paused make this coroutine 
+            //infinite loop here until unpaused.
+            while (GameManager.instance.isPaused)
+            {
+                yield return null;
+            }
+
             current = Mathf.Lerp(start, end, (float)frames / totalFrames);
             Debug.Log((current).ToString().Color("brown"));
             spriteParent.transform.rotation = Quaternion.Euler(0f, current, 0f);
@@ -1194,11 +1218,20 @@ public class Player : MonoBehaviour
             //TODO:
             //Replace this with different FX later.
             launchParticles.Play();
-            
+
+            //If the game is paused make this coroutine 
+            //infinite loop here until unpaused.
+            //Otherwise if the game is paused while inside the
+            //other while loop it'll wait for FixedUpdate for
+            //quite a long time.
+            while (GameManager.instance.isPaused)
+            {
+                yield return null;
+            }
+
             while (frames > 0)
             {
-                //we wait for fixed update because we need to be in there to mess with physics.
-                yield return new WaitForFixedUpdate();
+
 
                 if (frames < intangibilityFrames)
                 {
@@ -1217,6 +1250,8 @@ public class Player : MonoBehaviour
                 //TODO:
                 //code spot dodging https://www.ssbwiki.com/Spot_dodge.
                 frames--;
+                //we wait for fixed update because we need to be in there to mess with physics.
+                yield return new WaitForFixedUpdate();
             }
             
             //TODO:
@@ -1285,6 +1320,13 @@ public class Player : MonoBehaviour
         {
             if (!isHitStunned)
             {
+
+                //If the game is paused make this coroutine 
+                //infinite loop here until unpaused.
+                while (GameManager.instance.isPaused)
+                {
+                    yield return null;
+                }
 
                 Debug.DrawRay(transform.position, rb.velocity, Color.red);
                 Debug.Log("InitVel: " + initVel + " Acceleration: " + acceleration);
@@ -1395,7 +1437,6 @@ public class Player : MonoBehaviour
             }
             else if (xAxis < 0)
             {
-                Debug.Log("Here: ");
                 isFacingLeft = true;
             }
             if (prevFacing != isFacingLeft)
@@ -2461,6 +2502,7 @@ public class Player : MonoBehaviour
 
         while (/*launchSpeed > 0*/ hitStunFrames > 0)
         {
+
             //If you decide not to apply gravity to the y axis during a launch don't forget
             //to remove these floats and just do rb.velocity = hitDirection * launchSpeed;
 
@@ -2490,7 +2532,7 @@ public class Player : MonoBehaviour
             hitStunFrames--;
             //waitTime -= 0.51f;
             t += Time.deltaTime;
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
         //stop doing launch particles.
         launchParticles.Stop();

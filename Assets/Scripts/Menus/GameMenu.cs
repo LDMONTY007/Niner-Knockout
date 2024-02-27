@@ -33,6 +33,8 @@ public class GameMenu : MonoBehaviour
     public void Pause()
     {
         isPaused = !isPaused;
+        //Set the game managers isPaused value to match ours so all coroutines know.
+        GameManager.instance.isPaused = isPaused;
         if (isPaused)
         {
             Time.timeScale = 0f;
@@ -49,6 +51,10 @@ public class GameMenu : MonoBehaviour
     public void Pause(InputAction.CallbackContext ctx)
     {
         isPaused = !isPaused;
+        //Set the game managers isPaused value to match ours so all coroutines know.
+        GameManager.instance.isPaused = isPaused;
+
+
         if (isPaused)
         {
             Time.timeScale = 0f;
@@ -63,6 +69,11 @@ public class GameMenu : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
+        if (isPaused == true)
+        {
+            Pause();
+        }
         GameManager.instance.setScene(sceneName);
+
     }
 }

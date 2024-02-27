@@ -7,6 +7,8 @@ using Scene = UnityEngine.SceneManagement.Scene;
 
 public class GameManager
 {
+    public bool isPaused = false;
+
     private static GameManager _instance;
 
     [HideInInspector]
