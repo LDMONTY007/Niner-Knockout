@@ -106,12 +106,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474cec99785638346ad79a933322ae7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerIconPanel: {fileID: 0}
+  characterIconPanel: {fileID: 0}
   playerIconPrefab: {fileID: 3979263912656741114, guid: 112ecf1dcc5ce2a4b9038ed4684c23fa, type: 3}
   playerSelectIconPrefab: {fileID: 4809427410454751555, guid: 9d5e8f3c8faf7e144bc25893645cf7b1, type: 3}
   playerCursorPrefab: {fileID: 4702634011867046646, guid: f7953f050cb0a204a867cf0463cc76eb, type: 3}
   selectionCanvas: {fileID: 0}
   selectableIconList: {fileID: 11400000, guid: c0da51b72e76aa34ebf67d9a615a9d0b, type: 2}
   characterIcons: []
+  playerUIIconList: []
+  playerSelectUIIconPrefab: {fileID: 0}
+  playerIconPanel: {fileID: 0}
   useSelectableIcons: 0
   manuallyInitCharacters: 0
+  defaultIcon: {fileID: 11400000, guid: bee3f77cf2fdf9146b3dfb7e7e0b1ea0, type: 2}
+  inputActions: {fileID: -944628639613478452, guid: b400880335ec44f4a9bf253a1eedf9de, type: 3}

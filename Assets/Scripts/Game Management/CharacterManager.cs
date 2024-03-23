@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -50,6 +51,12 @@ public class CharacterManager : MonoBehaviour
 
     public bool manuallyInitCharacters = false;
 
+    //Used in case for some reason we don't select a character.
+    public Icon defaultIcon;
+
+    //The inputActionsAsset containing your control schemes.
+    public InputActionAsset inputActions;
+
     private void OnEnable()
     {
         
@@ -60,31 +67,55 @@ public class CharacterManager : MonoBehaviour
         
     }
 
+    private string GetCorrespondingControlScheme(InputDevice device)
+    {
+        if (device is Gamepad)
+        {
+            return "Gamepad";
+        }
+        if (device is Keyboard)
+        {
+            return "Keyboard&Mouse";
+        }
+        if (device is Mouse)
+        {
+            return "Keyboard&Mouse";
+        }
+        return null;
+    }
+
     private void Awake()
     {
-        //This is what I'm going to use to monitor if a device has pressed any input and desires to join the game.
+        
 
-        InputSystem.onEvent.Call(eventPtr => {
-            if (Application.isPlaying)
+        InputSystem.onActionChange += (obj, change) => {
+            if (change == InputActionChange.ActionPerformed)
             {
-                foreach (var control in eventPtr.EnumerateChangedControls())
+                InputDevice lastDevice = (obj as InputAction).activeControl.device;
+                Debug.Log($"last device->{lastDevice}");
+                
+                if (Application.isPlaying)
                 {
-                    Debug.Log($"Control {control} changed value to {control.ReadValueFromEventAsObject(eventPtr)}");
+                    //Debug.Log($"Control {control} changed value to {control.ReadValueFromEventAsObject(eventPtr)}");
                     if (GameManager.instance.players.Count > 0)
                     {
+                        //InputControlScheme scheme = InputControlScheme.FindControlSchemeForDevice(lastDevice, inputActions.controlSchemes).GetValueOrDefault();
+                        string scheme = GetCorrespondingControlScheme(lastDevice);
                         //Make sure this device hasn't already been added.
-                        if (GameManager.instance.players.TrueForAll(p => !p.device.deviceId.Equals(eventPtr.deviceId)))
+                        if (GameManager.instance.players.TrueForAll(p => !p.device.deviceId.Equals(lastDevice.deviceId) && !p.controlScheme.Equals(scheme)))
                         {
 
                             if (useSelectableIcons) //if we are in the selection scene
                             {
+                                //Debug.Log(((InputControlScheme)InputControlScheme.FindControlSchemeForDevice(control.device, inputActions.controlSchemes)));
                                 Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
                                 //Create a new cursor for this player.
                                 //PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
-                                PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
+                                
+                                PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, scheme, -1, lastDevice);
                                 Cursor c = curInput.GetComponent<Cursor>();
                                 //Create the playerInfo for this player
-                                PlayerInfo playerInfo = new PlayerInfo(control.device, curInput.currentControlScheme, null, GameManager.instance.stockTotal)/*c.CreatePlayerInfo()*/;
+                                PlayerInfo playerInfo = new PlayerInfo(lastDevice, curInput.currentControlScheme, defaultIcon, GameManager.instance.stockTotal);
                                 Debug.Log(playerInfo);
                                 //add this new cursor/player to the global list of players
                                 GameManager.instance.players.Add(playerInfo);
@@ -101,10 +132,52 @@ public class CharacterManager : MonoBehaviour
                             Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
                             //Create a new cursor for this player.
                             //PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
-                            PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
+                            //InputControlScheme scheme = InputControlScheme.FindControlSchemeForDevice(lastDevice, inputActions.controlSchemes).GetValueOrDefault();
+                            string scheme = GetCorrespondingControlScheme(lastDevice);
+                            PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, scheme, -1, lastDevice);
                             Cursor c = curInput.GetComponent<Cursor>();
                             //Create the playerInfo for this player
-                            PlayerInfo playerInfo = new PlayerInfo(control.device, curInput.currentControlScheme, null, GameManager.instance.stockTotal)/*c.CreatePlayerInfo()*/;
+                            PlayerInfo playerInfo = new PlayerInfo(lastDevice, curInput.currentControlScheme, defaultIcon, GameManager.instance.stockTotal);
+                            Debug.Log(playerInfo);
+                            //add this new cursor/player to the global list of players
+                            GameManager.instance.players.Add(playerInfo);
+                            //set the character's index.
+                            c.characterIndex = 0;
+
+                        }
+                    }
+                }
+            }
+        };
+
+        //This is what I'm going to use to monitor if a device has pressed any input and desires to join the game.
+        /*InputDevice tempDevice = null;
+        if (inputActions.Any((action) => 
+        {
+            tempDevice = action.activeControl.device;
+            return action.WasPressedThisFrame(); 
+        })) 
+        {
+            if (Application.isPlaying)
+            {
+                //Debug.Log($"Control {control} changed value to {control.ReadValueFromEventAsObject(eventPtr)}");
+                if (GameManager.instance.players.Count > 0)
+                {
+                    //Make sure this device hasn't already been added.
+                    if (GameManager.instance.players.TrueForAll(p => !p.device.deviceId.Equals(tempDevice.deviceId)))
+                    {
+
+                        if (useSelectableIcons) //if we are in the selection scene
+                        {
+                            //Debug.Log(((InputControlScheme)InputControlScheme.FindControlSchemeForDevice(control.device, inputActions.controlSchemes)));
+                            Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
+                            //Create a new cursor for this player.
+                            //PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
+                            InputControlScheme scheme = InputControlScheme.FindControlSchemeForDevice(tempDevice, inputActions.controlSchemes).GetValueOrDefault();
+                            PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, scheme.name, -1, tempDevice);
+                            Cursor c = curInput.GetComponent<Cursor>();
+                            //Create the playerInfo for this player
+                            PlayerInfo playerInfo = new PlayerInfo(tempDevice, curInput.currentControlScheme, defaultIcon*//*null*//*, GameManager.instance.stockTotal)*//*c.CreatePlayerInfo()*//*;
                             Debug.Log(playerInfo);
                             //add this new cursor/player to the global list of players
                             GameManager.instance.players.Add(playerInfo);
@@ -114,8 +187,85 @@ public class CharacterManager : MonoBehaviour
                         }
                     }
                 }
+                else
+                {
+                    if (useSelectableIcons) //if we are in the selection scene
+                    {
+                        Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
+                        //Create a new cursor for this player.
+                        //PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
+                        InputControlScheme scheme = InputControlScheme.FindControlSchemeForDevice(tempDevice, inputActions.controlSchemes).GetValueOrDefault();
+                        PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, scheme.name, -1, tempDevice);
+                        Cursor c = curInput.GetComponent<Cursor>();
+                        //Create the playerInfo for this player
+                        PlayerInfo playerInfo = new PlayerInfo(tempDevice, curInput.currentControlScheme, defaultIcon*//*null*//*, GameManager.instance.stockTotal)*//*c.CreatePlayerInfo()*//*;
+                        Debug.Log(playerInfo);
+                        //add this new cursor/player to the global list of players
+                        GameManager.instance.players.Add(playerInfo);
+                        //set the character's index.
+                        c.characterIndex = 0;
+
+                    }
+                }
             }
-        });
+        };*/
+
+        /*InputSystem.onEvent.Call(eventPtr => {
+            if (Application.isPlaying)
+            {
+                foreach (var control in eventPtr.EnumerateChangedControls())
+                {
+                    if (inputActions.Any((action) => )
+                    Debug.Log($"Control {control} changed value to {control.ReadValueFromEventAsObject(eventPtr)}");
+                    if (GameManager.instance.players.Count > 0)
+                    {
+                        //Make sure this device hasn't already been added.
+                        if (GameManager.instance.players.TrueForAll(p => !p.device.deviceId.Equals(eventPtr.deviceId)))
+                        {
+
+                            if (useSelectableIcons) //if we are in the selection scene
+                            {
+                                //Debug.Log(((InputControlScheme)InputControlScheme.FindControlSchemeForDevice(control.device, inputActions.controlSchemes)));
+                                Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
+                                //Create a new cursor for this player.
+                                //PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
+                                InputControlScheme scheme = InputControlScheme.FindControlSchemeForDevice(control.device, inputActions.controlSchemes).GetValueOrDefault();
+                                PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, scheme.name, -1, control.device);
+                                Cursor c = curInput.GetComponent<Cursor>();
+                                //Create the playerInfo for this player
+                                PlayerInfo playerInfo = new PlayerInfo(control.device, curInput.currentControlScheme, defaultIcon*//*null*//*, GameManager.instance.stockTotal)*//*c.CreatePlayerInfo()*//*;
+                                Debug.Log(playerInfo);
+                                //add this new cursor/player to the global list of players
+                                GameManager.instance.players.Add(playerInfo);
+                                //set the character's index.
+                                c.characterIndex = GameManager.instance.players.Count - 1;
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (useSelectableIcons) //if we are in the selection scene
+                        {
+                            Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
+                            //Create a new cursor for this player.
+                            //PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
+                            InputControlScheme scheme = InputControlScheme.FindControlSchemeForDevice(control.device, inputActions.controlSchemes).GetValueOrDefault();
+                            PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, scheme.name, -1, control.device);
+                            Cursor c = curInput.GetComponent<Cursor>();
+                            //Create the playerInfo for this player
+                            PlayerInfo playerInfo = new PlayerInfo(control.device, curInput.currentControlScheme, defaultIcon*//*null*//*, GameManager.instance.stockTotal)*//*c.CreatePlayerInfo()*//*;
+                            Debug.Log(playerInfo);
+                            //add this new cursor/player to the global list of players
+                            GameManager.instance.players.Add(playerInfo);
+                            //set the character's index.
+                            c.characterIndex = 0;
+
+                        }
+                    }
+                }
+            }
+        });*/
 
         InputSystem.onDeviceChange +=
         (device, change) =>
@@ -299,6 +449,7 @@ public class CharacterManager : MonoBehaviour
         }
 
         //instantiate the prefab, auto assign the playerindex, use X control scheme, auto assign the split screen index, and use X device.
+        Debug.Log(playerInfo.characterIcon);
         PlayerInput p = PlayerInput.Instantiate(playerInfo.characterIcon.characterPrefab, -1, playerInfo.controlScheme, -1, playerInfo.device);
         p.GetComponent<Player>().characterIndex = characterIndex;
         //Set the stock of the player.

@@ -153,7 +153,8 @@ public class Cursor : MonoBehaviour
                 else
                 {
                     //add the playerInfo to the GameManager player list.
-                    GameManager.instance.players.Add(playerInfo);
+                    //GameManager.instance.players.Add(playerInfo);
+                    GameManager.instance.players[characterIndex] = playerInfo;
                     //set the character index in case we need to remove it.
                     //characterIndex = GameManager.instance.players.Count - 1;
                     //create the coin where the cursor currently is.
