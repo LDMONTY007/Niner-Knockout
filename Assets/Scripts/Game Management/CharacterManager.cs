@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
+using UnityEngine.InputSystem.Utilities;
 using UnityEngine.SceneManagement;
 
 public class CharacterManager : MonoBehaviour
@@ -49,8 +50,73 @@ public class CharacterManager : MonoBehaviour
 
     public bool manuallyInitCharacters = false;
 
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        
+    }
+
     private void Awake()
     {
+        //This is what I'm going to use to monitor if a device has pressed any input and desires to join the game.
+
+        InputSystem.onEvent.Call(eventPtr => {
+            if (Application.isPlaying)
+            {
+                foreach (var control in eventPtr.EnumerateChangedControls())
+                {
+                    Debug.Log($"Control {control} changed value to {control.ReadValueFromEventAsObject(eventPtr)}");
+                    if (GameManager.instance.players.Count > 0)
+                    {
+                        //Make sure this device hasn't already been added.
+                        if (GameManager.instance.players.TrueForAll(p => !p.device.deviceId.Equals(eventPtr.deviceId)))
+                        {
+
+                            if (useSelectableIcons) //if we are in the selection scene
+                            {
+                                Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
+                                //Create a new cursor for this player.
+                                //PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
+                                PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
+                                Cursor c = curInput.GetComponent<Cursor>();
+                                //Create the playerInfo for this player
+                                PlayerInfo playerInfo = new PlayerInfo(control.device, curInput.currentControlScheme, null, GameManager.instance.stockTotal)/*c.CreatePlayerInfo()*/;
+                                Debug.Log(playerInfo);
+                                //add this new cursor/player to the global list of players
+                                GameManager.instance.players.Add(playerInfo);
+                                //set the character's index.
+                                c.characterIndex = GameManager.instance.players.Count - 1;
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (useSelectableIcons) //if we are in the selection scene
+                        {
+                            Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
+                            //Create a new cursor for this player.
+                            //PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
+                            PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
+                            Cursor c = curInput.GetComponent<Cursor>();
+                            //Create the playerInfo for this player
+                            PlayerInfo playerInfo = new PlayerInfo(control.device, curInput.currentControlScheme, null, GameManager.instance.stockTotal)/*c.CreatePlayerInfo()*/;
+                            Debug.Log(playerInfo);
+                            //add this new cursor/player to the global list of players
+                            GameManager.instance.players.Add(playerInfo);
+                            //set the character's index.
+                            c.characterIndex = GameManager.instance.players.Count - 1;
+
+                        }
+                    }
+                }
+            }
+        });
+
         InputSystem.onDeviceChange +=
         (device, change) =>
         {

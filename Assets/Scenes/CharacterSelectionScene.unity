@@ -551,7 +551,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7121329970186757976, guid: 1b7c928e4ce94bc4b96d83ad7fb5b342, type: 3}
       propertyPath: m_JoinBehavior
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7121329970186757976, guid: 1b7c928e4ce94bc4b96d83ad7fb5b342, type: 3}
       propertyPath: m_PlayerPrefab

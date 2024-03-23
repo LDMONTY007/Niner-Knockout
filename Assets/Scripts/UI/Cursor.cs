@@ -31,12 +31,13 @@ public class Cursor : MonoBehaviour
     private PointerEventData pointerEventData = new PointerEventData(null);
     public GraphicRaycaster gr;
 
+    private int _characterIndex = -1;
+
     //used to store the index 
     //where our character was inserted into 
     //the list of characters so we can replace it
     //if they decide to change characters.
-    public static int curCharacterIndex = 0;
-    public int characterIndex;
+    public int characterIndex {  get { return _characterIndex; } set { _characterIndex = value; } }
     //if the user already selected a character.
     public bool didSelect;
     private GameObject coinInstance;
@@ -46,10 +47,10 @@ public class Cursor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Might want to change this in the future especially when loading the scene again.
+/*        //Might want to change this in the future especially when loading the scene again.
         characterIndex = curCharacterIndex;
         curCharacterIndex++;
-        //End of area we need to change.
+        //End of area we need to change.*/
 
         canvas = FindObjectOfType<Canvas>();
 
@@ -106,6 +107,13 @@ public class Cursor : MonoBehaviour
             UpdateMotion();
         }
     }
+
+/*    public PlayerInfo CreatePlayerInfo()
+    {
+        return new PlayerInfo(playerInput.GetDevice<InputDevice>(), playerInput.currentControlScheme, null, GameManager.instance.stockTotal);
+    }*/
+
+
 
     private void Select()
     {
