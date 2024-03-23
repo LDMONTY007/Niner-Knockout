@@ -35,7 +35,9 @@ public class CharacterManager : MonoBehaviour
     /// <summary>
     /// This list is used to create the grid of selectable characters in the player select scene.
     /// </summary>
-    public CharacterIconList characterIcons;
+    public CharacterIconList selectableIconList;
+
+    public List<CharacterIcon> characterIcons = new List<CharacterIcon>();
 
     public bool useSelectableIcons = false;
 
@@ -83,7 +85,7 @@ public class CharacterManager : MonoBehaviour
             device.
         }*/
         if (useSelectableIcons)
-        foreach (Icon icon in characterIcons.icons)
+        foreach (Icon icon in selectableIconList.icons)
         {
             AddSelectableIcon(icon);
         }
@@ -95,9 +97,10 @@ public class CharacterManager : MonoBehaviour
             int index = 0;
             foreach(PlayerInfo playerInfo in GameManager.instance.gameMode.players)
             {               
+                //Create the Character Icons in game.
+                characterIcons.Add(AddPlayerIcon(playerInfo.characterIcon));
                 SpawnPlayer(playerInfo, index);
 
-                
                 index++;
                 //THIS IS WHAT LINKS THE CONTROLLER TO THE SPECIFICALLY SPAWNED PLAYER. 
             }
@@ -187,7 +190,7 @@ public class CharacterManager : MonoBehaviour
         p.GetComponent<Player>().characterIndex = characterIndex;
         //Set the stock of the player.
         p.GetComponent<Player>().stock = playerInfo.stock;
-        p.GetComponent<Player>().characterIcon = AddPlayerIcon(playerInfo.characterIcon);
+        p.GetComponent<Player>().characterIcon = characterIcons[characterIndex]/*AddPlayerIcon(playerInfo.characterIcon)*/;
     }
 
     /// <summary>
@@ -213,7 +216,8 @@ public class CharacterManager : MonoBehaviour
         p.GetComponent<Player>().characterIndex = characterIndex;
         //Set the stock of the player.
         p.GetComponent<Player>().stock = playerInfo.stock;
-        p.GetComponent<Player>().characterIcon = AddPlayerIcon(playerInfo.characterIcon);
+        Debug.LogWarning(characterIcons[characterIndex]);
+        p.GetComponent<Player>().characterIcon = characterIcons[characterIndex]/*AddPlayerIcon(playerInfo.characterIcon)*/;
 
         Debug.Log(("Spawn Player: " + characterIndex).ToString().Color("Green"));
     }

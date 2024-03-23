@@ -38,6 +38,7 @@ public class GameMode : MonoBehaviour
         //make a copy of the original list of players for use
         //during this game mode.
         players = new List<PlayerInfo>(GameManager.instance.players);
+
         //Set our reference in the GameManager
         GameManager.instance.gameMode = this;
     }
@@ -45,7 +46,7 @@ public class GameMode : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame

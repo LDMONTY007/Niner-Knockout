@@ -586,13 +586,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4809427410454751555, guid: 9d5e8f3c8faf7e144bc25893645cf7b1, type: 3}
     - target: {fileID: 8617798651085390458, guid: 1b7c928e4ce94bc4b96d83ad7fb5b342, type: 3}
-      propertyPath: characterIcons.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8617798651085390458, guid: 1b7c928e4ce94bc4b96d83ad7fb5b342, type: 3}
       propertyPath: characterIcons.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: bee3f77cf2fdf9146b3dfb7e7e0b1ea0, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -37,6 +37,8 @@ public class CharacterIcon : MonoBehaviour
     /// </summary>
     public TextMeshProUGUI percentText;
 
+   
+
     private void Start()
     {
 #if UNITY_EDITOR

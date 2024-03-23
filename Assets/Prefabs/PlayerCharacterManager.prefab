@@ -111,6 +111,7 @@ MonoBehaviour:
   playerSelectIconPrefab: {fileID: 4809427410454751555, guid: 9d5e8f3c8faf7e144bc25893645cf7b1, type: 3}
   playerCursorPrefab: {fileID: 4702634011867046646, guid: f7953f050cb0a204a867cf0463cc76eb, type: 3}
   selectionCanvas: {fileID: 0}
-  characterIcons: {fileID: 0}
+  selectableIconList: {fileID: 11400000, guid: c0da51b72e76aa34ebf67d9a615a9d0b, type: 2}
+  characterIcons: []
   useSelectableIcons: 0
   manuallyInitCharacters: 0

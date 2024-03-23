@@ -312,6 +312,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         //set the shield health.
         shieldHealth = totalShield;
         //set the OG scale of this shield for use later.
@@ -2671,7 +2672,9 @@ public class Player : MonoBehaviour
             //we destroy both player and the icon for it
             //because I am too lazy to just make code
             //to re-assign it.
-            Destroy(characterIcon.gameObject);
+
+            //We no longer do that, the GameMode and CharacterManager now handle that.
+            //Destroy(characterIcon.gameObject);
             Destroy(gameObject);
         }
     }
