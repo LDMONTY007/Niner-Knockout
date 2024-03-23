@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
+
 //No need to redesign the wheel: https://www.youtube.com/watch?v=CNu8PcAmC2c
 public class CharacterSelectIcon : MonoBehaviour
 {

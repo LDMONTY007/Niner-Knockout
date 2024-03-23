@@ -35,14 +35,22 @@ public class Cursor : MonoBehaviour
     //where our character was inserted into 
     //the list of characters so we can replace it
     //if they decide to change characters.
+    public static int curCharacterIndex = 0;
     public int characterIndex;
     //if the user already selected a character.
     public bool didSelect;
     private GameObject coinInstance;
 
+    public PlayerUIIcon playerUIIcon;
+
     // Start is called before the first frame update
     void Start()
     {
+        //Might want to change this in the future especially when loading the scene again.
+        characterIndex = curCharacterIndex;
+        curCharacterIndex++;
+        //End of area we need to change.
+
         canvas = FindObjectOfType<Canvas>();
 
         if (canvas == null)
@@ -53,6 +61,9 @@ public class Cursor : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["point"];
         selectAction = playerInput.actions["click"];
+
+        playerUIIcon = GameManager.instance.characterManager.AddPlayerIcon(null);
+        playerUIIcon.playerName.text = "Player" + characterIndex.ToString();
     }
 
     private void Update()
@@ -127,17 +138,23 @@ public class Cursor : MonoBehaviour
                     //removed and we assign the new 
                     //character. 
                     GameManager.instance.players[characterIndex] = playerInfo;
+
+                    //Call to reassign the character we've selected.
+                    playerUIIcon.ReassignCharacterIcon(selectIcon);
                 }
                 else
                 {
                     //add the playerInfo to the GameManager player list.
                     GameManager.instance.players.Add(playerInfo);
                     //set the character index in case we need to remove it.
-                    characterIndex = GameManager.instance.players.Count - 1;
+                    //characterIndex = GameManager.instance.players.Count - 1;
                     //create the coin where the cursor currently is.
                     coinInstance = Instantiate(coinPrefab, cursorTransform.position, Quaternion.identity, canvas.transform);
                     didSelect = true;
                     print(results[0].gameObject.name);
+
+                    //Call to reassign the character we've selected.
+                    playerUIIcon.ReassignCharacterIcon(selectIcon);
                 }
             }
             if (results[0].gameObject.TryGetComponent(out Button button))

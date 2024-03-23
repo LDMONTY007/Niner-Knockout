@@ -12,7 +12,7 @@ public class CharacterManager : MonoBehaviour
 {
     CinemachineTargetGroup targetGroup;
 
-    public Transform playerIconPanel;
+    public Transform characterIconPanel;
 
     public GameObject playerIconPrefab;
 
@@ -38,6 +38,12 @@ public class CharacterManager : MonoBehaviour
     public CharacterIconList selectableIconList;
 
     public List<CharacterIcon> characterIcons = new List<CharacterIcon>();
+
+    public List<PlayerUIIcon> playerUIIconList = new List<PlayerUIIcon>();
+
+    public GameObject playerSelectUIIconPrefab;
+
+    public Transform playerIconPanel;
 
     public bool useSelectableIcons = false;
 
@@ -98,7 +104,7 @@ public class CharacterManager : MonoBehaviour
             foreach(PlayerInfo playerInfo in GameManager.instance.gameMode.players)
             {               
                 //Create the Character Icons in game.
-                characterIcons.Add(AddPlayerIcon(playerInfo.characterIcon));
+                characterIcons.Add(AddCharacterIcon(playerInfo.characterIcon));
                 SpawnPlayer(playerInfo, index);
 
                 index++;
@@ -146,11 +152,11 @@ public class CharacterManager : MonoBehaviour
     /// Adds a player's icon to the UI.
     /// </summary>
     /// <param name="prefab">The prefab of the player icon</param>
-    public CharacterIcon AddPlayerIcon(Icon icon)
+    public CharacterIcon AddCharacterIcon(Icon icon)
     {
         if (playerIconPrefab != null)
         {
-            CharacterIcon obj = Instantiate(playerIconPrefab, playerIconPanel).GetComponent<CharacterIcon>();
+            CharacterIcon obj = Instantiate(playerIconPrefab, characterIconPanel).GetComponent<CharacterIcon>();
             obj.characterIcon = icon;
             return obj;
         }
@@ -165,9 +171,24 @@ public class CharacterManager : MonoBehaviour
     {
         if (playerSelectIconPrefab != null)
         {
-            CharacterSelectIcon obj = Instantiate(playerSelectIconPrefab, playerIconPanel).GetComponent<CharacterSelectIcon>();
+            CharacterSelectIcon obj = Instantiate(playerSelectIconPrefab, characterIconPanel).GetComponent<CharacterSelectIcon>();
             obj.characterIcon = icon;
         }
+    }
+
+    /// <summary>
+    /// Adds a character icon to the selectable grid.
+    /// </summary>
+    /// <param name="prefab">The gameobject icon to be added to the selectable grid UI</param>
+    public PlayerUIIcon AddPlayerIcon(CharacterSelectIcon icon)
+    {
+        if (playerSelectIconPrefab != null)
+        {
+            PlayerUIIcon obj = Instantiate(playerSelectUIIconPrefab, playerIconPanel).GetComponent<PlayerUIIcon>();
+            obj.currentlySelectedCharacter = null;
+            return obj;
+        }
+        return null;
     }
 
     /// <summary>

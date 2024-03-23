@@ -2337,6 +2337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69eecc844acf1ab4985927ded65bc6f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  totalStocks: 3
 --- !u!1 &1782311289
 GameObject:
   m_ObjectHideFlags: 0
@@ -2699,6 +2700,10 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: c0da51b72e76aa34ebf67d9a615a9d0b, type: 2}
     - target: {fileID: 8617798651085390458, guid: 1b7c928e4ce94bc4b96d83ad7fb5b342, type: 3}
       propertyPath: playerIconPanel
+      value: 
+      objectReference: {fileID: 460334373}
+    - target: {fileID: 8617798651085390458, guid: 1b7c928e4ce94bc4b96d83ad7fb5b342, type: 3}
+      propertyPath: characterIconPanel
       value: 
       objectReference: {fileID: 460334373}
     - target: {fileID: 8617798651085390458, guid: 1b7c928e4ce94bc4b96d83ad7fb5b342, type: 3}
