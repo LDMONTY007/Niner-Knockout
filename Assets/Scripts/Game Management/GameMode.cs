@@ -52,10 +52,28 @@ public class GameMode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (players.Count == 1)
+
+        //Super inefficient way to check if there's only 1 player left.
+        int deadCount = 0;
+        foreach (PlayerInfo player in players)
+        {
+            if (player.stock == 0)
+            {
+                deadCount++;
+            }
+        }
+        Debug.LogWarning(deadCount);
+        if (deadCount == players.Count - 1)
         {
             Debug.Log("IT'S A KNOCKOUT!".Color("Green"));
             GameManager.instance.setScene("CharacterSelectionScene");
         }
+
+
+/*        if (players.Count == 1)
+        {
+            Debug.Log("IT'S A KNOCKOUT!".Color("Green"));
+            GameManager.instance.setScene("CharacterSelectionScene");
+        }*/
     }
 }

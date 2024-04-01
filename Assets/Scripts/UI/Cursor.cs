@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -64,6 +65,8 @@ public class Cursor : MonoBehaviour
         selectAction = playerInput.actions["click"];
 
         playerUIIcon = GameManager.instance.characterManager.AddPlayerIcon(null);
+        //Set the icon's character index.
+        playerUIIcon.characterIndex = characterIndex;
         playerUIIcon.playerName.text = "Player" + characterIndex.ToString();
     }
 
@@ -140,7 +143,7 @@ public class Cursor : MonoBehaviour
                     //and place a new one. 
                     if (coinInstance)
                     Destroy(coinInstance.gameObject);
-                    coinInstance = Instantiate(coinPrefab, cursorTransform.position, Quaternion.identity, canvas.transform);
+                    coinInstance = createCoin(coinPrefab, cursorTransform.position, Quaternion.identity, canvas.transform, characterIndex);
                     //replace the reference so that 
                     //the old character they chose is 
                     //removed and we assign the new 
@@ -158,7 +161,7 @@ public class Cursor : MonoBehaviour
                     //set the character index in case we need to remove it.
                     //characterIndex = GameManager.instance.players.Count - 1;
                     //create the coin where the cursor currently is.
-                    coinInstance = Instantiate(coinPrefab, cursorTransform.position, Quaternion.identity, canvas.transform);
+                    coinInstance = createCoin(coinPrefab, cursorTransform.position, Quaternion.identity, canvas.transform, characterIndex);
                     didSelect = true;
                     print(results[0].gameObject.name);
 
@@ -176,6 +179,15 @@ public class Cursor : MonoBehaviour
         }
     }
 
+    public GameObject createCoin(GameObject gameObject, Vector3 position,  Quaternion rotation, Transform parent, int playerIndex)
+    {
+        GameObject temp = Instantiate(coinPrefab, cursorTransform.position, Quaternion.identity, canvas.transform);
+        //Set the color of the coin.
+        temp.GetComponent<Image>().color = playerUIIcon.backgroundGradient.Evaluate(playerIndex);
+        //Set the number on the coin.
+        temp.GetComponentInChildren<TextMeshProUGUI>().text = "P" + playerIndex;
+        return temp;
+    }
 
 
     private void UpdateMotion()

@@ -557,7 +557,11 @@ public class CharacterManager : MonoBehaviour
         {
             Debug.Log(modifiedInfo.characterIcon.characterName + " is down for the count!");
             //remove them from the character list.
-            GameManager.instance.gameMode.players.RemoveAt(characterIndex);
+            //Actually don't do that because it can mess some stuff up. Just know that the stock count is zero there now.
+            //GameManager.instance.gameMode.players.RemoveAt(characterIndex);
+
+            //Update the info to be modified info.
+            GameManager.instance.gameMode.players[characterIndex] = modifiedInfo;
             //exit this method 
             //because the player can no longer respawn.
             return;

@@ -11,6 +11,7 @@ public class PlayerUIIcon : MonoBehaviour
     //public Image backgroundImage;
     public Image characterImage;
     public TextMeshProUGUI characterName;
+    public Image backgroundImage;
 
     public TextMeshProUGUI playerName;
 
@@ -19,7 +20,9 @@ public class PlayerUIIcon : MonoBehaviour
     //The default sprite to use if we havent't selected any character.
     public Sprite defaultIfUnselected;
 
+    public int characterIndex;
 
+    public Gradient backgroundGradient = new Gradient();
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +46,10 @@ public class PlayerUIIcon : MonoBehaviour
 
         currentlySelectedCharacter = icon;
 
-        //backgroundImage.color = currentlySelectedCharacter.characterIcon.backgroundColor;
+        //set the color to be relative to our player/character index so that it's kind of like smash
+        backgroundImage.color = backgroundGradient.Evaluate(characterIndex)/*currentlySelectedCharacter.characterIcon.backgroundColor*/;
+        //Set our alpha of the background to be decently transparent.
+        backgroundImage.color = new Color(backgroundImage.color.r, backgroundImage.color.g, backgroundImage.color.b, 100);
         characterImage.sprite = currentlySelectedCharacter.characterIcon.characterSprite;
         characterName.text = currentlySelectedCharacter.characterIcon.characterName;
         if (imageSizeDelta == Vector2.zero)

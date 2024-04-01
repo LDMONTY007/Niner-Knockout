@@ -1419,7 +1419,11 @@ public class Player : MonoBehaviour
             if (characterIcon.GetPercent() != damagePercent)
                 characterIcon.SetPercent(damagePercent);
             //this is what determines how many stocks are displayed in the UI.
-            characterIcon.stockCount = stock;
+            if (GameManager.instance.gameMode != null)
+            {
+                //if (GameManager.instance.gameMode.players[characterIndex] != null)
+                characterIcon.stockCount = GameManager.instance.gameMode.players[characterIndex].stock;
+            }
         }
         else
         {
@@ -2744,6 +2748,8 @@ public class Player : MonoBehaviour
         if (GameManager.instance.characterManager != null)
         {
             GameManager.instance.characterManager.PlayerDied(characterIndex);
+            //Call handle UI one last time so that our stock count is accurate. 
+            HandleUI();
         }
     }
 
