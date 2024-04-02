@@ -52,6 +52,10 @@ public class CharacterManager : MonoBehaviour
 
     public bool manuallyInitCharacters = false;
 
+    //this is the list of cursors currently being used.
+    //If we aren't on the Selection Screen then this should be empty. 
+    public List<GameObject> cursors = new List<GameObject>();
+
     //Used in case for some reason we don't select a character.
     public Icon defaultIcon;
 
@@ -227,7 +231,8 @@ public class CharacterManager : MonoBehaviour
 
                     string scheme = GetCorrespondingControlScheme(control.device);
 
-                    Debug.Log($"Control {control} changed value to {control.ReadValueFromEventAsObject(eventPtr)}");
+                    //Debug info for what changed about each control.
+                    //Debug.Log($"Control {control} changed value to {control.ReadValueFromEventAsObject(eventPtr)}");
                     //Debug.Log(eventPtr.type.ToString());
                     if (GameManager.instance.players.Count > 0)
                     {
@@ -239,15 +244,20 @@ public class CharacterManager : MonoBehaviour
                             if (useSelectableIcons) //if we are in the selection scene
                             {
                                 //Debug.Log(((InputControlScheme)InputControlScheme.FindControlSchemeForDevice(control.device, inputActions.controlSchemes)));
-                                Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
+                                //Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
                                 //Create a new cursor for this player.
                                 //PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
                                 //InputControlScheme scheme = InputControlScheme.FindControlSchemeForDevice(control.device, inputActions.controlSchemes).GetValueOrDefault();
                                 PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, scheme, -1, control.device);
+                                
+                                //Add to the global cursors list.
+                                cursors.Add(curInput.gameObject);
+                                //REALLY IMPORTANT THAT WE SET THE SCALE HERE.
+                                curInput.transform.localScale = Vector3.one;
                                 Cursor c = curInput.GetComponent<Cursor>();
                                 //Create the playerInfo for this player
                                 PlayerInfo playerInfo = new PlayerInfo(control.device, curInput.currentControlScheme, defaultIcon, GameManager.instance.stockTotal);
-                                Debug.Log(playerInfo);
+                                //Debug.Log(playerInfo);
                                 //add this new cursor/player to the global list of players
                                 GameManager.instance.players.Add(playerInfo);
                                 //set the character's index.
@@ -261,15 +271,17 @@ public class CharacterManager : MonoBehaviour
                         if (useSelectableIcons) //if we are in the selection scene
                         {
                             //string scheme = GetCorrespondingControlScheme(control.device);
-                            Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
+                            //Debug.Log(GameManager.instance.players.ToString() + " " + GameManager.instance.players.Count);
                             //Create a new cursor for this player.
                             //PlayerInput.Instantiate(playerCursorPrefab, -1, null, -1, control.device);
                             //InputControlScheme scheme = InputControlScheme.FindControlSchemeForDevice(control.device, inputActions.controlSchemes).GetValueOrDefault();
                             PlayerInput curInput = PlayerInput.Instantiate(playerCursorPrefab, -1, scheme, -1, control.device);
+                            //Add to the global cursors list.
+                            cursors.Add(curInput.gameObject);
                             Cursor c = curInput.GetComponent<Cursor>();
                             //Create the playerInfo for this player
                             PlayerInfo playerInfo = new PlayerInfo(control.device, curInput.currentControlScheme, defaultIcon, GameManager.instance.stockTotal);
-                            Debug.Log(playerInfo);
+                            //Debug.Log(playerInfo);
                             //add this new cursor/player to the global list of players
                             GameManager.instance.players.Add(playerInfo);
                             //set the character's index.
@@ -356,7 +368,40 @@ public class CharacterManager : MonoBehaviour
                     Debug.Log(device + " was Added!");
                     break;
                 case InputDeviceChange.Disconnected:
-                    // Device got unplugged.
+                    //On disconnect we want to delete the cursor and their playerInfo
+                    //BUT ONLY IN THE SELECTION SCENE
+                    //If a controller is disconnected during gameplay it should auto pause
+                    //and then let the user reconnect it. THIS IS REALLY IMPORTANT.
+
+                    //we are in the selection scene
+                    if (useSelectableIcons)
+                    {
+
+                        // Device got unplugged.
+                        // Get the player that just unplugged this.
+                        PlayerInfo p = GameManager.instance.players.First(p => p.device.Equals(device));
+                        // Remove the player from the list.
+                        // The cursor will destroy itself and it's other UI objects.
+                        GameManager.instance.players.Remove(p);
+
+                        //Does the cursor have an issue with it's controls?
+                        GameObject cursorToDestroy = cursors.First(c => c.GetComponent<PlayerInput>().hasMissingRequiredDevices);
+                        if (cursorToDestroy != null)
+                        {
+                            Destroy(cursorToDestroy);
+                        }
+
+                    }
+                    else //We are in a game
+                    {
+                        //TODO:
+                        //Pause the game and prompt the player to reconnect their controller.
+                        //Another player can press a button to close the menu and quit the match
+                        //Or the controller is reconnected and gets assigned back to the player that
+                        //was using it.
+                    }
+
+                    // Debug the disconnect.
                     Debug.Log(device + " was Disconnected!");
                     break;
                 case InputDeviceChange.Reconnected:
@@ -420,6 +465,8 @@ public class CharacterManager : MonoBehaviour
             {
                 //instantiate the player input object using the player cursor prefab.
                 PlayerInput p = PlayerInput.Instantiate(playerCursorPrefab, -1, pi.controlScheme, -1, pi.device);
+                //Add them to the global cursor list
+                cursors.Add(p.gameObject);
                 //tell the cursor we already selected something.
                 p.GetComponent<Cursor>().didSelect = true;
                 p.GetComponent<Cursor>().characterIndex = index;

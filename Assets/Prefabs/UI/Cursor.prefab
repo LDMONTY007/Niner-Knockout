@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: b400880335ec44f4a9bf253a1eedf9de, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -63,7 +63,107 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7e481141-8332-4ee5-b567-bfdc02e71ed3
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/XInputControllerWindows/leftStick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a3bb4c00-450d-47bc-824d-bfb8cd3d9caf
+    m_ActionName: Player/Look[/XInputControllerWindows/rightStick,/Mouse/delta,/Pen/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 06da890e-d785-4efa-96bb-c085a5450175
+    m_ActionName: Player/Jump[/Keyboard/space,/XInputControllerWindows/buttonWest,/XInputControllerWindows/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 426ac5ab-b23b-4854-974a-920f1788d721
+    m_ActionName: Player/Attack[/Keyboard/o,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3f291f8d-98d8-41af-88b2-0595bd6d2367
+    m_ActionName: Player/Special[/Keyboard/p,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e69858fe-9f44-438e-8e0d-421adcb92b2f
+    m_ActionName: Player/UpSmash[/XInputControllerWindows/rightStick/up,/Keyboard/w,/Keyboard/o]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 440b085b-1b57-4dc1-b7f1-84fd7e06863c
+    m_ActionName: Player/DownSmash[/XInputControllerWindows/rightStick/down,/Keyboard/s,/Keyboard/o]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 18e4d6fd-19da-4334-a2c3-5224e2a8959d
+    m_ActionName: Player/RightSmash[/XInputControllerWindows/rightStick/right,/Keyboard/d,/Keyboard/o]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bf688524-c920-4db2-ac0c-395d4fe3fa52
+    m_ActionName: Player/LeftSmash[/XInputControllerWindows/rightStick/left,/Keyboard/a,/Keyboard/o]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3509b6c7-a926-44d7-98f1-39c8fe80dad5
+    m_ActionName: Player/Direction[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5fccf65a-211e-4736-8e28-76acd4989e6d
+    m_ActionName: Player/Grab[/XInputControllerWindows/leftShoulder,/XInputControllerWindows/rightShoulder,/Keyboard/l]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8f107a5f-b1ce-41c4-a1b9-21ee11a180d9
+    m_ActionName: Player/Shield[/XInputControllerWindows/leftTrigger,/XInputControllerWindows/rightTrigger,/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b0e8c6a8-a0bf-4651-af3e-bccb451ec473
+    m_ActionName: Player/Pause[/XInputControllerWindows/start,/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ec85d200-7c6a-43b2-b8fd-bdff0dd3cbe9
+    m_ActionName: Player/Start[/Keyboard/anyKey,/XInputControllerWindows/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1f81968c-367a-48e9-9cc5-4c4be70f6fb7
+    m_ActionName: UI/Navigate[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/rightStick/right,/XInputControllerWindows/dpad,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e046ed75-0113-4e32-81a2-02de9184d992
+    m_ActionName: UI/Submit[/Keyboard/enter,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 34edd2ac-a981-411e-88de-e543a3f8b3e3
+    m_ActionName: UI/Cancel[/Keyboard/escape,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 60fd33dc-9750-4bd8-8a86-ac21cada2403
+    m_ActionName: UI/Point[/Mouse/position,/Pen/position,/XInputControllerWindows/leftStick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 700041b2-7b2c-49be-86e4-f103f6624fde
+    m_ActionName: UI/Click[/Mouse/leftButton,/Pen/tip,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7a469471-2eab-4144-ac36-16eee27b6288
+    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e686cd9d-9be2-4a2e-a8ce-3f26c0a5e73d
+    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a1360724-119b-4e4c-8107-bdc949e4679f
+    m_ActionName: UI/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f569e3e6-2048-46cd-8593-f17c062f43c0
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fb1bd688-7887-48f0-b69a-27c95f335a96
+    m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fbcd4420-33b0-44d5-ac9f-81ab9b79c695
+    m_ActionName: UI/Pause[/XInputControllerWindows/start,/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: UI
@@ -81,10 +181,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc286c501c24f6348894d1cdb0c60fbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 0}
   coinPrefab: {fileID: 7709565719339301769, guid: feda4f90995be8247bc63d7ca492aaa6, type: 3}
   cursorSpeed: 400
   cursorTransform: {fileID: 1011745461383208950}
   gr: {fileID: 0}
+  didSelect: 0
+  playerUIIcon: {fileID: 0}
 --- !u!222 &615009028042994494
 CanvasRenderer:
   m_ObjectHideFlags: 0

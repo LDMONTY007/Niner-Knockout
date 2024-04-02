@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -11,7 +12,7 @@ using UnityEngine.UI;
 //a custom one.
 public class Cursor : MonoBehaviour
 {
-    PlayerInput playerInput;
+    public PlayerInput playerInput;
 
     public GameObject coinPrefab;
 
@@ -48,6 +49,8 @@ public class Cursor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+       
+
 /*        //Might want to change this in the future especially when loading the scene again.
         characterIndex = curCharacterIndex;
         curCharacterIndex++;
@@ -68,6 +71,12 @@ public class Cursor : MonoBehaviour
         //Set the icon's character index.
         playerUIIcon.characterIndex = characterIndex;
         playerUIIcon.playerName.text = "Player" + characterIndex.ToString();
+
+        //When the device is disconnected destroy us and our gameobject.
+        //For this to get called make sure the "Send Unity Events" mode is selected in the "PlayerInput" component.
+        //playerInput.deviceLostEvent.AddListener(_ => Debug.LogWarning("HERE")/*Destroy(this.gameObject)*/);
+        //Can't do this here. Nevermind, it causes an error when you destroy this object because the PlayerInput no longer exists but this listener
+        //is trying to find it.
     }
 
     private void Update()
@@ -163,7 +172,7 @@ public class Cursor : MonoBehaviour
                     //create the coin where the cursor currently is.
                     coinInstance = createCoin(coinPrefab, cursorTransform.position, Quaternion.identity, canvas.transform, characterIndex);
                     didSelect = true;
-                    print(results[0].gameObject.name);
+                    //print(results[0].gameObject.name);
 
                     //Call to reassign the character we've selected.
                     playerUIIcon.ReassignCharacterIcon(selectIcon);
@@ -242,5 +251,23 @@ public class Cursor : MonoBehaviour
             lastStickValue = stickValue;
             lastTime = currentTime;
         }
+    }
+
+    //We call destroy if a player disconnects.
+    //Therefore we should also destroy their icon in the UI 
+    //if they disconnect.
+    //We also remove them from the player list in CharacterManager.cs 
+    //By listening for all the disconnections.
+
+    //Yes, I am aware that this code should be all in one place and only get 
+    //called by one thing but I haven't had the time to clean it up yet.
+    //I wanted to call it from characterManager.cs but I didn't 
+    //set the codebase up properly to store references for that.
+    //I'll have to do that in the future.
+    private void OnDestroy()
+    {         
+        Destroy(playerUIIcon.gameObject);
+        if (coinInstance)
+        Destroy(coinInstance.gameObject);
     }
 }
