@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterSprite: {fileID: 21300000, guid: cfd2a407da12cfa4f8295a87145dae09, type: 3}
   characterName: Norm The Niner
-  characterAnnouncement: {fileID: 0}
+  characterAnnouncement: {fileID: 8300000, guid: 2cecb8bb1eb247244901a0cfc334013e, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 1}
   zoom: 0.5
   characterPrefab: {fileID: 6711993648058681849, guid: 9fb71eaf774a4d1449a4e1ae91838d2b, type: 3}

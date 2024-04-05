@@ -159,6 +159,9 @@ public class Cursor : MonoBehaviour
                     //character. 
                     GameManager.instance.players[characterIndex] = playerInfo;
 
+                    //Play the audio of the selection
+                    AudioManager.instance.globalSource.PlayOneShot(playerInfo.characterIcon.characterAnnouncement);
+
                     //Call to reassign the character we've selected.
                     playerUIIcon.ReassignCharacterIcon(selectIcon);
                 }
@@ -173,6 +176,9 @@ public class Cursor : MonoBehaviour
                     coinInstance = createCoin(coinPrefab, cursorTransform.position, Quaternion.identity, canvas.transform, characterIndex);
                     didSelect = true;
                     //print(results[0].gameObject.name);
+
+                    //Play the audio of the selection
+                    AudioManager.instance.globalSource.PlayOneShot(playerInfo.characterIcon.characterAnnouncement);
 
                     //Call to reassign the character we've selected.
                     playerUIIcon.ReassignCharacterIcon(selectIcon);

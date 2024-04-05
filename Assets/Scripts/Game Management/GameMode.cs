@@ -23,6 +23,8 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class GameMode : MonoBehaviour
 {
+    
+
     //Only make this value editable
     //in the inspector.
     [SerializeField]
@@ -32,6 +34,8 @@ public class GameMode : MonoBehaviour
     //Cleared after each match.
     //assigned during the selection screen.
     public List<PlayerInfo> players;
+
+    public List<AudioClip> respawnSounds = new List<AudioClip>();
 
     private void Awake()
     {
